@@ -1,17 +1,7 @@
 # Seattle Checklist
 
-<div style="position: relative; padding-bottom: 55.00000000000001%; height: 0;">
-  <iframe
-    src="https://www.loom.com/embed/d4af27ac8770436d9edee1bc32035834?sid=3ccf9786-9f61-4dca-a20e-ae33dc7ccf2c"
-    frameborder="0"
-    webkitallowfullscreen
-    mozallowfullscreen
-    allowfullscreen
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-    title="Seattle Checklist overview"
-  ></iframe>
-</div>
-<br/>_Update the embed URL if you publish a new Loom walkthrough._
+[![Seattle Checklist overview](https://cdn.loom.com/sessions/thumbnails/d4af27ac8770436d9edee1bc32035834-with-play.png)](https://www.loom.com/share/d4af27ac8770436d9edee1bc32035834)  
+_Update the Loom link if you publish a new walkthrough._
 
 Seattle Checklist is a community project that turns Seattle’s maze of municipal
 code into a friendly guide for homeowners, tenants, and small businesses. The
