@@ -1,6 +1,7 @@
 # Seattle Checklist
 
-[![Seattle Checklist overview](https://cdn.loom.com/sessions/thumbnails/d4af27ac8770436d9edee1bc32035834-with-play.png)](https://www.loom.com/share/d4af27ac8770436d9edee1bc32035834)  
+[![Watch the demo](docs/loom-thumb.png)](https://www.loom.com/share/d4af27ac8770436d9edee1bc32035834?sid=6d392f9e-9d8e-4652-ae2b-bf69d861f378 "Watch the demo on Loom")
+
 _Update the Loom link if you publish a new walkthrough._
 
 Seattle Checklist is a community project that turns Seattle’s maze of municipal
