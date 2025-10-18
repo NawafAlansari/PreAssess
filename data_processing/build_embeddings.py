@@ -19,8 +19,9 @@ import torch
 from transformers import AutoModel, AutoTokenizer
 
 
-DEFAULT_CHUNKS = Path("seattle-checker/data/processed/smc_chunks.jsonl")
-DEFAULT_OUTPUT = Path("seattle-checker/data/processed/smc_embeddings.npz")
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_CHUNKS = REPO_ROOT / "data/processed/smc_chunks.jsonl"
+DEFAULT_OUTPUT = REPO_ROOT / "data/processed/smc_embeddings.npz"
 DEFAULT_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
 

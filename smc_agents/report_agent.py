@@ -20,6 +20,10 @@ from groq import Groq
 from .retriever import GroundedRetriever, RetrievalResult
 
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = REPO_ROOT / "data/processed"
+
+
 @dataclass
 class EvidenceRequest:
     label: str
@@ -141,9 +145,9 @@ def demo() -> None:
     Example invocation for manual testing (requires GROQ_API_KEY set).
     """
     retriever = GroundedRetriever(
-        embeddings_path=Path("seattle-checker/data/processed/smc_embeddings.npz"),
-        chunks_path=Path("seattle-checker/data/processed/smc_chunks.jsonl"),
-        sqlite_path=Path("seattle-checker/data/processed/smc_ground_truth.db"),
+        embeddings_path=DATA_DIR / "smc_embeddings.npz",
+        chunks_path=DATA_DIR / "smc_chunks.jsonl",
+        sqlite_path=DATA_DIR / "smc_ground_truth.db",
     )
     agent = SeattleReportAgent(retriever=retriever)
     address_profile = {

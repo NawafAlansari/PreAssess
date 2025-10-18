@@ -16,7 +16,8 @@ from pathlib import Path
 from typing import Iterable, Iterator, Optional, Sequence, Tuple
 
 
-DEFAULT_DB = Path("seattle-checker/data/processed/smc_ground_truth.db")
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_DB = REPO_ROOT / "data/processed/smc_ground_truth.db"
 
 
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:

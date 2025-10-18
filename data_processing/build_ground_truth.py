@@ -19,6 +19,9 @@ from pathlib import Path
 from typing import Dict, Iterable, Iterator, List, Optional, Sequence, Tuple
 
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
 MAX_CHARS_DEFAULT = 900
 
 
@@ -281,7 +284,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
         "--output",
         "-o",
         type=Path,
-        default=Path("seattle-checker/data/processed/smc_chunks.jsonl"),
+        default=REPO_ROOT / "data/processed/smc_chunks.jsonl",
         help="Destination JSONL file (default: %(default)s).",
     )
     parser.add_argument(

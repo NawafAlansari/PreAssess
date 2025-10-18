@@ -85,22 +85,22 @@ before wiring the database into your app or agent.
 
 1. Ensure the SQLite DB and embeddings archive exist (`smc_ground_truth.db`,
    `smc_embeddings.npz`, `smc_chunks.jsonl`).
-2. From the repo root, run Python with the app folder on the path:
-   ```bash
-   export PYTHONPATH="$(pwd)/seattle-checker"
-   ```
+2. From the repo root, run Python with the project on the path:
+  ```bash
+  export PYTHONPATH="$(pwd)"
+  ```
 3. Instantiate the retriever and agent:
-   ```python
-   from smc_agents.retriever import GroundedRetriever
-   from smc_agents.report_agent import SeattleReportAgent, EvidenceRequest
+  ```python
+  from smc_agents.retriever import GroundedRetriever
+  from smc_agents.report_agent import SeattleReportAgent, EvidenceRequest
 
-   retriever = GroundedRetriever(
-       embeddings_path=Path("seattle-checker/data/processed/smc_embeddings.npz"),
-       chunks_path=Path("seattle-checker/data/processed/smc_chunks.jsonl"),
-       sqlite_path=Path("seattle-checker/data/processed/smc_ground_truth.db"),
-   )
-   agent = SeattleReportAgent(retriever=retriever, model="llama-3.1-70b-versatile")
-   ```
+  retriever = GroundedRetriever(
+      embeddings_path=Path("data/processed/smc_embeddings.npz"),
+      chunks_path=Path("data/processed/smc_chunks.jsonl"),
+      sqlite_path=Path("data/processed/smc_ground_truth.db"),
+  )
+  agent = SeattleReportAgent(retriever=retriever, model="llama-3.1-70b-versatile")
+  ```
 4. Tell the agent what evidence to fetch (queries + filters), pass in parcel/user
    context, and call `generate_report`. The agent will:
    - Run semantic search over the embeddings.
@@ -112,7 +112,7 @@ before wiring the database into your app or agent.
 Example CLI demo:
 
 ```bash
-GROQ_API_KEY=... PYTHONPATH="$(pwd)/seattle-checker" \
+GROQ_API_KEY=... PYTHONPATH="$(pwd)" \
 python -m smc_agents.report_agent
 ```
 
