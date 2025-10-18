@@ -1,0 +1,14 @@
+services:
+  preassess:
+    build:
+      context: .
+      args:
+        VITE_GROQ_API_KEY: ${VITE_GROQ_API_KEY:-}
+        VITE_GROQ_MODEL: ${VITE_GROQ_MODEL:-mixtral-8x7b-32768}
+        VITE_GROQ_MODELS: ${VITE_GROQ_MODELS:-}
+    environment:
+      NODE_ENV: production
+      VITE_GROQ_MODEL: ${VITE_GROQ_MODEL:-mixtral-8x7b-32768}
+      VITE_GROQ_MODELS: ${VITE_GROQ_MODELS:-}
+    ports:
+      - "4173:4173"

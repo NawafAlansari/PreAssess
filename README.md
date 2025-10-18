@@ -12,15 +12,38 @@ PreAssess turns Seattle’s municipal code into a plain-language checklist so re
 ## Quick start
 
 ### Prerequisites
-- Node.js 18 or newer (for the Vite app) and npm.
+- Node.js 20.19 or newer (for the Vite app) and npm.
 - Python 3.10+ with `pip`.
-- Groq API key (only required for the AI report agent).
+- Groq API key (only required for AI-assisted reporting, both in the UI and for the Python agent).
+
+### Prepare municipal code data (first run)
+Run this before launching the UI (local or Docker) or calling the Groq agent so `data/processed/` contains the latest ground-truth artifacts.
+
+1. Ensure Python dependencies are available (a virtual environment is recommended):
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install PyPDF2 numpy torch transformers
+   ```
+2. Download the latest Seattle Municipal Code supplement PDF.
+3. From the repository root, run the helper script (it defaults to Titles 22 and 23):
+   ```bash
+   chmod +x data_processing/run_pipeline.sh
+   ./data_processing/run_pipeline.sh /path/to/MunicipalCode.pdf
+   ```
+   The script creates or updates:
+   - `data/title22.json` and `data/title23.json`
+   - `data/processed/smc_chunks.jsonl`
+   - `data/processed/smc_ground_truth.db`
+   - `data/processed/smc_embeddings.npz`
+
+Re-run the pipeline whenever Seattle publishes a new supplement.
 
 ### Run the checklist app
 1. Clone the repository and move into the project:
    ```bash
    git clone <your-fork-or-this-repo>
-   cd seattle-checker
+   cd PreAssess
    ```
 2. Install JavaScript dependencies:
    ```bash
@@ -32,24 +55,20 @@ PreAssess turns Seattle’s municipal code into a plain-language checklist so re
    ```
 4. Open the printed localhost URL in your browser and walk through the checklist for any Seattle address.
 
-### Refresh the municipal code data (optional)
-1. Ensure Python dependencies are available (feel free to use a virtual environment):
+### Run with Docker (optional)
+1. Export any Groq overrides (or put them in a `.env` file that Docker Compose will read):
    ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   pip install PyPDF2 numpy torch transformers
+   export VITE_GROQ_API_KEY=your_groq_key             # required for AI-assisted features
+   export VITE_GROQ_MODEL=llama-3.1-70b-versatile     # optional override (defaults to mixtral-8x7b-32768)
+   export VITE_GROQ_MODELS="llama-3.1-70b-versatile,mixtral-8x7b-32768"  # optional dropdown list
    ```
-2. Download the latest Seattle Municipal Code supplement PDF.
-3. From the `seattle-checker` directory, run the helper script (it defaults to Titles 22 and 23):
+   The image bake step reads these variables; rerun `docker compose up --build` after changing them.
+2. Build and start the container (run the data pipeline above first so the processed files exist):
    ```bash
-   chmod +x data_processing/run_pipeline.sh
-   ./data_processing/run_pipeline.sh /path/to/MunicipalCode.pdf
+   docker compose up --build
    ```
-   The script creates or updates:
-   - `data/title22.json` and `data/title23.json`
-   - `data/processed/smc_chunks.jsonl`
-   - `data/processed/smc_ground_truth.db`
-   - `data/processed/smc_embeddings.npz`
+3. Visit http://localhost:4173 to use the app (served with `vite preview`).
+4. Press `Ctrl+C` when you are done, then run `docker compose down` if you want to remove the container.
 
 ### Generate an AI report (optional)
 1. Export your Groq key and make sure Python can find the project code:
