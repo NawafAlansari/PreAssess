@@ -2,7 +2,6 @@
 
 [![Watch the demo](docs/loom-thumb.png)](https://www.loom.com/share/d4af27ac8770436d9edee1bc32035834?sid=6d392f9e-9d8e-4652-ae2b-bf69d861f378 "Watch the demo on Loom")
 
-_Update the Loom link if you publish a new walkthrough._
 
 PreAssess is a community project that turns Seattle’s maze of municipal
 code into a friendly guide for homeowners, tenants, and small businesses. The
