@@ -72,3 +72,25 @@ export function askFollowup(question, history) {
     body: JSON.stringify({ question, history })
   });
 }
+
+export function sendFeedback(payload) {
+  return request('/api/feedback', { method: 'POST', body: JSON.stringify(payload) });
+}
+
+export async function suggestAddresses(prefix) {
+  const clean = prefix.trim().toUpperCase().replace(/'/g, "''");
+  if (clean.length < 4) return [];
+  const params = new URLSearchParams({
+    where: `UPPER(CTYNAME) = 'SEATTLE' AND UPPER(ADDR_FULL) LIKE '${clean}%'`,
+    outFields: 'ADDR_FULL',
+    returnGeometry: 'false',
+    resultRecordCount: '8',
+    orderByFields: 'ADDR_FULL',
+    f: 'json'
+  });
+  const body = await request(`/api/parcel/query?${params}`);
+  const seen = new Set();
+  return (body.features || [])
+    .map((f) => f.attributes?.ADDR_FULL)
+    .filter((a) => a && !seen.has(a) && seen.add(a));
+}

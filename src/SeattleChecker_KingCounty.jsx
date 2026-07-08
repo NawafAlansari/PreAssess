@@ -3,7 +3,7 @@ import { Search, FileText, AlertCircle, CheckCircle, Building2, MapPin, Database
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './preassess.css';
 import ReportSection from './components/ReportSection.jsx';
-import { fetchComplianceReport, fetchContext, fetchHealth } from './lib/api.js';
+import { fetchComplianceReport, fetchContext, fetchHealth, suggestAddresses } from './lib/api.js';
 import MapPanel from './components/MapPanel.jsx';
 import ContextPanel from './components/ContextPanel.jsx';
 import { SiteFooter } from './components/Disclaimer.jsx';
@@ -107,6 +107,8 @@ const SeattleConstructionChecker = () => {
   const [llmReport, setLlmReport] = useState(null);
   const [contextData, setContextData] = useState(null);
   const [corpusStats, setCorpusStats] = useState(null);
+  const [addressOptions, setAddressOptions] = useState([]);
+  const suggestTimer = React.useRef(null);
 
   React.useEffect(() => {
     fetchHealth()
@@ -690,7 +692,15 @@ const SeattleConstructionChecker = () => {
                   <input
                     type="text"
                     value={address}
-                    onChange={(e) => setAddress(e.target.value)}
+                    onChange={(e) => {
+                    const v = e.target.value;
+                    setAddress(v);
+                    clearTimeout(suggestTimer.current);
+                    suggestTimer.current = setTimeout(() => {
+                      suggestAddresses(v).then(setAddressOptions).catch(() => {});
+                    }, 250);
+                  }}
+                  list="addr-suggest" 
                     placeholder="e.g. 400 Broad St"
                     className="form-control"
                   />
@@ -725,6 +735,11 @@ const SeattleConstructionChecker = () => {
                   rows={3}
                 />
               </div>
+                          <datalist id="addr-suggest">
+                {addressOptions.map((a) => (
+                  <option key={a} value={a} />
+                ))}
+              </datalist>
             </form>
 
             {loading && loadingStage && (

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FileText, Info, ShieldCheck, ShieldAlert, ShieldQuestion, X } from 'lucide-react';
-import { askFollowup, lookupCitation } from '../lib/api.js';
+import { askFollowup, lookupCitation, sendFeedback } from '../lib/api.js';
+import { Printer, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { ReportDisclaimer } from './Disclaimer.jsx';
 
 // Renders the AI compliance report as a document with its citation audit made
@@ -57,6 +58,7 @@ const ReportSection = ({ bundle, error }) => {
   const [thread, setThread] = useState([]);
   const [question, setQuestion] = useState('');
   const [asking, setAsking] = useState(false);
+  const [voted, setVoted] = useState(null);
   const cardRef = useRef(null);
 
   useEffect(() => {
@@ -169,7 +171,17 @@ const ReportSection = ({ bundle, error }) => {
             <FileText className="text-primary" size={22} />
             <h2 className="h5 mb-0">Compliance Report</h2>
           </div>
-          {ratioBadge(bundle.grounded_ratio ?? 0)}
+          <div className="d-flex align-items-center gap-2">
+            {ratioBadge(bundle.grounded_ratio ?? 0)}
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-secondary pa-no-print"
+              onClick={() => window.print()}
+              title="Print or save as PDF"
+            >
+              <Printer size={14} /> PDF
+            </button>
+          </div>
         </div>
         <div className="text-muted small mb-3">
           Model: <span className="text-monospace">{bundle.model}</span> — every SMC
@@ -221,6 +233,36 @@ const ReportSection = ({ bundle, error }) => {
               {asking ? 'Checking the code…' : 'Ask'}
             </button>
           </form>
+        </div>
+
+        <div className="d-flex align-items-center gap-2 mt-3 pa-no-print">
+          <span className="small text-muted">Was this report useful?</span>
+          {voted ? (
+            <span className="small text-success">Thanks — feedback recorded.</span>
+          ) : (
+            <>
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-success"
+                onClick={() => {
+                  setVoted('up');
+                  sendFeedback({ vote: 'up', grounded_ratio: bundle.grounded_ratio }).catch(() => {});
+                }}
+              >
+                <ThumbsUp size={14} />
+              </button>
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-danger"
+                onClick={() => {
+                  setVoted('down');
+                  sendFeedback({ vote: 'down', grounded_ratio: bundle.grounded_ratio }).catch(() => {});
+                }}
+              >
+                <ThumbsDown size={14} />
+              </button>
+            </>
+          )}
         </div>
 
         <ReportDisclaimer />

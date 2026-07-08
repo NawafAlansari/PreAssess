@@ -124,3 +124,21 @@ def test_followup_endpoint(client_with_agent, monkeypatch):
 def test_followup_rejects_empty_question(client_with_agent):
     resp = client_with_agent.post("/api/followup", json={"question": "  "})
     assert resp.status_code == 422
+
+
+def test_feedback_appends_jsonl(client, tmp_path, monkeypatch):
+    monkeypatch.setattr(api_main, "FEEDBACK_PATH", tmp_path / "feedback.jsonl")
+    resp = client.post(
+        "/api/feedback",
+        json={"vote": "up", "comment": "good", "grounded_ratio": 0.8},
+    )
+    assert resp.status_code == 200
+    import json as _json
+
+    lines = (tmp_path / "feedback.jsonl").read_text().strip().splitlines()
+    rec = _json.loads(lines[0])
+    assert rec["vote"] == "up" and rec["grounded_ratio"] == 0.8 and rec["ts"]
+
+
+def test_feedback_rejects_bad_vote(client):
+    assert client.post("/api/feedback", json={"vote": "meh"}).status_code == 422

@@ -10,6 +10,7 @@ Run: uvicorn api.main:app --reload  (from the repo root)
 
 from __future__ import annotations
 
+import json
 import os
 import time
 from collections import defaultdict, deque
@@ -332,6 +333,29 @@ def report(payload: ReportRequest, request: Request) -> dict:
         "evidence": _trim_evidence(bundle["evidence"]),
         "model": agent.model,
     }
+
+
+FEEDBACK_PATH = REPO_ROOT / "data/feedback.jsonl"
+
+
+class FeedbackRequest(BaseModel):
+    vote: str = Field(pattern="^(up|down)$")
+    comment: str = ""
+    address: str = ""
+    project: str = ""
+    grounded_ratio: Optional[float] = None
+
+
+@app.post("/api/feedback")
+def feedback(payload: FeedbackRequest, request: Request) -> dict:
+    _rate_limit(request.client.host if request.client else "unknown")
+    record = payload.model_dump()
+    record["ts"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    record["comment"] = record["comment"][:1000]
+    FEEDBACK_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with FEEDBACK_PATH.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(record, ensure_ascii=False) + "\n")
+    return {"ok": True}
 
 
 class FollowupRequest(BaseModel):
