@@ -1,11 +1,10 @@
-import React, { useMemo, useState } from 'react';
-import { FileText, Info, ShieldCheck, ShieldAlert, ShieldQuestion } from 'lucide-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { FileText, Info, ShieldCheck, ShieldAlert, ShieldQuestion, X } from 'lucide-react';
 import { lookupCitation } from '../lib/api.js';
 
-// Renders the AI compliance report with its citation audit made visible:
-// every SMC citation the model used is badged with its verification status,
-// and clicking one shows the actual code text that grounds (or fails to
-// ground) it.
+// Renders the AI compliance report as a document with its citation audit made
+// visible: every SMC citation the model used is badged with its verification
+// status, and clicking one opens the actual code text in a side drawer.
 
 const STATUS_META = {
   grounded: {
@@ -54,6 +53,13 @@ function segment(text, citations) {
 const ReportSection = ({ bundle, error }) => {
   const [selected, setSelected] = useState(null);
   const [lookup, setLookup] = useState({ loading: false, results: null });
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    if (bundle && cardRef.current) {
+      cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [bundle]);
 
   const auditByCitation = useMemo(() => {
     const map = {};
@@ -112,46 +118,43 @@ const ReportSection = ({ bundle, error }) => {
   };
 
   return (
-    <div className="card border-0 shadow-sm mb-4">
+    <div className="card border-0 shadow-sm mb-4" ref={cardRef}>
       <div className="card-body">
         <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
           <div className="d-flex align-items-center gap-2">
             <FileText className="text-primary" size={22} />
-            <h2 className="h5 mb-0">AI Compliance Report</h2>
+            <h2 className="h5 mb-0">Compliance Report</h2>
           </div>
           {ratioBadge(bundle.grounded_ratio ?? 0)}
         </div>
         <div className="text-muted small mb-3">
           Model: <span className="text-monospace">{bundle.model}</span> — every SMC
-          citation below is checked against the code that was actually retrieved.
-          Click a citation to see the code text.
+          citation is checked against the code that was actually retrieved. Click a
+          citation to read the code text.
         </div>
 
-        <div className="border rounded-3 bg-body-tertiary p-3 mb-3">
-          <pre className="mb-0 small text-body-emphasis" style={{ whiteSpace: 'pre-wrap' }}>
-            {segments.map((seg, i) =>
-              seg.citation ? (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => onCitationClick(seg.citation)}
-                  className={`btn btn-sm py-0 px-1 fw-semibold ${
-                    (STATUS_META[auditByCitation[seg.citation]?.status] || STATUS_META.unknown)
-                      .className
-                  }`}
-                  style={{ fontSize: 'inherit' }}
-                >
-                  {seg.text}
-                </button>
-              ) : (
-                <React.Fragment key={i}>{seg.text}</React.Fragment>
-              )
-            )}
-          </pre>
+        <div className="pa-report mb-3">
+          {segments.map((seg, i) =>
+            seg.citation ? (
+              <button
+                key={i}
+                type="button"
+                onClick={() => onCitationClick(seg.citation)}
+                className={`btn btn-sm py-0 pa-citation fw-semibold ${
+                  (STATUS_META[auditByCitation[seg.citation]?.status] || STATUS_META.unknown)
+                    .className
+                }`}
+              >
+                {seg.text}
+              </button>
+            ) : (
+              <React.Fragment key={i}>{seg.text}</React.Fragment>
+            )
+          )}
         </div>
 
         {citations.length > 0 && (
-          <div className="d-flex flex-wrap gap-2 mb-3">
+          <div className="d-flex flex-wrap gap-2">
             {Object.entries(STATUS_META).map(([status, meta]) => (
               <span key={status} className={`badge d-flex align-items-center gap-1 ${meta.className}`}>
                 <meta.Icon size={14} />
@@ -162,39 +165,40 @@ const ReportSection = ({ bundle, error }) => {
         )}
 
         {selected && (
-          <div className="border rounded-3 p-3">
-            <div className="d-flex align-items-center justify-content-between mb-2">
-              <div className="fw-semibold">
-                SMC {selected.citation}
-                <span className="text-muted small ms-2">
+          <div className="pa-drawer" role="dialog" aria-label={`Code text for SMC ${selected.citation}`}>
+            <div className="pa-drawer-head d-flex align-items-start justify-content-between gap-2">
+              <div>
+                <div className="fw-bold">SMC {selected.citation}</div>
+                <div className="text-muted small">
                   {(STATUS_META[selected.verdict?.status] || STATUS_META.unknown).label}
-                </span>
+                </div>
               </div>
               <button
                 type="button"
                 className="btn btn-sm btn-outline-secondary"
                 onClick={() => setSelected(null)}
+                aria-label="Close"
               >
-                Close
+                <X size={16} />
               </button>
             </div>
-            {lookup.loading && <div className="text-muted small">Looking up code text…</div>}
-            {!lookup.loading && lookup.results?.length === 0 && (
-              <div className="text-muted small">
-                No matching section found in the ingested code (Titles 22 and 23).
-              </div>
-            )}
-            {!lookup.loading &&
-              (lookup.results || []).map((hit) => (
-                <div key={hit.chunk_id} className="mb-2">
-                  <div className="small fw-semibold">
-                    {hit.citation} {hit.heading ? `— ${hit.heading}` : ''}
-                  </div>
-                  <div className="small text-muted" style={{ whiteSpace: 'pre-wrap' }}>
-                    {hit.text}
-                  </div>
+            <div className="pa-drawer-body">
+              {lookup.loading && <div className="text-muted small">Looking up code text…</div>}
+              {!lookup.loading && lookup.results?.length === 0 && (
+                <div className="text-muted small">
+                  No matching section found in the ingested code.
                 </div>
-              ))}
+              )}
+              {!lookup.loading &&
+                (lookup.results || []).map((hit) => (
+                  <div key={hit.chunk_id} className="mb-3">
+                    <div className="small fw-semibold mb-1">
+                      {hit.citation} {hit.heading ? `— ${hit.heading}` : ''}
+                    </div>
+                    <div className="pa-code-text">{hit.text}</div>
+                  </div>
+                ))}
+            </div>
           </div>
         )}
       </div>

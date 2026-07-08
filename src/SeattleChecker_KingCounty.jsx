@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Search, FileText, AlertCircle, CheckCircle, Building2, MapPin, Database, TreePine, Home, Info } from 'lucide-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './preassess.css';
 import ReportSection from './components/ReportSection.jsx';
-import { fetchComplianceReport, fetchContext } from './lib/api.js';
+import { fetchComplianceReport, fetchContext, fetchHealth } from './lib/api.js';
 import MapPanel from './components/MapPanel.jsx';
 import ContextPanel from './components/ContextPanel.jsx';
 
@@ -104,6 +105,13 @@ const SeattleConstructionChecker = () => {
   const [debugInfo, setDebugInfo] = useState(null);
   const [llmReport, setLlmReport] = useState(null);
   const [contextData, setContextData] = useState(null);
+  const [corpusStats, setCorpusStats] = useState(null);
+
+  React.useEffect(() => {
+    fetchHealth()
+      .then((h) => setCorpusStats(h.corpus))
+      .catch(() => {});
+  }, []);
   const [llmError, setLlmError] = useState('');
 
   // King County GIS parcel address layer (ArcGIS MapServer)
@@ -610,15 +618,19 @@ const SeattleConstructionChecker = () => {
     <div className="bg-light min-vh-100 py-5">
       <div className="container">
         {/* Header */}
-        <div className="card shadow-sm border-0 mb-4">
+        <div className="card shadow-sm border-0 mb-4 pa-header">
           <div className="card-body">
             <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
               <div>
-                <div className="d-flex align-items-center gap-2 mb-2">
-                  <Building2 className="text-primary" size={32} />
-                  <h1 className="h3 mb-0 text-dark">Seattle Construction Requirements</h1>
+                <div className="d-flex align-items-baseline gap-3 mb-1">
+                  <h1 className="h2 mb-0 pa-wordmark">Pre<span className="pa-accent">Assess</span></h1>
+                  {corpusStats && (
+                    <span className="small pa-stats">
+                      {corpusStats.sections.toLocaleString()} code sections indexed · Titles {corpusStats.titles.join(', ')}
+                    </span>
+                  )}
                 </div>
-                <p className="text-muted mb-3">Live parcel data from King County GIS; compliance reports grounded in the Seattle Municipal Code with verified citations.</p>
+                <p className="mb-3 pa-tagline">Ask what the Seattle Municipal Code requires for your project — every citation verified against the code itself.</p>
                 <div className="d-flex flex-wrap gap-3 align-items-center">
                   <span className="badge bg-success-subtle text-success-emphasis d-flex align-items-center gap-2">
                     <Database size={16} />
@@ -715,9 +727,26 @@ const SeattleConstructionChecker = () => {
             </form>
 
             {loading && loadingStage && (
-              <div className="alert alert-info d-flex align-items-center gap-2 mt-4 mb-0">
-                <div className="spinner-border spinner-border-sm" role="status" />
-                <span className="fw-semibold small">{loadingStage}</span>
+              <div className="d-flex flex-column gap-2 mt-4">
+                <div className="pa-stages">
+                  {[
+                    ['Parcel', /parcel|property|search|match|address/i],
+                    ['Overlays & trees', /overlay|critical|tree/i],
+                    ['Report', /report/i]
+                  ].map(([label, re], idx, arr) => {
+                    const activeIdx = arr.findIndex(([, rx]) => rx.test(loadingStage));
+                    const state = idx < activeIdx ? 'done' : idx === activeIdx ? 'active' : '';
+                    return (
+                      <span key={label} className={`pa-stage ${state}`}>
+                        {state === 'done' ? '✓ ' : ''}{label}
+                      </span>
+                    );
+                  })}
+                </div>
+                <div className="d-flex align-items-center gap-2 text-muted">
+                  <div className="spinner-border spinner-border-sm" role="status" />
+                  <span className="small">{loadingStage}</span>
+                </div>
               </div>
             )}
 
@@ -847,11 +876,11 @@ const SeattleConstructionChecker = () => {
               </div>
 
               {checklist.map((category, catIndex) => (
-                <div key={catIndex} className="mb-4">
-                  <div className="d-flex align-items-center justify-content-between bg-body-tertiary px-3 py-2 rounded-3 mb-3">
+                <details key={catIndex} className="mb-3" open={catIndex === 0}>
+                  <summary className="d-flex align-items-center justify-content-between bg-body-tertiary px-3 py-2 rounded-3 mb-3" style={{ cursor: 'pointer', listStyle: 'none' }}>
                     <h3 className="h6 mb-0">{category.category}</h3>
                     <span className="badge bg-secondary-subtle text-secondary-emphasis">{category.items.length} item(s)</span>
-                  </div>
+                  </summary>
 
                   <div className="d-flex flex-column gap-3">
                     {category.items.map((item, itemIndex) => {
@@ -884,7 +913,7 @@ const SeattleConstructionChecker = () => {
                       );
                     })}
                   </div>
-                </div>
+                </details>
               ))}
             </div>
           </div>
