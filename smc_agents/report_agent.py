@@ -57,15 +57,16 @@ class SeattleReportAgent:
         self.client = Groq(api_key=api_key)
 
     def gather_evidence(self, requests: Iterable[EvidenceRequest]) -> Dict[str, List[RetrievalResult]]:
+        # Fused (dense + BM25, RRF) retrieval: best MRR and recall@1 of the
+        # configurations measured in eval/results.md.
         evidence: Dict[str, List[RetrievalResult]] = {}
         for req in requests:
-            hits = self.retriever.search(
+            hits = self.retriever.search_fused(
                 req.query,
                 top_k=req.top_k,
                 title_number=req.title_number,
                 section_prefix=req.section_prefix,
                 chunk_types=req.chunk_types,
-                fts_query=req.fts_query,
             )
             evidence[req.label] = hits
         return evidence

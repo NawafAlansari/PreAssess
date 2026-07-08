@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import sqlite3
 from dataclasses import dataclass
 from pathlib import Path
@@ -198,7 +199,7 @@ class GroundedRetriever:
         *,
         title_number: Optional[int],
         section_prefix: Optional[str],
-        limit: int = 200,
+        limit: int = 800,
     ) -> List[str]:
         sql = [
             "SELECT chunks.chunk_id",
@@ -213,12 +214,96 @@ class GroundedRetriever:
         if section_prefix:
             sql.append("AND chunks.section_citation LIKE ?")
             params.append(f"{section_prefix}%")
-        sql.append("LIMIT ?")
+        # Order by BM25 before applying the limit: without this, SQLite returns
+        # an arbitrary subset of matching rows and the prefilter silently drops
+        # the most relevant chunks before the dense rerank sees them.
+        sql.append("ORDER BY rank LIMIT ?")
         params.append(limit)
 
         with sqlite3.connect(self.sqlite_path) as conn:
-            rows = conn.execute(" ".join(sql), params).fetchall()
+            try:
+                rows = conn.execute(" ".join(sql), params).fetchall()
+            except sqlite3.OperationalError:
+                # Malformed MATCH input (stray punctuation etc.) — treat as no
+                # lexical evidence rather than failing the whole request.
+                return []
         return [row[0] for row in rows]
+
+    @staticmethod
+    def fts_or_query(query: str) -> str:
+        """Turn free text into a safe OR-joined FTS5 MATCH expression."""
+        tokens = re.findall(r"[a-zA-Z]{3,}", query.lower())
+        return " OR ".join(dict.fromkeys(tokens))
+
+    def _result(self, chunk_id: str, score: float) -> RetrievalResult:
+        meta = self.metadata[chunk_id]
+        return RetrievalResult(
+            chunk_id=chunk_id,
+            score=score,
+            text=meta.get("text", ""),
+            full_citation=meta.get("full_citation"),
+            section_heading=meta.get("section_heading"),
+            chapter_title=meta.get("chapter_title"),
+            title_number=meta.get("title_number"),
+            title_label=meta.get("title_label"),
+            metadata=meta,
+        )
+
+    def search_fused(
+        self,
+        query: str,
+        *,
+        top_k: int = 5,
+        title_number: Optional[int] = None,
+        section_prefix: Optional[str] = None,
+        chunk_types: Optional[Sequence[str]] = None,
+        pool: int = 50,
+        rrf_k: int = 60,
+    ) -> List[RetrievalResult]:
+        """
+        Hybrid retrieval by reciprocal-rank fusion: dense and BM25 rankings are
+        computed independently (each under the same metadata filters) and
+        merged with RRF. Chosen over the FTS-prefilter + dense-rerank design
+        after evaluation — see eval/results.md.
+        """
+        mask = self._candidate_mask(
+            title_number=title_number,
+            section_prefix=section_prefix,
+            chunk_types=chunk_types,
+            fts_query=None,
+        )
+        vocab_indices = np.where(mask)[0]
+        if vocab_indices.size == 0:
+            return []
+
+        query_embedding = self._encode([query])[0]
+        scores = self.embeddings[vocab_indices] @ query_embedding
+        order = np.argsort(scores)[::-1][:pool]
+        dense_ids = [str(self.chunk_ids[vocab_indices[i]]) for i in order]
+
+        fts_ids: List[str] = []
+        if self.sqlite_path:
+            fts_ids = self._fts_lookup(
+                self.fts_or_query(query),
+                title_number=title_number,
+                section_prefix=section_prefix,
+                limit=pool,
+            )
+            if chunk_types:
+                allowed = set(chunk_types)
+                fts_ids = [
+                    cid
+                    for cid in fts_ids
+                    if self.metadata.get(cid, {}).get("chunk_type") in allowed
+                ]
+
+        fused: Dict[str, float] = {}
+        for ranking in (dense_ids, fts_ids):
+            for rank, cid in enumerate(ranking, start=1):
+                fused[cid] = fused.get(cid, 0.0) + 1.0 / (rrf_k + rank)
+
+        top = sorted(fused, key=lambda cid: fused[cid], reverse=True)[:top_k]
+        return [self._result(cid, fused[cid]) for cid in top]
 
     def search(
         self,

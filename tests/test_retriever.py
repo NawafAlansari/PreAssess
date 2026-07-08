@@ -77,3 +77,42 @@ def test_encoder_injection_no_torch_needed(retriever):
     q = retriever._encode(["setback"])
     assert isinstance(q, np.ndarray)
     assert q.shape == (1, 8)
+
+
+def test_fts_or_query_sanitizes_free_text():
+    from smc_agents.retriever import GroundedRetriever
+
+    assert (
+        GroundedRetriever.fts_or_query("What setbacks apply? (ADU!)")
+        == "what OR setbacks OR apply OR adu"
+    )
+
+
+def test_search_fused_returns_relevant_chunk_first(retriever):
+    hits = retriever.search_fused("setback rules for a dwelling", top_k=3)
+    assert hits[0].chunk_id == "c-2344-010"
+
+
+def test_search_fused_promotes_lexical_only_match(retriever):
+    # "submittal" appears in the permit chunk text but maps to no embedding
+    # axis in the stub encoder — only the BM25 branch can find it.
+    hits = retriever.search_fused("submittal documents", top_k=2)
+    assert "c-22801-050" in [h.chunk_id for h in hits]
+
+
+def test_search_fused_respects_filters(retriever):
+    hits = retriever.search_fused("permit setback", top_k=4, title_number=23)
+    assert hits
+    assert all(h.title_number == 23 for h in hits)
+
+    typed = retriever.search_fused("parking", top_k=4, chunk_types=["definition"])
+    assert [h.chunk_id for h in typed] == ["c-2345-005"]
+
+
+def test_search_fused_impossible_filter_returns_empty(retriever):
+    assert retriever.search_fused("tree", top_k=3, title_number=25) == []
+
+
+def test_search_fused_malformed_punctuation_still_works(retriever):
+    hits = retriever.search_fused('"setback?!" -- (dwelling)', top_k=2)
+    assert hits[0].chunk_id == "c-2344-010"
