@@ -6,6 +6,7 @@ import ReportSection from './components/ReportSection.jsx';
 import { fetchComplianceReport, fetchContext, fetchHealth } from './lib/api.js';
 import MapPanel from './components/MapPanel.jsx';
 import ContextPanel from './components/ContextPanel.jsx';
+import { SiteFooter } from './components/Disclaimer.jsx';
 
 // Simplified reference values for the INSTANT client-side checklist only.
 // The AI report does not use this table; it retrieves from the full ingested
@@ -918,6 +919,8 @@ const SeattleConstructionChecker = () => {
             </div>
           </div>
         )}
+
+        <SiteFooter />
       </div>
     </div>
   );

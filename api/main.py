@@ -334,6 +334,28 @@ def report(payload: ReportRequest, request: Request) -> dict:
     }
 
 
+class FollowupRequest(BaseModel):
+    question: str
+    history: List[Dict[str, str]] = Field(default_factory=list, max_length=16)
+    address_profile: Dict[str, object] = Field(default_factory=dict)
+
+
+@app.post("/api/followup")
+def followup(payload: FollowupRequest, request: Request) -> dict:
+    if not payload.question.strip():
+        raise HTTPException(status_code=422, detail="question must not be empty")
+    _rate_limit(request.client.host if request.client else "unknown")
+    agent = get_agent()
+    bundle = agent.answer_followup(
+        question=payload.question.strip()[:1000],
+        history=payload.history,
+        address_profile=payload.address_profile or None,
+    )
+    bundle["evidence"] = _trim_evidence(bundle["evidence"])
+    bundle["model"] = agent.model
+    return bundle
+
+
 # In production the built frontend is served from the same process; in dev the
 # Vite server proxies /api here instead.
 if DIST_DIR.exists():

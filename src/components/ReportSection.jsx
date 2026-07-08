@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FileText, Info, ShieldCheck, ShieldAlert, ShieldQuestion, X } from 'lucide-react';
-import { lookupCitation } from '../lib/api.js';
+import { askFollowup, lookupCitation } from '../lib/api.js';
+import { ReportDisclaimer } from './Disclaimer.jsx';
 
 // Renders the AI compliance report as a document with its citation audit made
 // visible: every SMC citation the model used is badged with its verification
@@ -53,6 +54,9 @@ function segment(text, citations) {
 const ReportSection = ({ bundle, error }) => {
   const [selected, setSelected] = useState(null);
   const [lookup, setLookup] = useState({ loading: false, results: null });
+  const [thread, setThread] = useState([]);
+  const [question, setQuestion] = useState('');
+  const [asking, setAsking] = useState(false);
   const cardRef = useRef(null);
 
   useEffect(() => {
@@ -93,13 +97,53 @@ const ReportSection = ({ bundle, error }) => {
   if (!bundle) return null;
 
   const citations = Object.keys(auditByCitation);
-  // Defensive: some models emit markdown emphasis despite the plain-text
-  // instruction; stray asterisks read as typos in the rendered report.
-  const reportText = (bundle.report || '').replace(/\*\*([^*]+)\*\*/g, '$1');
-  const segments = segment(reportText, citations);
 
-  const onCitationClick = async (citation) => {
-    const verdict = auditByCitation[citation];
+  const renderAudited = (text, auditMap) => {
+    const cited = Object.keys(auditMap);
+    const clean = (text || '').replace(/\*\*([^*]+)\*\*/g, '$1');
+    return segment(clean, cited).map((seg, i) =>
+      seg.citation ? (
+        <button
+          key={i}
+          type="button"
+          onClick={() => openCitation(seg.citation, auditMap[seg.citation])}
+          className={`btn btn-sm py-0 pa-citation fw-semibold ${
+            (STATUS_META[auditMap[seg.citation]?.status] || STATUS_META.unknown).className
+          }`}
+        >
+          {seg.text}
+        </button>
+      ) : (
+        <React.Fragment key={i}>{seg.text}</React.Fragment>
+      )
+    );
+  };
+
+  const ask = async () => {
+    const q = question.trim();
+    if (!q || asking) return;
+    setAsking(true);
+    setQuestion('');
+    const history = thread.map((m) => ({ role: m.role, content: m.text }));
+    setThread((prev) => [...prev, { role: 'user', text: q }]);
+    try {
+      const res = await askFollowup(q, [...history, { role: 'user', content: q }]);
+      const auditMap = {};
+      (res.citation_audit || []).forEach((v) => {
+        auditMap[v.citation] = v;
+      });
+      setThread((prev) => [...prev, { role: 'assistant', text: res.answer, auditMap }]);
+    } catch (err) {
+      setThread((prev) => [
+        ...prev,
+        { role: 'assistant', text: `Sorry — ${err.message}`, auditMap: {} }
+      ]);
+    } finally {
+      setAsking(false);
+    }
+  };
+
+  const openCitation = async (citation, verdict) => {
     setSelected({ citation, verdict });
     const grounding = (verdict?.matched_chunk_ids || [])
       .map((id) => evidenceByChunk[id])
@@ -133,28 +177,10 @@ const ReportSection = ({ bundle, error }) => {
           citation to read the code text.
         </div>
 
-        <div className="pa-report mb-3">
-          {segments.map((seg, i) =>
-            seg.citation ? (
-              <button
-                key={i}
-                type="button"
-                onClick={() => onCitationClick(seg.citation)}
-                className={`btn btn-sm py-0 pa-citation fw-semibold ${
-                  (STATUS_META[auditByCitation[seg.citation]?.status] || STATUS_META.unknown)
-                    .className
-                }`}
-              >
-                {seg.text}
-              </button>
-            ) : (
-              <React.Fragment key={i}>{seg.text}</React.Fragment>
-            )
-          )}
-        </div>
+        <div className="pa-report mb-3">{renderAudited(bundle.report, auditByCitation)}</div>
 
         {citations.length > 0 && (
-          <div className="d-flex flex-wrap gap-2">
+          <div className="d-flex flex-wrap gap-2 mb-1">
             {Object.entries(STATUS_META).map(([status, meta]) => (
               <span key={status} className={`badge d-flex align-items-center gap-1 ${meta.className}`}>
                 <meta.Icon size={14} />
@@ -163,6 +189,41 @@ const ReportSection = ({ bundle, error }) => {
             ))}
           </div>
         )}
+
+        <div className="border-top pt-3 mt-3">
+          <div className="fw-semibold small mb-2">Ask a follow-up about this report</div>
+          {thread.map((m, i) =>
+            m.role === 'user' ? (
+              <div key={i} className="small fw-semibold text-secondary mb-1 mt-2">
+                You: {m.text}
+              </div>
+            ) : (
+              <div key={i} className="pa-report mb-2" style={{ fontSize: '0.95rem' }}>
+                {renderAudited(m.text, m.auditMap || {})}
+              </div>
+            )
+          )}
+          <form
+            className="d-flex gap-2 mt-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              ask();
+            }}
+          >
+            <input
+              className="form-control form-control-sm"
+              placeholder='e.g. "What about my fence?" — answers are retrieved and audited the same way'
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              disabled={asking}
+            />
+            <button className="btn btn-sm btn-outline-success" type="submit" disabled={asking}>
+              {asking ? 'Checking the code…' : 'Ask'}
+            </button>
+          </form>
+        </div>
+
+        <ReportDisclaimer />
 
         {selected && (
           <div className="pa-drawer" role="dialog" aria-label={`Code text for SMC ${selected.citation}`}>

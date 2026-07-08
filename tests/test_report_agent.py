@@ -89,3 +89,25 @@ def test_generate_report_bundle_includes_audit(retriever):
     assert statuses["99.99.999"] == "unknown"
     assert bundle["grounded_ratio"] == pytest.approx(0.5)
     assert "zoning" in bundle["evidence"]
+
+
+def test_answer_followup_grounded_and_audited(retriever):
+    reply = "The code limits ADU size per SMC 23.44.010. Also SMC 99.99.999."
+    agent = make_agent(retriever, reply)
+    bundle = agent.answer_followup(
+        question="How big can the setback dwelling be?",
+        history=[
+            {"role": "user", "content": "Earlier question"},
+            {"role": "assistant", "content": "Earlier answer citing SMC 23.44.010."},
+        ],
+        address_profile={"address": "1 Test Ave"},
+    )
+    statuses = {v["citation"]: v["status"] for v in bundle["citation_audit"]}
+    assert statuses["23.44.010"] == "grounded"
+    assert statuses["99.99.999"] == "unknown"
+    # history + property context reached the model
+    messages = agent.client.chat.completions.create.call_args.kwargs["messages"]
+    assert messages[0]["role"] == "system"
+    assert any(m["role"] == "assistant" for m in messages)
+    assert "1 Test Ave" in messages[-1]["content"]
+    assert "Municipal code evidence" in messages[-1]["content"]

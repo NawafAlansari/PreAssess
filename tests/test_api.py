@@ -104,3 +104,23 @@ def test_citation_lookup_exact_and_subsection(client):
     assert deep["results"][0]["citation"] == "SMC 23.44.010"
     none = client.get("/api/citation/99.99.999").json()
     assert none["results"] == []
+
+
+def test_followup_endpoint(client_with_agent, monkeypatch):
+    # reuse the mocked agent; its scripted reply cites 23.44.010 and 22.801.050
+    resp = client_with_agent.post(
+        "/api/followup",
+        json={
+            "question": "What about the setback?",
+            "history": [{"role": "user", "content": "hi"}],
+        },
+    )
+    assert resp.status_code == 200
+    body = resp.json()
+    assert "answer" in body and body["citation_audit"]
+    assert "followup" in body["evidence"]
+
+
+def test_followup_rejects_empty_question(client_with_agent):
+    resp = client_with_agent.post("/api/followup", json={"question": "  "})
+    assert resp.status_code == 422

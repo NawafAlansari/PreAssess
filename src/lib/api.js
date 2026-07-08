@@ -65,3 +65,10 @@ export function fetchHealth() {
 export function lookupCitation(citation) {
   return request(`/api/citation/${encodeURIComponent(citation)}`);
 }
+
+export function askFollowup(question, history) {
+  return request('/api/followup', {
+    method: 'POST',
+    body: JSON.stringify({ question, history })
+  });
+}

@@ -39,6 +39,40 @@ def resolve_api_key() -> Optional[str]:
     return os.getenv("LLM_API_KEY") or os.getenv("GROQ_API_KEY")
 
 
+def format_evidence(evidence: Dict[str, List["RetrievalResult"]]) -> str:
+    """Evidence blocks for prompts. Never exposes internal chunk ids as
+    citation labels: the model copies whatever label it sees into its answer."""
+    blocks = []
+    for label, hits in evidence.items():
+        if not hits:
+            continue
+        snippets = []
+        for hit in hits:
+            citation = (
+                hit.full_citation
+                or hit.metadata.get("section_citation")
+                or hit.metadata.get("chapter_citation")
+                or "uncited"
+            )
+            heading = hit.section_heading or ""
+            snippets.append(
+                f"[{citation}] {heading}\n{textwrap.shorten(hit.text, width=1200, placeholder=' …')}"
+            )
+        blocks.append(f"{label.upper()}:\n" + "\n\n".join(snippets))
+    return "\n\n".join(blocks) if blocks else "No evidence found."
+
+
+FOLLOWUP_SYSTEM = """
+You are a civic compliance research assistant answering a follow-up question in
+an ongoing conversation about a Seattle property project. Use ONLY the
+municipal code evidence provided in the latest message.
+- Cite inline using [SMC chapter.section]; never invent citations.
+- If the evidence does not answer the question, say so plainly.
+- Information voice ("the code requires/allows ..."), not personal directives.
+- Plain text only, no markdown syntax. Be concise: a short paragraph or two.
+""".strip()
+
+
 @dataclass
 class EvidenceRequest:
     label: str
@@ -93,27 +127,7 @@ class SeattleReportAgent:
             ensure_ascii=False,
         )
 
-        evidence_blocks = []
-        for label, hits in evidence.items():
-            if not hits:
-                continue
-            snippets = []
-            for hit in hits:
-                # Never expose internal chunk ids as citation labels: the model
-                # copies whatever label it sees into the report.
-                citation = (
-                    hit.full_citation
-                    or hit.metadata.get("section_citation")
-                    or hit.metadata.get("chapter_citation")
-                    or "uncited"
-                )
-                heading = hit.section_heading or ""
-                snippets.append(
-                    f"[{citation}] {heading}\n{textwrap.shorten(hit.text, width=1200, placeholder=' …')}"
-                )
-            evidence_blocks.append(f"{label.upper()}:\n" + "\n\n".join(snippets))
-
-        evidence_text = "\n\n".join(evidence_blocks) if evidence_blocks else "No evidence found."
+        evidence_text = format_evidence(evidence)
 
         instructions = """
 You are a civic compliance assistant. Use only the evidence provided.
@@ -121,6 +135,9 @@ You are a civic compliance assistant. Use only the evidence provided.
 - Cite each requirement inline using [SMC chapter.section].
 - If evidence is missing for a checklist item, state that it needs confirmation.
 - Keep the tone practical and friendly; no legal disclaimers.
+- Describe what the code provides, in information voice: "the code requires /
+  allows / limits X [SMC ...]". Do not give personal directives or advice
+  ("you must", "you should hire"); the reader decides what to do.
 - Write plain text only: no markdown syntax (no asterisks, hashes, or backticks).
   Structure with short paragraphs and simple numbered lists like "1." on their
   own lines.
@@ -136,6 +153,48 @@ Municipal code evidence:
 {evidence_text}
 """.strip()
         return prompt
+
+    def answer_followup(
+        self,
+        *,
+        question: str,
+        history: Optional[List[Dict[str, str]]] = None,
+        address_profile: Optional[Dict[str, object]] = None,
+        top_k: int = 4,
+    ) -> Dict[str, object]:
+        """One audited conversational turn: retrieve fresh evidence for the
+        question, answer grounded in it, audit the citations."""
+        hits = self.retriever.search_fused(question, top_k=top_k)
+        evidence = {"followup": hits}
+
+        messages: List[Dict[str, str]] = [{"role": "system", "content": FOLLOWUP_SYSTEM}]
+        for turn in (history or [])[-8:]:
+            role = "assistant" if turn.get("role") == "assistant" else "user"
+            content = str(turn.get("content", ""))[:2000]
+            if content:
+                messages.append({"role": role, "content": content})
+
+        facts = ""
+        if address_profile:
+            facts = "Property context:\n" + json.dumps(address_profile, ensure_ascii=False)[:2000] + "\n\n"
+        messages.append(
+            {
+                "role": "user",
+                "content": f"{facts}Municipal code evidence:\n{format_evidence(evidence)}\n\nQuestion: {question}",
+            }
+        )
+
+        completion = self.client.chat.completions.create(
+            model=self.model, temperature=0.2, messages=messages
+        )
+        text = completion.choices[0].message.content or ""
+        audit = audit_report(text, hits, corpus_lookup=self.retriever.has_citation)
+        return {
+            "answer": text,
+            "citation_audit": [v.to_dict() for v in audit.verdicts],
+            "grounded_ratio": audit.grounded_ratio,
+            "evidence": {"followup": [hit.metadata for hit in hits]},
+        }
 
     def generate_report(
         self,
