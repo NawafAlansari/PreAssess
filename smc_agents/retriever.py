@@ -136,7 +136,11 @@ class GroundedRetriever:
         if citation in self.section_citations or citation in self.chapter_citations:
             return True
         prefix = citation + "."
-        return any(sec.startswith(prefix) for sec in self.section_citations)
+        if any(sec.startswith(prefix) for sec in self.section_citations):
+            return True
+        # A citation deeper than corpus granularity (e.g. 23.44.014.C.17.a)
+        # resolves to its parent section if that section exists.
+        return any(citation.startswith(sec + ".") for sec in self.section_citations)
 
     def _candidate_mask(
         self,

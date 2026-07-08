@@ -33,15 +33,14 @@ UNKNOWN = "unknown"
 # Examples: 22.801, 23.44.010, 23.60A.190, 23.44.014.C.17.a
 _NUM = r"\d{2}\.\d+[A-Za-z]?(?:\.[0-9A-Za-z]+)*"
 
-# Keyword-led form: "SMC 23.44.010", "Section 22.801", "Chapter 22.801",
-# "SMC Chapter 23.44".
-_KEYWORD_RE = re.compile(
-    r"(?:SMC|Section|Chapter)\s+(?:Chapter\s+)?(" + _NUM + r")",
+# One pass, two alternatives, so citations are returned in document order:
+# bracketed form ("[23.44.010]", "[SMC 23.44.010]") or keyword-led form
+# ("SMC 23.44.010", "Section 22.801", "SMC Chapter 23.44").
+_CITATION_RE = re.compile(
+    r"\[\s*(?:SMC\s+)?(" + _NUM + r")\s*\]"
+    r"|(?:SMC|Section|Chapter)\s+(?:Chapter\s+)?(" + _NUM + r")",
     re.IGNORECASE,
 )
-
-# Bracketed form: "[23.44.010]", "[SMC 23.44.010]".
-_BRACKET_RE = re.compile(r"\[\s*(?:SMC\s+)?(" + _NUM + r")\s*\]", re.IGNORECASE)
 
 
 @dataclass
@@ -77,13 +76,11 @@ class CitationAudit:
 
 
 def parse_citations(text: str) -> List[str]:
-    """Extract unique SMC citations from report text, preserving order."""
+    """Extract unique SMC citations from report text, in document order."""
     found: List[str] = []
     seen: set = set()
-    for match in _KEYWORD_RE.finditer(text or ""):
-        _add(match.group(1), found, seen)
-    for match in _BRACKET_RE.finditer(text or ""):
-        _add(match.group(1), found, seen)
+    for match in _CITATION_RE.finditer(text or ""):
+        _add(match.group(1) or match.group(2), found, seen)
     return found
 
 
@@ -98,6 +95,10 @@ def _matches_chunk(citation: str, meta: Dict[str, object]) -> bool:
     section = str(meta.get("section_citation") or "")
     chapter = str(meta.get("chapter_citation") or "")
     if section == citation or section.startswith(citation + "."):
+        return True
+    # Citation deeper than the chunk's section (e.g. 23.44.014.C.17.a cited,
+    # chunk is section 23.44.014): the subsection is grounded by its parent.
+    if section and citation.startswith(section + "."):
         return True
     if chapter == citation:
         return True
