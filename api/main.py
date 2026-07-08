@@ -23,7 +23,12 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from api.gis import point_context
-from smc_agents.report_agent import DEFAULT_MODEL, EvidenceRequest, SeattleReportAgent
+from smc_agents.report_agent import (
+    DEFAULT_MODEL,
+    EvidenceRequest,
+    SeattleReportAgent,
+    resolve_api_key,
+)
 from smc_agents.retriever import GroundedRetriever
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -60,11 +65,11 @@ def get_retriever() -> GroundedRetriever:
 def get_agent() -> SeattleReportAgent:
     global _agent
     if _agent is None:
-        if not os.getenv("GROQ_API_KEY"):
+        if not resolve_api_key():
             raise HTTPException(
                 status_code=503,
-                detail="Report generation is not configured (GROQ_API_KEY missing "
-                "on the server). Retrieval endpoints still work.",
+                detail="Report generation is not configured (LLM_API_KEY / GROQ_API_KEY "
+                "missing on the server). Retrieval endpoints still work.",
             )
         _agent = SeattleReportAgent(retriever=get_retriever())
     return _agent
@@ -154,7 +159,7 @@ def health() -> dict:
     return {
         "status": "ok",
         "model": DEFAULT_MODEL,
-        "report_enabled": bool(os.getenv("GROQ_API_KEY")),
+        "report_enabled": bool(resolve_api_key()),
         "corpus": {
             "chunks": len(retriever.metadata),
             "sections": len(retriever.section_citations),

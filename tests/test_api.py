@@ -83,9 +83,10 @@ def test_report_returns_audit_and_evidence(client_with_agent):
 
 def test_report_503_without_server_key(client, monkeypatch):
     monkeypatch.delenv("GROQ_API_KEY", raising=False)
+    monkeypatch.delenv("LLM_API_KEY", raising=False)
     resp = client.post("/api/report", json={"project_description": "setback"})
     assert resp.status_code == 503
-    assert "GROQ_API_KEY" in resp.json()["detail"]
+    assert "LLM_API_KEY" in resp.json()["detail"]
 
 
 def test_report_rate_limit(client_with_agent, monkeypatch):

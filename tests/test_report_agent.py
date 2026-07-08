@@ -18,7 +18,8 @@ def make_agent(retriever, reply: str) -> SeattleReportAgent:
 
 def test_requires_api_key(retriever, monkeypatch):
     monkeypatch.delenv("GROQ_API_KEY", raising=False)
-    with pytest.raises(RuntimeError, match="GROQ_API_KEY"):
+    monkeypatch.delenv("LLM_API_KEY", raising=False)
+    with pytest.raises(RuntimeError, match="LLM_API_KEY"):
         SeattleReportAgent(retriever=retriever)
 
 

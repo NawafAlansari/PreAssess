@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
-from groq import Groq
+from openai import OpenAI
 
 from .citation_check import audit_report
 from .retriever import GroundedRetriever, RetrievalResult
@@ -24,10 +24,19 @@ from .retriever import GroundedRetriever, RetrievalResult
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = REPO_ROOT / "data/processed"
 
-# The original pin (llama-3.1-70b-versatile) was decommissioned by Groq on
-# 2025-01-24; llama-3.3-70b-versatile is its live successor. Verified against
-# the Groq models API. Override via GROQ_MODEL when the roster rotates.
-DEFAULT_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+# Any OpenAI-compatible endpoint works: Groq (default), OpenAI, a local
+# Ollama, or a self-hosted gateway. Configure with LLM_BASE_URL + LLM_API_KEY
+# + LLM_MODEL; the GROQ_* names are kept as fallbacks for compatibility.
+# (llama-3.1-70b-versatile, the original pin, was decommissioned by Groq on
+# 2025-01-24; llama-3.3-70b-versatile is its live successor.)
+DEFAULT_BASE_URL = os.getenv("LLM_BASE_URL", "https://api.groq.com/openai/v1")
+DEFAULT_MODEL = (
+    os.getenv("LLM_MODEL") or os.getenv("GROQ_MODEL") or "llama-3.3-70b-versatile"
+)
+
+
+def resolve_api_key() -> Optional[str]:
+    return os.getenv("LLM_API_KEY") or os.getenv("GROQ_API_KEY")
 
 
 @dataclass
@@ -51,10 +60,10 @@ class SeattleReportAgent:
     ) -> None:
         self.retriever = retriever
         self.model = model or DEFAULT_MODEL
-        api_key = api_key or os.getenv("GROQ_API_KEY")
+        api_key = api_key or resolve_api_key()
         if not api_key:
-            raise RuntimeError("GROQ_API_KEY not set")
-        self.client = Groq(api_key=api_key)
+            raise RuntimeError("LLM_API_KEY (or GROQ_API_KEY) not set")
+        self.client = OpenAI(base_url=DEFAULT_BASE_URL, api_key=api_key)
 
     def gather_evidence(self, requests: Iterable[EvidenceRequest]) -> Dict[str, List[RetrievalResult]]:
         # Fused (dense + BM25, RRF) retrieval: best MRR and recall@1 of the
