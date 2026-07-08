@@ -1,0 +1,196 @@
+"""
+PreAssess API: the retrieval + report pipeline behind an HTTP boundary.
+
+The browser never talks to Groq and never sees an API key; it sends property
+facts and a project description here, and gets back a report with a citation
+audit and the evidence that grounded it.
+
+Run: uvicorn api.main:app --reload  (from the repo root)
+"""
+
+from __future__ import annotations
+
+import os
+import time
+from collections import defaultdict, deque
+from pathlib import Path
+from typing import Deque, Dict, List, Optional
+
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field
+
+from smc_agents.report_agent import DEFAULT_MODEL, EvidenceRequest, SeattleReportAgent
+from smc_agents.retriever import GroundedRetriever
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = REPO_ROOT / "data/processed"
+DIST_DIR = REPO_ROOT / "dist"
+
+REPORT_RATE_LIMIT = int(os.getenv("REPORT_RATE_LIMIT", "10"))  # per minute per IP
+
+app = FastAPI(title="PreAssess API", version="1.0")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=os.getenv("CORS_ORIGINS", "*").split(","),
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Module-level singletons, overridable in tests.
+_retriever: Optional[GroundedRetriever] = None
+_agent: Optional[SeattleReportAgent] = None
+_report_hits: Dict[str, Deque[float]] = defaultdict(deque)
+
+
+def get_retriever() -> GroundedRetriever:
+    global _retriever
+    if _retriever is None:
+        _retriever = GroundedRetriever(
+            embeddings_path=DATA_DIR / "smc_embeddings.npz",
+            chunks_path=DATA_DIR / "smc_chunks.jsonl",
+            sqlite_path=DATA_DIR / "smc_ground_truth.db",
+        )
+    return _retriever
+
+
+def get_agent() -> SeattleReportAgent:
+    global _agent
+    if _agent is None:
+        if not os.getenv("GROQ_API_KEY"):
+            raise HTTPException(
+                status_code=503,
+                detail="Report generation is not configured (GROQ_API_KEY missing "
+                "on the server). Retrieval endpoints still work.",
+            )
+        _agent = SeattleReportAgent(retriever=get_retriever())
+    return _agent
+
+
+def _rate_limit(client: str) -> None:
+    now = time.monotonic()
+    hits = _report_hits[client]
+    while hits and now - hits[0] > 60.0:
+        hits.popleft()
+    if len(hits) >= REPORT_RATE_LIMIT:
+        raise HTTPException(status_code=429, detail="Rate limit exceeded; retry in a minute.")
+    hits.append(now)
+
+
+class ReportRequest(BaseModel):
+    address_profile: Dict[str, object] = Field(default_factory=dict)
+    project_description: str = ""
+    questions: List[str] = Field(default_factory=list, max_length=6)
+
+
+def _evidence_requests(payload: ReportRequest) -> List[EvidenceRequest]:
+    requests: List[EvidenceRequest] = []
+    if payload.project_description.strip():
+        requests.append(
+            EvidenceRequest(label="project", query=payload.project_description, top_k=5)
+        )
+    for i, question in enumerate(payload.questions, start=1):
+        if question.strip():
+            requests.append(EvidenceRequest(label=f"question_{i}", query=question, top_k=4))
+    if not requests:
+        raise HTTPException(
+            status_code=422,
+            detail="Provide a project_description or at least one question.",
+        )
+    return requests
+
+
+def _trim_evidence(evidence: Dict[str, List[dict]]) -> Dict[str, List[dict]]:
+    trimmed: Dict[str, List[dict]] = {}
+    for label, hits in evidence.items():
+        trimmed[label] = [
+            {
+                "chunk_id": meta.get("chunk_id"),
+                "citation": meta.get("full_citation") or meta.get("section_citation"),
+                "section_citation": meta.get("section_citation"),
+                "heading": meta.get("section_heading"),
+                "chapter_title": meta.get("chapter_title"),
+                "text": str(meta.get("text", ""))[:600],
+            }
+            for meta in hits
+        ]
+    return trimmed
+
+
+@app.get("/api/health")
+def health() -> dict:
+    retriever = get_retriever()
+    return {
+        "status": "ok",
+        "model": DEFAULT_MODEL,
+        "report_enabled": bool(os.getenv("GROQ_API_KEY")),
+        "corpus": {
+            "chunks": len(retriever.metadata),
+            "sections": len(retriever.section_citations),
+            "chapters": len(retriever.chapter_citations),
+            "titles": retriever.ingested_titles,
+        },
+    }
+
+
+@app.get("/api/stats")
+def stats() -> dict:
+    retriever = get_retriever()
+    by_title: Dict[str, int] = defaultdict(int)
+    by_type: Dict[str, int] = defaultdict(int)
+    for meta in retriever.metadata.values():
+        by_title[str(meta.get("title_number"))] += 1
+        by_type[str(meta.get("chunk_type"))] += 1
+    return {"chunks_by_title": dict(by_title), "chunks_by_type": dict(by_type)}
+
+
+@app.get("/api/search")
+def search(q: str, k: int = 5, title: Optional[int] = None) -> dict:
+    if not q.strip():
+        raise HTTPException(status_code=422, detail="q must not be empty")
+    k = max(1, min(k, 20))
+    hits = get_retriever().search_fused(q, top_k=k, title_number=title)
+    return {
+        "query": q,
+        "results": [
+            {
+                "chunk_id": h.chunk_id,
+                "score": h.score,
+                "citation": h.full_citation or h.metadata.get("section_citation"),
+                "section_citation": h.metadata.get("section_citation"),
+                "heading": h.section_heading,
+                "chapter_title": h.chapter_title,
+                "title_number": h.title_number,
+                "text": h.text[:600],
+            }
+            for h in hits
+        ],
+    }
+
+
+@app.post("/api/report")
+def report(payload: ReportRequest, request: Request) -> dict:
+    _rate_limit(request.client.host if request.client else "unknown")
+    agent = get_agent()
+    bundle = agent.generate_report(
+        address_profile=payload.address_profile,
+        user_inputs={
+            "project": payload.project_description,
+            "questions": payload.questions,
+        },
+        evidence_requests=_evidence_requests(payload),
+    )
+    return {
+        "report": bundle["report"],
+        "citation_audit": bundle["citation_audit"],
+        "grounded_ratio": bundle["grounded_ratio"],
+        "evidence": _trim_evidence(bundle["evidence"]),
+        "model": agent.model,
+    }
+
+
+# In production the built frontend is served from the same process; in dev the
+# Vite server proxies /api here instead.
+if DIST_DIR.exists():
+    app.mount("/", StaticFiles(directory=DIST_DIR, html=True), name="app")
