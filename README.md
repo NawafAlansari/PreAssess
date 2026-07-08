@@ -1,98 +1,125 @@
-# PreAssess: Seattle Municipal Code Checker
+# PreAssess
 
+**Ask what the Seattle Municipal Code requires for your project — and get an
+answer whose every citation is verified, not just generated.**
+
+Enter a Seattle address and a project ("add a 600 sq ft detached ADU"). PreAssess
+pulls the real parcel from King County GIS, retrieves the governing code sections
+from an ingested corpus of the Seattle Municipal Code, drafts a plain-language
+compliance report — and then **audits every SMC citation in that report against
+the code that was actually retrieved**. Citations render green (verified in
+evidence), yellow (exists in code, but wasn't shown to the model), or red (not
+found — likely fabricated). Click any citation to read the code text itself.
+
+3rd place, PACT-Athon 2025 (City of Seattle + AI House).
 [![Watch the demo](docs/loom-thumb.png)](https://www.loom.com/share/d4af27ac8770436d9edee1bc32035834?sid=6d392f9e-9d8e-4652-ae2b-bf69d861f378 "Watch the demo on Loom")
 
-PreAssess turns Seattle’s municipal code into a plain-language checklist so residents know what the City expects before they remodel, plant, or build.
+## Why the verification layer exists
 
-## What you get
-- Plain-language front-end checklist with inline citations to the Seattle Municipal Code.
-- Automated data pipeline that extracts Titles 22 and 23 from the latest PDF supplement.
-- Retrieval-augmented Groq agent that drafts property reports backed by verified code snippets.
+Legal-information RAG has a specific failure mode: the model writes a confident
+requirement with a plausible-looking citation that doesn't exist. Asking the
+model to cite is not a guarantee; checking the citations is. PreAssess treats
+"citation-backed" as a property to *verify*, not a prompt instruction:
 
-## Quick start
+```
+citation audit for a generated report:
+  23.42.022  -> grounded                    (matches retrieved evidence)
+  22.801     -> in_corpus_not_retrieved     (real code, but not shown to the model)
+  99.99.999  -> unknown                     (appears nowhere in the ingested code)
+grounded_ratio: 0.33
+```
 
-### Prerequisites
-- Node.js 20.19 or newer (for the Vite app) and npm.
-- Python 3.10+ with `pip`.
-- Groq API key (only required for AI-assisted reporting, both in the UI and for the Python agent).
+## Architecture
 
-### Prepare municipal code data (first run)
-Run this before launching the UI (local or Docker) or calling the Groq agent so `data/processed/` contains the latest ground-truth artifacts.
+```
+                       browser (React + Vite)
+                         │ address + project        citations clicked
+                         ▼                          ▼
+ King County GIS ◄─ /api/parcel/query   /api/report │ /api/citation
+ (live parcels)          │                  │       │
+                         ▼                  ▼       ▼
+                       FastAPI  ──►  GroundedRetriever ──► Groq (server-side key)
+                                     dense + BM25, RRF          │
+                                     5,896 SMC chunks           ▼
+                                     (Titles 22 & 23)     citation_check
+                                                          audits the report
+```
 
-1. Ensure Python dependencies are available (a virtual environment is recommended):
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   pip install PyPDF2 numpy torch transformers
-   ```
-2. Download the latest Seattle Municipal Code supplement PDF.
-3. From the repository root, run the helper script (it defaults to Titles 22 and 23):
-   ```bash
-   chmod +x data_processing/run_pipeline.sh
-   ./data_processing/run_pipeline.sh /path/to/MunicipalCode.pdf
-   ```
-   The script creates or updates:
-   - `data/title22.json` and `data/title23.json`
-   - `data/processed/smc_chunks.jsonl`
-   - `data/processed/smc_ground_truth.db`
-   - `data/processed/smc_embeddings.npz`
+- **Retrieval**: sentence-transformer embeddings + SQLite FTS5, fused with
+  reciprocal-rank fusion. The corpus: 5,896 chunks, 1,826 sections, 92 chapters
+  extracted from the City's PDF code supplements by the ingestion pipeline in
+  `data_processing/`.
+- **The browser holds no secrets**: the Groq key lives on the server; King
+  County GIS (which sends no CORS headers) is proxied against a fixed URL.
 
-Re-run the pipeline whenever Seattle publishes a new supplement.
+## Retrieval quality is measured, not assumed
 
-### Run the checklist app
-1. Clone the repository and move into the project:
-   ```bash
-   git clone <your-fork-or-this-repo>
-   cd PreAssess
-   ```
-2. Install JavaScript dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-4. Open the printed localhost URL in your browser and walk through the checklist for any Seattle address.
+30 hand-labeled resident-style queries (`eval/queries.jsonl`), scored with
+recall@k and MRR (`python -m eval.retrieval_eval`):
 
-### Run with Docker (optional)
-1. Export any Groq overrides (or put them in a `.env` file that Docker Compose will read):
-   ```bash
-   export VITE_GROQ_API_KEY=your_groq_key             # required for AI-assisted features
-   export VITE_GROQ_MODEL=llama-3.1-70b-versatile     # optional override (defaults to mixtral-8x7b-32768)
-   export VITE_GROQ_MODELS="llama-3.1-70b-versatile,mixtral-8x7b-32768"  # optional dropdown list
-   ```
-   The image bake step reads these variables; rerun `docker compose up --build` after changing them.
-2. Build and start the container (run the data pipeline above first so the processed files exist):
-   ```bash
-   docker compose up --build
-   ```
-3. Visit http://localhost:4173 to use the app (served with `vite preview`).
-4. Press `Ctrl+C` when you are done, then run `docker compose down` if you want to remove the container.
+| config | recall@1 | recall@3 | recall@5 | MRR@5 |
+|--------|----------|----------|----------|-------|
+| dense | 0.23 | 0.53 | 0.60 | 0.39 |
+| fts (BM25) | 0.27 | 0.43 | 0.50 | 0.36 |
+| prefilter (old design) | 0.20 | 0.53 | 0.57 | 0.36 |
+| **rrf-fused (shipped)** | **0.33** | 0.50 | **0.60** | **0.43** |
 
-### Generate an AI report (optional)
-1. Export your Groq key and make sure Python can find the project code:
-   ```bash
-   export GROQ_API_KEY=your_api_key_here
-   export PYTHONPATH="$(pwd)"
-   ```
-2. Run the sample agent to produce a mock property report backed by retrieved code snippets:
-   ```bash
-   python -m smc_agents.report_agent
-   ```
-   Tweak `smc_agents/report_agent.py` to change the questions or integrate the agent into your own workflow.
+The eval earned its keep immediately: it caught the original hybrid mode
+returning an *arbitrary* candidate subset (missing `ORDER BY rank` before
+`LIMIT`) — 0.07 recall@5 — and then showed that rank fusion beats the
+prefilter design entirely. `eval/results.md` has the current numbers and the
+open misses.
 
-## How it works (under the hood)
-1. **Upload** the latest municipal code PDF.
-2. **Extract** the chapters of interest (Titles 22 & 23) into structured JSON.
-3. **Chunk & embed** each section so the retriever searches targeted snippets instead of entire chapters.
-4. **Retrieve & compose** the right passages when someone asks about their address, letting the Groq-powered agent write a report with citations.
+## Quickstart
 
-## Repository tour
-- `src/` – React + Vite front-end for the checklist experience.
-- `data_processing/` – Scripts that parse the PDF, build ground-truth chunks, and generate embeddings.
-- `smc_agents/` – Retrieval logic and Groq agent for producing narrative reports.
-- `data/processed/` – Outputs generated by the data pipeline (JSONL, SQLite, embeddings).
-- `docs/` – Supporting docs and demo assets (`loom-thumb.png`).
+Prerequisites: Python 3.11+, Node 20+, and optionally a Groq API key (retrieval
+and the checklist work without one; report generation needs it).
 
-Need more detail on the extraction process? Check `docs/ground_truth.md` for an end-to-end walkthrough of the data pipeline.
+```bash
+# API (from the repo root; corpus artifacts are committed)
+pip install -r requirements-dev.txt
+python -m pytest tests/ -q          # 56 tests, offline, no keys needed
+GROQ_API_KEY=... uvicorn api.main:app --port 8000
+
+# Frontend (dev)
+npm ci
+npm run dev                          # Vite proxies /api to :8000
+```
+
+Or as one container:
+
+```bash
+GROQ_API_KEY=... docker compose up --build   # serves app + API on :8000
+```
+
+Rebuilding the corpus from a new code supplement PDF:
+`./data_processing/run_pipeline.sh /path/to/MunicipalCode.pdf`
+
+## API
+
+| Endpoint | What |
+|----------|------|
+| `POST /api/report` | Property + project → report, citation audit, grounded ratio, evidence (rate-limited) |
+| `GET /api/search?q=` | Fused retrieval over the corpus |
+| `GET /api/citation/{smc}` | Exact code text for a citation (section, subsection, or chapter) |
+| `GET /api/parcel/query` | King County GIS proxy (fixed upstream) |
+| `GET /api/health`, `GET /api/stats` | Corpus + config introspection |
+
+## Limitations
+
+- **Titles 22 and 23 only.** Trees (Title 25), for example, are not ingested;
+  citations into other titles are honestly reported as "not found in the
+  ingested code" rather than guessed at. The retriever warns loudly when a
+  filter targets a title that isn't loaded.
+- **Not legal advice.** The report is a research aid over the code text; the
+  instant checklist uses a small static table of simplified reference values
+  (clearly scoped in `src/`), and permits are decided by the City, not a model.
+- **Retrieval is embedding + BM25, no cross-encoder reranker.** recall@1 of
+  0.33 on hard resident phrasing has clear headroom; the eval harness exists so
+  improvements are measured, not vibes.
+- **grounded_ratio measures citation discipline, not correctness** — a report
+  can cite real, retrieved code and still reason about it imperfectly.
+
+## License
+
+MIT
