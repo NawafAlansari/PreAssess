@@ -629,7 +629,7 @@ const SeattleConstructionChecker = () => {
                   <h1 className="h2 mb-0 pa-wordmark">Pre<span className="pa-accent">Assess</span></h1>
                   {corpusStats && (
                     <span className="small pa-stats">
-                      {corpusStats.sections.toLocaleString()} code sections indexed · Titles {corpusStats.titles.join(', ')}
+                      {corpusStats.sections.toLocaleString()} code sections indexed · {corpusStats.titles.length} SMC titles
                     </span>
                   )}
                 </div>
@@ -709,7 +709,7 @@ const SeattleConstructionChecker = () => {
               </div>
               <div className="col-lg-3">
                 <label className="form-label fw-semibold">&nbsp;</label>
-                <button type="submit" className="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2" disabled={loading}>
+                <button type="submit" className="btn btn-success w-100 d-flex align-items-center justify-content-center gap-2" disabled={loading}>
                   {loading ? (
                     <>
                       <span className="spinner-border spinner-border-sm" role="status" />
