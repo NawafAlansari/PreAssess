@@ -87,7 +87,10 @@ const ReportSection = ({ bundle, error }) => {
   if (!bundle) return null;
 
   const citations = Object.keys(auditByCitation);
-  const segments = segment(bundle.report || '', citations);
+  // Defensive: some models emit markdown emphasis despite the plain-text
+  // instruction; stray asterisks read as typos in the rendered report.
+  const reportText = (bundle.report || '').replace(/\*\*([^*]+)\*\*/g, '$1');
+  const segments = segment(reportText, citations);
 
   const onCitationClick = async (citation) => {
     const verdict = auditByCitation[citation];

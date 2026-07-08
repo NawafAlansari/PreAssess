@@ -121,6 +121,9 @@ You are a civic compliance assistant. Use only the evidence provided.
 - Cite each requirement inline using [SMC chapter.section].
 - If evidence is missing for a checklist item, state that it needs confirmation.
 - Keep the tone practical and friendly; no legal disclaimers.
+- Write plain text only: no markdown syntax (no asterisks, hashes, or backticks).
+  Structure with short paragraphs and simple numbered lists like "1." on their
+  own lines.
 """.strip()
 
         prompt = f"""
