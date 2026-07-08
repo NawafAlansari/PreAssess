@@ -44,8 +44,8 @@ grounded_ratio: 0.33
                                              │
                        FastAPI  ──►  GroundedRetriever ──► LLM (server-side key,
                                      dense + BM25, RRF      any OpenAI-compatible
-                                     8,066 SMC chunks       endpoint; Groq default)
-                                     (Titles 22, 23, 25)        │
+                                     19,419 SMC chunks      endpoint; Groq default)
+                                     (21 titles)                │
                                                                 ▼
                                                           citation_check
                                                           audits the report
@@ -57,9 +57,9 @@ City Landmark District, the report retrieves and cites SMC 25.20 by itself —
 instead of asking the resident to go find out.
 
 - **Retrieval**: sentence-transformer embeddings + SQLite FTS5, fused with
-  reciprocal-rank fusion. The corpus: 8,066 chunks, 2,376 sections across
-  Titles 22, 23, and 25, extracted from the City's PDF code by the ingestion
-  pipeline in `data_processing/`.
+  reciprocal-rank fusion. The corpus: 19,419 chunks, 7,475 sections across 21
+  SMC titles — effectively the whole Seattle Municipal Code — extracted from
+  the City's PDF code by the ingestion pipeline in `data_processing/`.
 - **The browser holds no secrets**: the Groq key lives on the server; King
   County GIS (which sends no CORS headers) is proxied against a fixed URL.
 
@@ -70,10 +70,15 @@ recall@k and MRR (`python -m eval.retrieval_eval`):
 
 | config | recall@1 | recall@3 | recall@5 | MRR@5 |
 |--------|----------|----------|----------|-------|
-| dense | 0.28 | 0.56 | 0.62 | 0.42 |
-| fts (BM25) | 0.31 | 0.49 | 0.56 | 0.40 |
-| prefilter (old design) | 0.26 | 0.54 | 0.59 | 0.40 |
-| **rrf-fused (shipped)** | **0.38** | 0.56 | **0.67** | **0.49** |
+| dense | 0.28 | 0.54 | 0.62 | 0.42 |
+| fts (BM25) | 0.03 | 0.15 | 0.23 | 0.09 |
+| prefilter (old design) | 0.23 | 0.51 | 0.56 | 0.37 |
+| **rrf-fused (shipped)** | **0.36** | 0.51 | **0.64** | **0.46** |
+
+A finding worth noting: on the 2-title corpus BM25 alone scored 0.31 recall@1;
+on the full 21-title corpus it collapses to 0.03 — common permit vocabulary
+matches noise across the whole code. Dense holds, and fusion is what keeps
+first-result quality as the corpus scales.
 
 The eval earned its keep immediately: it caught the original hybrid mode
 returning an *arbitrary* candidate subset (missing `ORDER BY rank` before
@@ -119,16 +124,15 @@ Rebuilding the corpus from a new code supplement PDF:
 
 ## Limitations
 
-- **Titles 22, 23, and 25 of ~28.** Street use (Title 15) and utilities
-  (Title 21), for example, are not yet ingested; citations into missing titles
-  are honestly reported as "not found in the ingested code" rather than guessed
-  at, and the retriever warns loudly when a filter targets an unloaded title.
-  The pipeline ingests any title from the City's code PDF in one command.
+- **21 of the SMC's titles are ingested** (the PDF yielded nothing usable for
+  Titles 12, 13, and 19); citations into missing titles are honestly reported
+  as "not found in the ingested code" rather than guessed at, and the
+  retriever warns loudly when a filter targets an unloaded title.
 - **Not legal advice.** The report is a research aid over the code text; the
   instant checklist uses a small static table of simplified reference values
   (clearly scoped in `src/`), and permits are decided by the City, not a model.
 - **Retrieval is embedding + BM25, no cross-encoder reranker.** recall@1 of
-  0.38 on hard resident phrasing has clear headroom; the eval harness exists so
+  0.36 on hard resident phrasing has clear headroom; the eval harness exists so
   improvements are measured, not vibes.
 - **grounded_ratio measures citation discipline, not correctness** — a report
   can cite real, retrieved code and still reason about it imperfectly.
