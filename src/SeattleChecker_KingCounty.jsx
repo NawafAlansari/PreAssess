@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Search, FileText, AlertCircle, CheckCircle, Building2, MapPin, Database, TreePine, Home, Info } from 'lucide-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ReportSection from './components/ReportSection.jsx';
-import { fetchComplianceReport } from './lib/api.js';
+import { fetchComplianceReport, fetchContext } from './lib/api.js';
+import MapPanel from './components/MapPanel.jsx';
+import ContextPanel from './components/ContextPanel.jsx';
 
 // Simplified reference values for the INSTANT client-side checklist only.
 // The AI report does not use this table; it retrieves from the full ingested
@@ -101,6 +103,7 @@ const SeattleConstructionChecker = () => {
   const [projectAnalysis, setProjectAnalysis] = useState(null);
   const [debugInfo, setDebugInfo] = useState(null);
   const [llmReport, setLlmReport] = useState(null);
+  const [contextData, setContextData] = useState(null);
   const [llmError, setLlmError] = useState('');
 
   // King County GIS parcel address layer (ArcGIS MapServer)
@@ -163,7 +166,8 @@ const SeattleConstructionChecker = () => {
           where: whereClause,
           outFields: '*',
           f: 'json',
-          returnGeometry: 'false',
+          returnGeometry: 'true',
+          outSR: '4326',
           resultRecordCount: '10',
           orderByFields: 'ADDR_FULL'
         });
@@ -267,7 +271,7 @@ const SeattleConstructionChecker = () => {
       const filterByStreet = requiredStreetTokens.length
         ? parcelFeatures.filter((feature) => {
             const attrs = feature.attributes || {};
-            const streetTokens = [attrs.ADDR_PD, attrs.ADDR_SN, attrs.ADDR_ST, attrs.ADDR_SD]
+            const streetTokens = (attrs.ADDR_FULL || '').toUpperCase().split(' ').slice(1)
               .map(normalizeToken)
               .filter(Boolean);
             return requiredStreetTokens.every((token) => streetTokens.includes(token));
@@ -281,7 +285,7 @@ const SeattleConstructionChecker = () => {
           const attrs = feature.attributes || {};
           const fullAddress = attrs.ADDR_FULL ? attrs.ADDR_FULL.toUpperCase().trim() : '';
           const normalizedFull = normalizeAddress(attrs.ADDR_FULL || '');
-          const streetTokens = [attrs.ADDR_PD, attrs.ADDR_SN, attrs.ADDR_ST, attrs.ADDR_SD]
+          const streetTokens = (attrs.ADDR_FULL || '').toUpperCase().split(' ').slice(1)
             .map(normalizeToken)
             .filter(Boolean);
           const streetMatchesAll =
@@ -345,6 +349,18 @@ const SeattleConstructionChecker = () => {
 
       // Process the best matching parcel
       const parcel = bestCandidate.feature.attributes;
+      const parcelGeometry = bestCandidate.feature.geometry || null;
+      const parcelCentroid = (() => {
+        const ring = parcelGeometry?.rings?.[0];
+        if (!ring?.length) return null;
+        let sx = 0;
+        let sy = 0;
+        ring.forEach(([x, y]) => {
+          sx += x;
+          sy += y;
+        });
+        return { longitude: sx / ring.length, latitude: sy / ring.length };
+      })();
       console.log('Found parcel:', parcel);
 
       setLoadingStage('Processing property information...');
@@ -405,11 +421,9 @@ const SeattleConstructionChecker = () => {
         jurisdiction: parcel.CTYNAME || parcel.LEVY_JURIS || 'SEATTLE',
         neighborhood: parcel.PROP_NAME || parcel.PLAT_NAME || 'Unknown',
 
-        // Tree data (placeholder - would need separate API)
-        canopyCoverage: Math.floor(Math.random() * 30) + 10,
-        treeCount: Math.floor(Math.random() * 5) + 1,
-        latitude: parcel.LAT || parcel.POINT_Y || null,
-        longitude: parcel.LON || parcel.POINT_X || null,
+        latitude: parcelCentroid?.latitude ?? null,
+        longitude: parcelCentroid?.longitude ?? null,
+        parcelRings: parcelGeometry?.rings ?? null,
         legalDescription: parcel.LEGALDESC || null,
 
         // Data source
@@ -510,7 +524,7 @@ const SeattleConstructionChecker = () => {
           required: true,
           description: 'Document all trees ≥6" diameter',
           code: CHECKLIST_REFERENCE.treeProtection.inventory.code,
-          specificRequirement: `Property shows ${data.canopyCoverage}% canopy. Inventory required.`
+          specificRequirement: 'Street-tree data for this parcel appears on the map below.'
         }
       ]
     });
@@ -547,6 +561,7 @@ const SeattleConstructionChecker = () => {
     setProjectAnalysis(null);
     setLlmReport(null);
     setLlmError('');
+    setContextData(null);
 
     try {
       const trimmedDescription = projectDescription.trim();
@@ -563,9 +578,20 @@ const SeattleConstructionChecker = () => {
       const checklistData = generateChecklist(data, analysis);
       setChecklist(checklistData);
 
+      let ctx = null;
+      if (data.latitude && data.longitude) {
+        setLoadingStage('Checking overlays, critical areas, and trees...');
+        try {
+          ctx = await fetchContext(data.latitude, data.longitude);
+          setContextData(ctx);
+        } catch (ctxError) {
+          console.error('GIS context lookup failed:', ctxError);
+        }
+      }
+
       setLoadingStage('Generating compliance report...');
       try {
-        const bundle = await fetchComplianceReport(data, analysis, trimmedDescription);
+        const bundle = await fetchComplianceReport(data, analysis, trimmedDescription, ctx);
         setLlmReport(bundle);
       } catch (reportError) {
         setLlmError(reportError.message || 'Report generation failed.');
@@ -779,8 +805,8 @@ const SeattleConstructionChecker = () => {
                 <div className="col d-flex align-items-center gap-2">
                   <TreePine className="text-success" size={18} />
                   <div>
-                    <div className="small text-muted">Estimated Tree Canopy</div>
-                    <div className="fw-semibold">{propertyData.canopyCoverage}%</div>
+                    <div className="small text-muted">Street Trees (30 m)</div>
+                    <div className="fw-semibold">{contextData?.trees?.count ?? '—'}</div>
                   </div>
                 </div>
                 {propertyData.appraisedValue > 0 && (
@@ -804,6 +830,10 @@ const SeattleConstructionChecker = () => {
             </div>
           </div>
         )}
+
+        <ContextPanel contextData={contextData} />
+
+        {propertyData && <MapPanel property={propertyData} contextData={contextData} />}
 
         <ReportSection bundle={llmReport} error={llmError} />
 

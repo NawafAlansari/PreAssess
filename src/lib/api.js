@@ -26,13 +26,16 @@ const summarizeProperty = (property) => ({
   zoneDescription: property.zoneDescription,
   jurisdiction: property.jurisdiction,
   neighborhood: property.neighborhood,
-  canopyCoverage: property.canopyCoverage,
-  treeCount: property.treeCount,
   latitude: property.latitude,
   longitude: property.longitude
 });
 
-export function fetchComplianceReport(property, analysis, description) {
+export function fetchContext(lat, lon) {
+  const params = new URLSearchParams({ lat: String(lat), lon: String(lon) });
+  return request(`/api/context?${params}`);
+}
+
+export function fetchComplianceReport(property, analysis, description, context) {
   const questions = [];
   if (analysis?.projectTypes?.length) {
     questions.push(
@@ -44,6 +47,7 @@ export function fetchComplianceReport(property, analysis, description) {
     body: JSON.stringify({
       address_profile: summarizeProperty(property),
       project_description: description || '',
+      context: context || undefined,
       questions
     })
   });

@@ -69,8 +69,8 @@ def fake_transport():
         elif "Combined_Tree_Point" in url:
             body = {
                 "features": [
-                    {"attributes": {"COMMON_NAME": "Chinese Elm", "SCIENTIFIC_NAME": "Ulmus parvifolia", "DBH": 2, "OWNERSHIP": "SDOT", "UNITDESC": "319 6TH AVE N"}},
-                    {"attributes": {"COMMON_NAME": "Red Oak", "SCIENTIFIC_NAME": "Quercus rubra", "DBH": 24, "OWNERSHIP": "SDOT", "UNITDESC": "321 6TH AVE N"}},
+                    {"attributes": {"COMMON_NAME": "Chinese Elm", "SCIENTIFIC_NAME": "Ulmus parvifolia", "DBH": 2, "OWNERSHIP": "SDOT", "UNITDESC": "319 6TH AVE N"}, "geometry": {"x": -122.29, "y": 47.56}},
+                    {"attributes": {"COMMON_NAME": "Red Oak", "SCIENTIFIC_NAME": "Quercus rubra", "DBH": 24, "OWNERSHIP": "SDOT", "UNITDESC": "321 6TH AVE N"}, "geometry": {"x": -122.291, "y": 47.561}},
                 ]
             }
         else:
@@ -107,6 +107,7 @@ async def test_point_context_shape(patched_gis_transport):
 
     assert ctx["trees"]["count"] == 2
     assert ctx["trees"]["largest"][0]["common_name"] == "Red Oak"  # sorted by DBH
+    assert ctx["trees"]["points"][0]["lat"] == 47.561
     assert ctx["warnings"] == []
 
 

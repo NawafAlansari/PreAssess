@@ -143,23 +143,35 @@ async def _trees(client: httpx.AsyncClient, lat: float, lon: float, radius_m: in
         "units": "esriSRUnit_Meter",
         "outFields": "COMMON_NAME,SCIENTIFIC_NAME,DBH,OWNERSHIP,UNITDESC",
         "resultRecordCount": "200",
+        "returnGeometry": "true",
+        "outSR": "4326",
     }
     body = await _get_json(client, TREES_QUERY, params)
-    trees = [f["attributes"] for f in body.get("features", [])]
-    trees.sort(key=lambda t: t.get("DBH") or 0, reverse=True)
+    trees = []
+    for feature in body.get("features", []):
+        attrs = feature["attributes"]
+        geom = feature.get("geometry") or {}
+        trees.append(
+            {
+                "common_name": attrs.get("COMMON_NAME"),
+                "scientific_name": attrs.get("SCIENTIFIC_NAME"),
+                "dbh_inches": attrs.get("DBH"),
+                "ownership": attrs.get("OWNERSHIP"),
+                "location": attrs.get("UNITDESC"),
+                "lat": geom.get("y"),
+                "lon": geom.get("x"),
+            }
+        )
+    trees.sort(key=lambda t: t.get("dbh_inches") or 0, reverse=True)
     return {
         "radius_m": radius_m,
         "count": len(trees),
-        "largest": [
-            {
-                "common_name": t.get("COMMON_NAME"),
-                "scientific_name": t.get("SCIENTIFIC_NAME"),
-                "dbh_inches": t.get("DBH"),
-                "ownership": t.get("OWNERSHIP"),
-                "location": t.get("UNITDESC"),
-            }
-            for t in trees[:8]
-        ],
+        "largest": trees[:8],
+        "points": [
+            {k: t[k] for k in ("lat", "lon", "common_name", "dbh_inches")}
+            for t in trees
+            if t.get("lat") is not None
+        ][:200],
     }
 
 
