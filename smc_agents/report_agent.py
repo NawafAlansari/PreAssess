@@ -90,7 +90,14 @@ class SeattleReportAgent:
                 continue
             snippets = []
             for hit in hits:
-                citation = hit.full_citation or hit.chunk_id
+                # Never expose internal chunk ids as citation labels: the model
+                # copies whatever label it sees into the report.
+                citation = (
+                    hit.full_citation
+                    or hit.metadata.get("section_citation")
+                    or hit.metadata.get("chapter_citation")
+                    or "uncited"
+                )
                 heading = hit.section_heading or ""
                 snippets.append(
                     f"[{citation}] {heading}\n{textwrap.shorten(hit.text, width=1200, placeholder=' …')}"

@@ -94,3 +94,12 @@ def test_report_rate_limit(client_with_agent, monkeypatch):
     assert client_with_agent.post("/api/report", json=payload).status_code == 200
     assert client_with_agent.post("/api/report", json=payload).status_code == 200
     assert client_with_agent.post("/api/report", json=payload).status_code == 429
+
+
+def test_citation_lookup_exact_and_subsection(client):
+    body = client.get("/api/citation/23.44.010").json()
+    assert body["results"][0]["citation"] == "SMC 23.44.010"
+    deep = client.get("/api/citation/23.44.010.C.2").json()
+    assert deep["results"][0]["citation"] == "SMC 23.44.010"
+    none = client.get("/api/citation/99.99.999").json()
+    assert none["results"] == []

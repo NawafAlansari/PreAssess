@@ -16,7 +16,8 @@ from collections import defaultdict, deque
 from pathlib import Path
 from typing import Deque, Dict, List, Optional
 
-from fastapi import FastAPI, HTTPException, Request
+import httpx
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -167,6 +168,63 @@ def search(q: str, k: int = 5, title: Optional[int] = None) -> dict:
             for h in hits
         ],
     }
+
+
+@app.get("/api/citation/{citation}")
+def citation_lookup(citation: str) -> dict:
+    """Exact lookup of a citation's code text (section, subsection, or chapter)."""
+    retriever = get_retriever()
+    citation = citation.strip()
+    matches = []
+    for meta in retriever.metadata.values():
+        section = str(meta.get("section_citation") or "")
+        chapter = str(meta.get("chapter_citation") or "")
+        if (
+            section == citation
+            or (section and section.startswith(citation + "."))
+            or (section and citation.startswith(section + "."))
+            or chapter == citation
+        ):
+            matches.append(meta)
+        if len(matches) >= 5:
+            break
+    return {
+        "citation": citation,
+        "results": [
+            {
+                "chunk_id": meta.get("chunk_id"),
+                "citation": meta.get("full_citation") or meta.get("section_citation"),
+                "heading": meta.get("section_heading"),
+                "chapter_title": meta.get("chapter_title"),
+                "text": str(meta.get("text", ""))[:600],
+            }
+            for meta in matches
+        ],
+    }
+
+
+# King County's ArcGIS endpoint does not send CORS headers, so the browser
+# cannot query it directly. This proxies the /query call against a FIXED
+# upstream URL — only query parameters pass through, never a caller-supplied
+# host or path.
+KC_PARCEL_QUERY_URL = (
+    "https://gismaps.kingcounty.gov/arcgis/rest/services/Property/"
+    "KingCo_PropertyInfo/MapServer/2/query"
+)
+
+
+@app.get("/api/parcel/query")
+def parcel_query(request: Request) -> Response:
+    try:
+        upstream = httpx.get(
+            KC_PARCEL_QUERY_URL,
+            params=dict(request.query_params),
+            timeout=15.0,
+            follow_redirects=True,
+        )
+    except httpx.HTTPError as err:
+        raise HTTPException(status_code=502, detail=f"King County GIS unreachable: {err}")
+    return Response(content=upstream.content, media_type="application/json")
 
 
 @app.post("/api/report")
