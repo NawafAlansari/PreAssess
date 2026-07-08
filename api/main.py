@@ -22,6 +22,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
+from api.gis import point_context
 from smc_agents.report_agent import DEFAULT_MODEL, EvidenceRequest, SeattleReportAgent
 from smc_agents.retriever import GroundedRetriever
 
@@ -83,6 +84,9 @@ class ReportRequest(BaseModel):
     address_profile: Dict[str, object] = Field(default_factory=dict)
     project_description: str = ""
     questions: List[str] = Field(default_factory=list, max_length=6)
+    # Output of /api/context — lets the report retrieve the chapters that the
+    # city's own GIS says govern this parcel (overlays, ECA, trees).
+    context: Optional[Dict[str, object]] = None
 
 
 def _evidence_requests(payload: ReportRequest) -> List[EvidenceRequest]:
@@ -94,6 +98,31 @@ def _evidence_requests(payload: ReportRequest) -> List[EvidenceRequest]:
     for i, question in enumerate(payload.questions, start=1):
         if question.strip():
             requests.append(EvidenceRequest(label=f"question_{i}", query=question, top_k=4))
+
+    if payload.context:
+        ingested = set(get_retriever().ingested_titles)
+        for overlay in payload.context.get("overlays", []) or []:
+            prefix = overlay.get("chapter_prefix") if isinstance(overlay, dict) else None
+            name = overlay.get("name") if isinstance(overlay, dict) else None
+            if not prefix:
+                continue
+            try:
+                title = int(prefix.split(".")[0])
+            except ValueError:
+                continue
+            # Only request chapters we have ingested; others would silently
+            # retrieve nothing (the retriever also warns).
+            if title not in ingested:
+                continue
+            requests.append(
+                EvidenceRequest(
+                    label=f"overlay:{name or prefix}",
+                    query=f"{name or ''} overlay district requirements and standards",
+                    section_prefix=prefix,
+                    top_k=3,
+                )
+            )
+
     if not requests:
         raise HTTPException(
             status_code=422,
@@ -170,6 +199,16 @@ def search(q: str, k: int = 5, title: Optional[int] = None) -> dict:
     }
 
 
+@app.get("/api/context")
+async def context(lat: float, lon: float, tree_radius: int = 30) -> dict:
+    """Zoning, overlay districts, ECA flags, and street trees at a point,
+    from the City of Seattle's authoritative GIS layers."""
+    if not (47.2 < lat < 47.9 and -122.6 < lon < -121.9):
+        raise HTTPException(status_code=422, detail="Point is not in the Seattle area.")
+    tree_radius = max(5, min(tree_radius, 150))
+    return await point_context(lat, lon, tree_radius_m=tree_radius)
+
+
 @app.get("/api/citation/{citation}")
 def citation_lookup(citation: str) -> dict:
     """Exact lookup of a citation's code text (section, subsection, or chapter)."""
@@ -231,8 +270,28 @@ def parcel_query(request: Request) -> Response:
 def report(payload: ReportRequest, request: Request) -> dict:
     _rate_limit(request.client.host if request.client else "unknown")
     agent = get_agent()
+
+    address_profile = dict(payload.address_profile)
+    if payload.context:
+        ctx = payload.context
+        trees = ctx.get("trees") or {}
+        address_profile["city_gis_facts"] = {
+            "zoning_layer": ctx.get("zoning"),
+            "overlay_districts": [
+                {k: o.get(k) for k in ("name", "type", "chapter")}
+                for o in (ctx.get("overlays") or [])
+                if isinstance(o, dict)
+            ],
+            "environmentally_critical_areas": ctx.get("eca") or [],
+            "street_trees_nearby": {
+                "count": trees.get("count", 0),
+                "radius_m": trees.get("radius_m"),
+                "largest": (trees.get("largest") or [])[:3],
+            },
+        }
+
     bundle = agent.generate_report(
-        address_profile=payload.address_profile,
+        address_profile=address_profile,
         user_inputs={
             "project": payload.project_description,
             "questions": payload.questions,
