@@ -80,6 +80,12 @@ on the full 21-title corpus it collapses to 0.03 — common permit vocabulary
 matches noise across the whole code. Dense holds, and fusion is what keeps
 first-result quality as the corpus scales.
 
+**Field test:** [docs/FIELD_TEST.md](./docs/FIELD_TEST.md) — city-staff
+scenarios run live, plus the headline comparison: the same model answering the
+same resident questions **fabricates 33% of its SMC citations without this
+pipeline, and 0% with it** (92% verified against retrieved evidence;
+`eval/citation_reliability.py`).
+
 The eval earned its keep immediately: it caught the original hybrid mode
 returning an *arbitrary* candidate subset (missing `ORDER BY rank` before
 `LIMIT`) — 0.07 recall@5 — and then showed that rank fusion beats the
