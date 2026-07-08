@@ -17,11 +17,17 @@ from typing import Dict, Iterable, List, Optional
 
 from groq import Groq
 
+from .citation_check import audit_report
 from .retriever import GroundedRetriever, RetrievalResult
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = REPO_ROOT / "data/processed"
+
+# The original pin (llama-3.1-70b-versatile) was decommissioned by Groq on
+# 2025-01-24; llama-3.3-70b-versatile is its live successor. Verified against
+# the Groq models API. Override via GROQ_MODEL when the roster rotates.
+DEFAULT_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 
 
 @dataclass
@@ -40,11 +46,11 @@ class SeattleReportAgent:
         self,
         retriever: GroundedRetriever,
         *,
-        model: str = "llama-3.1-70b-versatile",
+        model: Optional[str] = None,
         api_key: Optional[str] = None,
     ) -> None:
         self.retriever = retriever
-        self.model = model
+        self.model = model or DEFAULT_MODEL
         api_key = api_key or os.getenv("GROQ_API_KEY")
         if not api_key:
             raise RuntimeError("GROQ_API_KEY not set")
@@ -130,6 +136,14 @@ Municipal code evidence:
             messages=[{"role": "user", "content": prompt}],
         )
         text = completion.choices[0].message.content
+
+        retrieved_hits = [hit for hits in evidence.values() for hit in hits]
+        audit = audit_report(
+            text,
+            retrieved_hits,
+            corpus_lookup=self.retriever.has_citation,
+        )
+
         return {
             "report": text,
             "prompt": prompt,
@@ -137,6 +151,8 @@ Municipal code evidence:
                 label: [result.metadata for result in hits]
                 for label, hits in evidence.items()
             },
+            "citation_audit": [verdict.to_dict() for verdict in audit.verdicts],
+            "grounded_ratio": audit.grounded_ratio,
         }
 
 
@@ -154,30 +170,35 @@ def demo() -> None:
         "address": "1234 Example Ave N, Seattle, WA",
         "zoning": "LR1",
         "lot_size_sqft": 4200,
-        "tree_inventory": {"exceptional_trees": 1, "significant_trees": 3},
     }
     user_inputs = {
-        "project": "Add an accessory dwelling unit and remove one hazardous tree.",
-        "questions": ["Do I need a tree removal permit?", "What setbacks apply?"],
+        "project": "Add an accessory dwelling unit and plant new street trees.",
+        "questions": [
+            "What setbacks and lot coverage apply?",
+            "What landscaping standards apply?",
+            "What building permit do I need?",
+        ],
     }
+    # Every request targets an ingested title (22 and 23 only). Title 25
+    # (trees) is not in the corpus, so we do not ask for it here.
     evidence_requests = [
         EvidenceRequest(
             label="zoning",
-            query="accessory dwelling unit setbacks",
+            query="accessory dwelling unit development standards setbacks lot coverage",
             title_number=23,
             section_prefix="23.44",
             chunk_types=["section"],
         ),
         EvidenceRequest(
-            label="trees",
-            query="tree removal permit hazardous",
-            title_number=25,
-            section_prefix="25.11",
+            label="landscaping",
+            query="tree planting and landscaping standards",
+            title_number=23,
+            section_prefix="23.45",
             chunk_types=["section"],
         ),
         EvidenceRequest(
             label="permits",
-            query="building permit accessory dwelling",
+            query="building permit application requirements",
             title_number=22,
             section_prefix="22.801",
             chunk_types=["section"],
@@ -189,6 +210,10 @@ def demo() -> None:
         evidence_requests=evidence_requests,
     )
     print(bundle["report"])
+    print("\n--- citation audit ---")
+    print(f"grounded_ratio: {bundle['grounded_ratio']:.2f}")
+    for verdict in bundle["citation_audit"]:
+        print(f"  {verdict['citation']}: {verdict['status']}")
 
 
 if __name__ == "__main__":
