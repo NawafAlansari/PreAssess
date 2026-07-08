@@ -307,6 +307,13 @@ def build_title_structure(
         chapter_short_match = chapter_short_pattern.match(condensed)
         if chapter_match or chapter_short_match:
             finalize_chapter()
+            # Some titles (e.g. Title 25) have no Subtitle level: chapters sit
+            # directly under the title. Give them an anonymous subtitle rather
+            # than silently discarding them into the preface.
+            if current_subtitle is None:
+                current_subtitle = Subtitle(
+                    number="", title="", start_page=page, end_page=page
+                )
             match = chapter_match or chapter_short_match
             assert match is not None
             chapter_citation = match.group(1)

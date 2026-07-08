@@ -1,19 +1,19 @@
 # Retrieval evaluation
 
-30 hand-labeled queries (eval/queries.jsonl), top-5 retrieval.
+39 hand-labeled queries (eval/queries.jsonl), top-5 retrieval.
 
 | config | recall@1 | recall@3 | recall@5 | MRR@5 |
 |--------|----------|----------|----------|-------|
-| dense | 0.23 | 0.53 | 0.60 | 0.39 |
-| fts | 0.27 | 0.43 | 0.50 | 0.36 |
-| prefilter | 0.20 | 0.53 | 0.57 | 0.36 |
-| rrf-fused | 0.33 | 0.50 | 0.60 | 0.43 |
+| dense | 0.28 | 0.56 | 0.62 | 0.42 |
+| fts | 0.31 | 0.49 | 0.56 | 0.40 |
+| prefilter | 0.26 | 0.54 | 0.59 | 0.40 |
+| rrf-fused | 0.38 | 0.56 | 0.67 | 0.49 |
 
 The app uses rrf-fused (reciprocal-rank fusion of dense + BM25).
 `prefilter` is the previous design (FTS candidate filter + dense
 rerank), kept for comparison.
 
-rrf-fused misses (12):
+rrf-fused misses (13):
 - who enforces the building code and can adopt rules
 - city forcing repair or demolition of a dangerous building
 - penalty for violating mobile home park rules
@@ -26,3 +26,4 @@ rrf-fused misses (12):
 - seattle mixed north rainier zone special provisions
 - screening requirements for parking in structures
 - deadline to respond to an administrative appeal
+- purpose of the tree protection code

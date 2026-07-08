@@ -4,7 +4,9 @@
 answer whose every citation is verified, not just generated.**
 
 Enter a Seattle address and a project ("add a 600 sq ft detached ADU"). PreAssess
-pulls the real parcel from King County GIS, retrieves the governing code sections
+pulls the real parcel from King County GIS, resolves which overlay districts,
+environmentally critical areas, and street trees apply from the City of Seattle's
+own GIS layers (shown on a live parcel map), retrieves the governing code sections
 from an ingested corpus of the Seattle Municipal Code, drafts a plain-language
 compliance report — and then **audits every SMC citation in that report against
 the code that was actually retrieved**. Citations render green (verified in
@@ -32,37 +34,46 @@ grounded_ratio: 0.33
 ## Architecture
 
 ```
-                       browser (React + Vite)
-                         │ address + project        citations clicked
-                         ▼                          ▼
- King County GIS ◄─ /api/parcel/query   /api/report │ /api/citation
- (live parcels)          │                  │       │
-                         ▼                  ▼       ▼
-                       FastAPI  ──►  GroundedRetriever ──► Groq (server-side key)
-                                     dense + BM25, RRF          │
-                                     5,896 SMC chunks           ▼
-                                     (Titles 22 & 23)     citation_check
+                    browser (React + Vite + Leaflet parcel map)
+                      │ address + project              citations clicked
+                      ▼                                ▼
+ King County GIS ◄─ /api/parcel/query    /api/report  │  /api/citation
+ Seattle GIS     ◄─ /api/context             │        │
+ (zoning, overlays,      │                   ▼        ▼
+  ECA, street trees)     └──► overlay chapters as evidence requests
+                                             │
+                       FastAPI  ──►  GroundedRetriever ──► LLM (server-side key,
+                                     dense + BM25, RRF      any OpenAI-compatible
+                                     8,066 SMC chunks       endpoint; Groq default)
+                                     (Titles 22, 23, 25)        │
+                                                                ▼
+                                                          citation_check
                                                           audits the report
 ```
 
+The overlay resolution matters: the city's master overlay layer carries the SMC
+chapter that governs each district, so when a parcel sits in (say) the Columbia
+City Landmark District, the report retrieves and cites SMC 25.20 by itself —
+instead of asking the resident to go find out.
+
 - **Retrieval**: sentence-transformer embeddings + SQLite FTS5, fused with
-  reciprocal-rank fusion. The corpus: 5,896 chunks, 1,826 sections, 92 chapters
-  extracted from the City's PDF code supplements by the ingestion pipeline in
-  `data_processing/`.
+  reciprocal-rank fusion. The corpus: 8,066 chunks, 2,376 sections across
+  Titles 22, 23, and 25, extracted from the City's PDF code by the ingestion
+  pipeline in `data_processing/`.
 - **The browser holds no secrets**: the Groq key lives on the server; King
   County GIS (which sends no CORS headers) is proxied against a fixed URL.
 
 ## Retrieval quality is measured, not assumed
 
-30 hand-labeled resident-style queries (`eval/queries.jsonl`), scored with
+39 hand-labeled resident-style queries (`eval/queries.jsonl`), scored with
 recall@k and MRR (`python -m eval.retrieval_eval`):
 
 | config | recall@1 | recall@3 | recall@5 | MRR@5 |
 |--------|----------|----------|----------|-------|
-| dense | 0.23 | 0.53 | 0.60 | 0.39 |
-| fts (BM25) | 0.27 | 0.43 | 0.50 | 0.36 |
-| prefilter (old design) | 0.20 | 0.53 | 0.57 | 0.36 |
-| **rrf-fused (shipped)** | **0.33** | 0.50 | **0.60** | **0.43** |
+| dense | 0.28 | 0.56 | 0.62 | 0.42 |
+| fts (BM25) | 0.31 | 0.49 | 0.56 | 0.40 |
+| prefilter (old design) | 0.26 | 0.54 | 0.59 | 0.40 |
+| **rrf-fused (shipped)** | **0.38** | 0.56 | **0.67** | **0.49** |
 
 The eval earned its keep immediately: it caught the original hybrid mode
 returning an *arbitrary* candidate subset (missing `ORDER BY rank` before
@@ -78,7 +89,7 @@ and the checklist work without one; report generation needs it).
 ```bash
 # API (from the repo root; corpus artifacts are committed)
 pip install -r requirements-dev.txt
-python -m pytest tests/ -q          # 56 tests, offline, no keys needed
+python -m pytest tests/ -q          # 63 tests, offline, no keys needed
 GROQ_API_KEY=... uvicorn api.main:app --port 8000
 
 # Frontend (dev)
@@ -102,20 +113,22 @@ Rebuilding the corpus from a new code supplement PDF:
 | `POST /api/report` | Property + project → report, citation audit, grounded ratio, evidence (rate-limited) |
 | `GET /api/search?q=` | Fused retrieval over the corpus |
 | `GET /api/citation/{smc}` | Exact code text for a citation (section, subsection, or chapter) |
+| `GET /api/context` | Zoning, overlay districts, ECA flags, street trees at a point (Seattle GIS) |
 | `GET /api/parcel/query` | King County GIS proxy (fixed upstream) |
 | `GET /api/health`, `GET /api/stats` | Corpus + config introspection |
 
 ## Limitations
 
-- **Titles 22 and 23 only.** Trees (Title 25), for example, are not ingested;
-  citations into other titles are honestly reported as "not found in the
-  ingested code" rather than guessed at. The retriever warns loudly when a
-  filter targets a title that isn't loaded.
+- **Titles 22, 23, and 25 of ~28.** Street use (Title 15) and utilities
+  (Title 21), for example, are not yet ingested; citations into missing titles
+  are honestly reported as "not found in the ingested code" rather than guessed
+  at, and the retriever warns loudly when a filter targets an unloaded title.
+  The pipeline ingests any title from the City's code PDF in one command.
 - **Not legal advice.** The report is a research aid over the code text; the
   instant checklist uses a small static table of simplified reference values
   (clearly scoped in `src/`), and permits are decided by the City, not a model.
 - **Retrieval is embedding + BM25, no cross-encoder reranker.** recall@1 of
-  0.33 on hard resident phrasing has clear headroom; the eval harness exists so
+  0.38 on hard resident phrasing has clear headroom; the eval harness exists so
   improvements are measured, not vibes.
 - **grounded_ratio measures citation discipline, not correctness** — a report
   can cite real, retrieved code and still reason about it imperfectly.

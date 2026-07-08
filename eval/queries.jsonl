@@ -28,3 +28,12 @@
 {"query": "repair cost compared to replacement value of a damaged building", "expected": ["22.208.010"], "granularity": "section"}
 {"query": "minimum floor load capacity for ground level commercial floors", "expected": ["23.50A.100"], "granularity": "section"}
 {"query": "green stormwater infrastructure distance from lot line", "expected": ["23.47A.014"], "granularity": "section"}
+{"query": "which trees are exempt from the tree protection rules", "expected": ["25.11.020"], "granularity": "section"}
+{"query": "protecting trees during construction on a development site", "expected": ["25.11.070", "25.11.060"], "granularity": "section"}
+{"query": "how many trees must I plant to replace a removed tree", "expected": ["25.11.090"], "granularity": "section"}
+{"query": "purpose of the tree protection code", "expected": ["25.11.010"], "granularity": "section"}
+{"query": "criteria for designating features in the Columbia City landmark district", "expected": ["25.20.040"], "granularity": "section"}
+{"query": "environmental review requirements under SEPA for a proposed project", "expected": ["25.05"], "granularity": "chapter"}
+{"query": "development standards for steep slope critical areas", "expected": ["25.09"], "granularity": "chapter"}
+{"query": "designating a building as a historic landmark", "expected": ["25.12"], "granularity": "chapter"}
+{"query": "noise limits for construction equipment", "expected": ["25.08"], "granularity": "chapter"}

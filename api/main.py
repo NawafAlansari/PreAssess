@@ -104,8 +104,30 @@ def _evidence_requests(payload: ReportRequest) -> List[EvidenceRequest]:
         if question.strip():
             requests.append(EvidenceRequest(label=f"question_{i}", query=question, top_k=4))
 
+    ingested = set(get_retriever().ingested_titles)
+
+    if 25 in ingested and "tree" in payload.project_description.lower():
+        requests.append(
+            EvidenceRequest(
+                label="tree_protection",
+                query="tree removal protection replacement requirements",
+                section_prefix="25.11",
+                top_k=4,
+            )
+        )
+
     if payload.context:
-        ingested = set(get_retriever().ingested_titles)
+        eca_flags = payload.context.get("eca") or []
+        if eca_flags and 25 in ingested:
+            requests.append(
+                EvidenceRequest(
+                    label="eca",
+                    query="development standards for environmentally critical areas "
+                    + " ".join(str(f).replace("_", " ") for f in eca_flags),
+                    section_prefix="25.09",
+                    top_k=3,
+                )
+            )
         for overlay in payload.context.get("overlays", []) or []:
             prefix = overlay.get("chapter_prefix") if isinstance(overlay, dict) else None
             name = overlay.get("name") if isinstance(overlay, dict) else None
