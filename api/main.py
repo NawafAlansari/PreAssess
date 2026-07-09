@@ -292,15 +292,24 @@ KC_PARCEL_QUERY_URL = (
 
 @app.get("/api/parcel/query")
 def parcel_query(request: Request) -> Response:
+    params = dict(request.query_params)
+    # ArcGIS answers with an HTML directory page unless f=json is explicit;
+    # this endpoint promises JSON, so never let that default through.
+    params.setdefault("f", "json")
     try:
         upstream = httpx.get(
             KC_PARCEL_QUERY_URL,
-            params=dict(request.query_params),
+            params=params,
             timeout=15.0,
             follow_redirects=True,
         )
     except httpx.HTTPError as err:
         raise HTTPException(status_code=502, detail=f"King County GIS unreachable: {err}")
+    if upstream.content.lstrip()[:1] not in (b"{", b"["):
+        raise HTTPException(
+            status_code=502,
+            detail="King County GIS returned a non-JSON response.",
+        )
     return Response(content=upstream.content, media_type="application/json")
 
 

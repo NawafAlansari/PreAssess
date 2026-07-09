@@ -158,3 +158,39 @@ def test_feedback_appends_jsonl(client, tmp_path, monkeypatch):
 
 def test_feedback_rejects_bad_vote(client):
     assert client.post("/api/feedback", json={"vote": "meh"}).status_code == 422
+
+
+def test_parcel_query_defaults_f_json_and_passes_json_through(client, monkeypatch):
+    captured = {}
+
+    def fake_get(url, params=None, timeout=None, follow_redirects=None):
+        captured["params"] = params
+        return SimpleNamespace(content=b'{"features": []}')
+
+    monkeypatch.setattr(api_main.httpx, "get", fake_get)
+    resp = client.get("/api/parcel/query", params={"where": "1=1"})
+    assert resp.status_code == 200
+    assert resp.json() == {"features": []}
+    assert captured["params"]["f"] == "json"
+
+
+def test_parcel_query_rejects_non_json_upstream(client, monkeypatch):
+    def fake_get(url, params=None, timeout=None, follow_redirects=None):
+        return SimpleNamespace(content=b"<html>ArcGIS REST Services Directory</html>")
+
+    monkeypatch.setattr(api_main.httpx, "get", fake_get)
+    resp = client.get("/api/parcel/query", params={"where": "1=1"})
+    assert resp.status_code == 502
+    assert "non-JSON" in resp.json()["detail"]
+
+
+def test_parcel_query_respects_caller_f_param(client, monkeypatch):
+    captured = {}
+
+    def fake_get(url, params=None, timeout=None, follow_redirects=None):
+        captured["params"] = params
+        return SimpleNamespace(content=b"[]")
+
+    monkeypatch.setattr(api_main.httpx, "get", fake_get)
+    assert client.get("/api/parcel/query", params={"f": "geojson"}).status_code == 200
+    assert captured["params"]["f"] == "geojson"
