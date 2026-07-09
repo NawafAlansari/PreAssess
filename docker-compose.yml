@@ -4,5 +4,7 @@ services:
     environment:
       GROQ_API_KEY: ${GROQ_API_KEY:-}
       GROQ_MODEL: ${GROQ_MODEL:-llama-3.3-70b-versatile}
+      # Measured: recall@1 0.36 -> 0.59 (eval/results.md). Model (~90MB) loads once.
+      PREASSESS_RERANK: ${PREASSESS_RERANK:-1}
     ports:
       - "8000:8000"
