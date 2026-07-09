@@ -35,6 +35,7 @@ from smc_agents.retriever import GroundedRetriever
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = REPO_ROOT / "data/processed"
 DIST_DIR = REPO_ROOT / "dist"
+CORPUS_META_PATH = DATA_DIR / "corpus_meta.json"
 
 REPORT_RATE_LIMIT = int(os.getenv("REPORT_RATE_LIMIT", "10"))  # per minute per IP
 
@@ -176,6 +177,14 @@ def _trim_evidence(evidence: Dict[str, List[dict]]) -> Dict[str, List[dict]]:
     return trimmed
 
 
+def _corpus_built_at() -> Optional[str]:
+    """Freshness date from corpus_meta.json; None if the file is absent/bad."""
+    try:
+        return json.loads(CORPUS_META_PATH.read_text()).get("built_at")
+    except (OSError, ValueError):
+        return None
+
+
 @app.get("/api/health")
 def health() -> dict:
     retriever = get_retriever()
@@ -188,6 +197,7 @@ def health() -> dict:
             "sections": len(retriever.section_citations),
             "chapters": len(retriever.chapter_citations),
             "titles": retriever.ingested_titles,
+            "built_at": _corpus_built_at(),
         },
     }
 

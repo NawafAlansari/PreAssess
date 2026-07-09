@@ -36,6 +36,22 @@ def test_health_reports_corpus(client):
     assert body["corpus"]["titles"] == [22, 23]
 
 
+def test_health_includes_built_at_when_meta_present(client, tmp_path, monkeypatch):
+    import json as _json
+
+    meta = tmp_path / "corpus_meta.json"
+    meta.write_text(_json.dumps({"built_at": "2026-07-08", "chunks": 4}))
+    monkeypatch.setattr(api_main, "CORPUS_META_PATH", meta)
+    body = client.get("/api/health").json()
+    assert body["corpus"]["built_at"] == "2026-07-08"
+
+
+def test_health_built_at_null_when_meta_absent(client, tmp_path, monkeypatch):
+    monkeypatch.setattr(api_main, "CORPUS_META_PATH", tmp_path / "nope.json")
+    body = client.get("/api/health").json()
+    assert body["corpus"]["built_at"] is None
+
+
 def test_stats_counts_by_title_and_type(client):
     body = client.get("/api/stats").json()
     assert body["chunks_by_title"] == {"22": 1, "23": 3}

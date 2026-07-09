@@ -630,6 +630,7 @@ const SeattleConstructionChecker = () => {
                   {corpusStats && (
                     <span className="small pa-stats">
                       {corpusStats.sections.toLocaleString()} code sections indexed · {corpusStats.titles.length} SMC titles
+                      {corpusStats.built_at && ` · code as of ${corpusStats.built_at}`}
                     </span>
                   )}
                 </div>

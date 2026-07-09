@@ -15,6 +15,7 @@ import argparse
 import json
 import re
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import Dict, Iterable, Iterator, List, Optional, Sequence, Tuple
 
@@ -302,6 +303,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     total_chunks = 0
     total_sections = 0
+    titles: Dict[int, str] = {}
 
     with args.output.open("w", encoding="utf-8") as writer:
         for input_path in args.inputs:
@@ -312,11 +314,21 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 total_chunks += 1
                 if chunk.chunk_type == "section":
                     total_sections += 1
+                titles.setdefault(chunk.title_number, chunk.title_label)
+
+    meta_path = args.output.parent / "corpus_meta.json"
+    meta = {
+        "built_at": date.today().isoformat(),
+        "titles": [titles[n] for n in sorted(titles)],
+        "chunks": total_chunks,
+    }
+    meta_path.write_text(json.dumps(meta, indent=2, ensure_ascii=True) + "\n")
 
     print(
         f"Generated {total_chunks} chunks "
         f"({total_sections} section chunks) → {args.output}"
     )
+    print(f"Wrote corpus metadata (built_at {meta['built_at']}) → {meta_path}")
     return 0
 
 
