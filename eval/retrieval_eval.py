@@ -14,6 +14,7 @@ expected prefix (section-level labels) or falls inside the expected chapter
 from __future__ import annotations
 
 import json
+import os
 import re
 import sqlite3
 from pathlib import Path
@@ -65,8 +66,11 @@ def fts_search(db_path: Path, query: str, k: int) -> list[str]:
     return [row[0] or "" for row in rows]
 
 
-def evaluate(retriever, queries):
-    per_config = {name: [] for name in ("dense", "fts", "prefilter", "rrf-fused")}
+def evaluate(retriever, queries, *, with_ce=False):
+    names = ["dense", "fts", "prefilter", "rrf-fused"]
+    if with_ce:
+        names.append("rrf+ce")
+    per_config = {name: [] for name in names}
 
     for item in queries:
         q, expected = item["query"], item["expected"]
@@ -85,12 +89,20 @@ def evaluate(retriever, queries):
             for h in retriever.search_fused(q, top_k=TOP_K)
         ]
 
-        for name, sections in (
+        configs = [
             ("dense", dense),
             ("fts", fts),
             ("prefilter", prefilter),
             ("rrf-fused", fused),
-        ):
+        ]
+        if with_ce:
+            ce = [
+                str(h.metadata.get("section_citation") or "")
+                for h in retriever.search_fused(q, top_k=TOP_K, rerank=True)
+            ]
+            configs.append(("rrf+ce", ce))
+
+        for name, sections in configs:
             per_config[name].append(rank_of_hit(sections, expected))
 
     return per_config
@@ -115,13 +127,15 @@ def summarize(per_config, n):
 def main() -> None:
     from smc_agents.retriever import GroundedRetriever
 
+    with_ce = os.getenv("EVAL_RERANK") == "1"
+
     queries = load_queries()
     retriever = GroundedRetriever(
         embeddings_path=DATA_DIR / "smc_embeddings.npz",
         chunks_path=DATA_DIR / "smc_chunks.jsonl",
         sqlite_path=DATA_DIR / "smc_ground_truth.db",
     )
-    per_config = evaluate(retriever, queries)
+    per_config = evaluate(retriever, queries, with_ce=with_ce)
     table = summarize(per_config, len(queries))
 
     misses = [
@@ -129,13 +143,20 @@ def main() -> None:
         for q, r in zip(queries, per_config["rrf-fused"])
         if r is None
     ]
+    ce_note = (
+        "`rrf+ce` re-scores the fused top-30 with a cross-encoder\n"
+        "(cross-encoder/ms-marco-MiniLM-L-6-v2); run with EVAL_RERANK=1.\n"
+        if with_ce
+        else ""
+    )
     report = (
         f"# Retrieval evaluation\n\n{len(queries)} hand-labeled queries "
         f"(eval/queries.jsonl), top-{TOP_K} retrieval.\n\n{table}\n\n"
         "The app uses rrf-fused (reciprocal-rank fusion of dense + BM25).\n"
         "`prefilter` is the previous design (FTS candidate filter + dense\n"
-        "rerank), kept for comparison.\n\n"
-        f"rrf-fused misses ({len(misses)}):\n"
+        "rerank), kept for comparison.\n"
+        + ce_note
+        + f"\nrrf-fused misses ({len(misses)}):\n"
         + "".join(f"- {m}\n" for m in misses)
     )
     RESULTS.write_text(report)

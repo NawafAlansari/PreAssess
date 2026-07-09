@@ -73,12 +73,23 @@ recall@k and MRR (`python -m eval.retrieval_eval`):
 | dense | 0.28 | 0.54 | 0.62 | 0.42 |
 | fts (BM25) | 0.03 | 0.15 | 0.23 | 0.09 |
 | prefilter (old design) | 0.23 | 0.51 | 0.56 | 0.37 |
-| **rrf-fused (shipped)** | **0.36** | 0.51 | **0.64** | **0.46** |
+| **rrf-fused (default)** | **0.36** | 0.51 | **0.64** | **0.46** |
+| **rrf+ce (opt-in)** | **0.59** | **0.64** | **0.64** | **0.61** |
 
 A finding worth noting: on the 2-title corpus BM25 alone scored 0.31 recall@1;
 on the full 21-title corpus it collapses to 0.03 — common permit vocabulary
 matches noise across the whole code. Dense holds, and fusion is what keeps
 first-result quality as the corpus scales.
+
+**Cross-encoder reranker (measured, opt-in).** Re-scoring the fused top-30 with
+`cross-encoder/ms-marco-MiniLM-L-6-v2` lifts recall@1 from 0.36 to **0.59** and
+MRR from 0.46 to 0.61 — a real gain on hard resident phrasing, well past the
+0.50 target we set. It ships *disabled by default* because it downloads ~90MB on
+first use and adds per-query latency; enable it with `PREASSESS_RERANK=1` (or the
+`rerank=True` arg to `search_fused`). Reproduce the number with
+`EVAL_RERANK=1 python -m eval.retrieval_eval`. (Implementation note: this
+checkpoint's fp32 forward returns NaN on CPU under torch 2.2.x, so the reranker
+runs the model in float64 — trivial cost over a 30-item pool.)
 
 **Field test:** [docs/FIELD_TEST.md](./docs/FIELD_TEST.md) — city-staff
 scenarios run live, plus the headline comparison: the same model answering the
@@ -137,9 +148,10 @@ Rebuilding the corpus from a new code supplement PDF:
 - **Not legal advice.** The report is a research aid over the code text; the
   instant checklist uses a small static table of simplified reference values
   (clearly scoped in `src/`), and permits are decided by the City, not a model.
-- **Retrieval is embedding + BM25, no cross-encoder reranker.** recall@1 of
-  0.36 on hard resident phrasing has clear headroom; the eval harness exists so
-  improvements are measured, not vibes.
+- **Reranking is opt-in, not default.** The default path is embedding + BM25
+  fusion (recall@1 0.36). A cross-encoder reranker (`PREASSESS_RERANK=1`) is
+  measured to reach 0.59 but is off by default to avoid the model download and
+  added latency; the eval harness keeps both numbers honest rather than vibes.
 - **grounded_ratio measures citation discipline, not correctness** — a report
   can cite real, retrieved code and still reason about it imperfectly.
 

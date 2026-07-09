@@ -6,18 +6,51 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 import sqlite3
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Dict, Iterable, List, Optional, Sequence
+from typing import TYPE_CHECKING, Callable, Dict, Iterable, List, Optional, Sequence
 
 import numpy as np
+
+if TYPE_CHECKING:
+    from smc_agents.rerank import CrossEncoderReranker
 
 
 logger = logging.getLogger(__name__)
 
 Encoder = Callable[[Sequence[str]], np.ndarray]
+
+# Pool sent to the cross-encoder when reranking is on.
+RERANK_POOL = 30
+
+# Lazily constructed module-level reranker, overridable in tests via
+# set_reranker(). Kept off the retriever instance so the heavy model is shared
+# and only built when reranking actually runs.
+_reranker: Optional["CrossEncoderReranker"] = None
+
+
+def get_reranker() -> "CrossEncoderReranker":
+    global _reranker
+    if _reranker is None:
+        from smc_agents.rerank import CrossEncoderReranker
+
+        _reranker = CrossEncoderReranker()
+    return _reranker
+
+
+def set_reranker(reranker: Optional["CrossEncoderReranker"]) -> None:
+    global _reranker
+    _reranker = reranker
+
+
+def _resolve_rerank(rerank: Optional[bool]) -> bool:
+    """Explicit arg wins, else PREASSESS_RERANK env ("1"/"0"), else False."""
+    if rerank is not None:
+        return rerank
+    return os.getenv("PREASSESS_RERANK", "0") == "1"
 
 
 @dataclass
@@ -259,12 +292,17 @@ class GroundedRetriever:
         chunk_types: Optional[Sequence[str]] = None,
         pool: int = 50,
         rrf_k: int = 60,
+        rerank: Optional[bool] = None,
     ) -> List[RetrievalResult]:
         """
         Hybrid retrieval by reciprocal-rank fusion: dense and BM25 rankings are
         computed independently (each under the same metadata filters) and
         merged with RRF. Chosen over the FTS-prefilter + dense-rerank design
         after evaluation — see eval/results.md.
+
+        When `rerank` resolves truthy (explicit arg, else PREASSESS_RERANK env,
+        else off), the fused top-RERANK_POOL is re-scored by a cross-encoder and
+        the top_k by CE score is returned.
         """
         mask = self._candidate_mask(
             title_number=title_number,
@@ -302,7 +340,21 @@ class GroundedRetriever:
             for rank, cid in enumerate(ranking, start=1):
                 fused[cid] = fused.get(cid, 0.0) + 1.0 / (rrf_k + rank)
 
-        top = sorted(fused, key=lambda cid: fused[cid], reverse=True)[:top_k]
+        ordered = sorted(fused, key=lambda cid: fused[cid], reverse=True)
+
+        if _resolve_rerank(rerank):
+            pool_ids = ordered[:RERANK_POOL]
+            pairs = [
+                (query, str(self.metadata[cid].get("text", ""))[:1000])
+                for cid in pool_ids
+            ]
+            ce_scores = get_reranker().score(pairs)
+            reranked = sorted(
+                zip(pool_ids, ce_scores), key=lambda pair: pair[1], reverse=True
+            )[:top_k]
+            return [self._result(cid, float(score)) for cid, score in reranked]
+
+        top = ordered[:top_k]
         return [self._result(cid, fused[cid]) for cid in top]
 
     def search(
