@@ -17,7 +17,7 @@ from typing import Dict, Iterable, List, Optional
 
 from openai import OpenAI
 
-from .citation_check import audit_report
+from .citation_check import _matches_chunk, audit_report, parse_citations
 from .retriever import GroundedRetriever, RetrievalResult
 
 
@@ -154,6 +154,34 @@ Municipal code evidence:
 """.strip()
         return prompt
 
+    def _history_anchor_hits(
+        self,
+        history: Optional[List[Dict[str, str]]],
+        *,
+        max_citations: int = 4,
+        per_citation: int = 2,
+    ) -> List[RetrievalResult]:
+        """Chunks for sections the conversation has already cited. A follow-up
+        usually drills into what the report just said, and fresh retrieval on
+        the follow-up's wording alone can miss the very section under
+        discussion (e.g. "DADU" phrasing vs the code's "accessory dwelling
+        unit"). Most recent citations win the cap."""
+        citations: List[str] = []
+        for turn in history or []:
+            if turn.get("role") == "assistant":
+                citations.extend(parse_citations(str(turn.get("content", ""))))
+        unique = list(dict.fromkeys(reversed(citations)))[:max_citations]
+        hits: List[RetrievalResult] = []
+        for citation in unique:
+            found = 0
+            for chunk_id, meta in self.retriever.metadata.items():
+                if found >= per_citation:
+                    break
+                if _matches_chunk(citation, meta):
+                    hits.append(self.retriever._result(chunk_id, 0.0))
+                    found += 1
+        return hits
+
     def answer_followup(
         self,
         *,
@@ -163,9 +191,19 @@ Municipal code evidence:
         top_k: int = 4,
     ) -> Dict[str, object]:
         """One audited conversational turn: retrieve fresh evidence for the
-        question, answer grounded in it, audit the citations."""
-        hits = self.retriever.search_fused(question, top_k=top_k)
-        evidence = {"followup": hits}
+        question, anchor it with sections the conversation already cited,
+        answer grounded in both, audit the citations."""
+        fresh = self.retriever.search_fused(question, top_k=top_k)
+        fresh_ids = {hit.chunk_id for hit in fresh}
+        anchors = [
+            hit
+            for hit in self._history_anchor_hits(history)
+            if hit.chunk_id not in fresh_ids
+        ]
+        hits = fresh + anchors
+        evidence: Dict[str, List[RetrievalResult]] = {"followup": fresh}
+        if anchors:
+            evidence["conversation"] = anchors
 
         messages: List[Dict[str, str]] = [{"role": "system", "content": FOLLOWUP_SYSTEM}]
         for turn in (history or [])[-8:]:
@@ -193,7 +231,10 @@ Municipal code evidence:
             "answer": text,
             "citation_audit": [v.to_dict() for v in audit.verdicts],
             "grounded_ratio": audit.grounded_ratio,
-            "evidence": {"followup": [hit.metadata for hit in hits]},
+            "evidence": {
+                label: [hit.metadata for hit in label_hits]
+                for label, label_hits in evidence.items()
+            },
         }
 
     def generate_report(

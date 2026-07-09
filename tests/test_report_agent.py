@@ -111,3 +111,45 @@ def test_answer_followup_grounded_and_audited(retriever):
     assert any(m["role"] == "assistant" for m in messages)
     assert "1 Test Ave" in messages[-1]["content"]
     assert "Municipal code evidence" in messages[-1]["content"]
+
+
+def test_followup_anchors_sections_cited_in_history(retriever, monkeypatch):
+    """A follow-up whose fresh retrieval misses the section under discussion
+    still gets that section as evidence, because the conversation cited it."""
+    reply = "Per SMC 23.44.010 the limit is unchanged."
+    agent = make_agent(retriever, reply)
+    monkeypatch.setattr(retriever, "search_fused", lambda *a, **k: [])
+    bundle = agent.answer_followup(
+        question="Does that change on a corner lot?",
+        history=[
+            {"role": "user", "content": "What are the limits?"},
+            {"role": "assistant", "content": "Limits are set by [SMC 23.44.010]."},
+        ],
+    )
+    assert "conversation" in bundle["evidence"]
+    anchored = {m["section_citation"] for m in bundle["evidence"]["conversation"]}
+    assert "23.44.010" in anchored
+    statuses = {v["citation"]: v["status"] for v in bundle["citation_audit"]}
+    assert statuses["23.44.010"] == "grounded"
+
+
+def test_followup_anchor_skips_chunks_fresh_retrieval_found(retriever):
+    """Anchors never duplicate chunks that fresh retrieval already returned."""
+    reply = "Per SMC 23.44.010."
+    agent = make_agent(retriever, reply)
+    bundle = agent.answer_followup(
+        question="setback dwelling size",
+        history=[
+            {"role": "assistant", "content": "See [SMC 23.44.010]."},
+        ],
+    )
+    fresh_ids = {m["chunk_id"] for m in bundle["evidence"]["followup"]}
+    for meta in bundle["evidence"].get("conversation", []):
+        assert meta["chunk_id"] not in fresh_ids
+
+
+def test_followup_without_history_has_no_conversation_label(retriever):
+    reply = "Per SMC 23.44.010."
+    agent = make_agent(retriever, reply)
+    bundle = agent.answer_followup(question="setback dwelling size")
+    assert "conversation" not in bundle["evidence"]
