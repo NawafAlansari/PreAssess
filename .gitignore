@@ -36,3 +36,6 @@ __pycache__/
 *.sln
 *.sw?
 data/feedback.jsonl
+
+# Search indexes built by `python -m search build`
+data/search/
