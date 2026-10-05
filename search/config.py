@@ -1,5 +1,5 @@
 """
-Every setting of the evaluated system, in one place.
+Every setting, in one place.
 """
 
 from __future__ import annotations
@@ -13,9 +13,8 @@ CHUNKS_PATH = DATA_DIR / "smc_chunks.jsonl"
 IDS_PATH = DATA_DIR / "smc_embeddings.npz"
 INDEX_DIR = ROOT / "data" / "search"          # built by `python -m search build`
 
-# Dense encoder. The evaluated system used all-MiniLM-L6-v2 fine-tuned on real
-# complaints (in-batch negatives + one hard negative, scale 20); that checkpoint is
-# not published, so the base model is the default.
+# Dense encoder. A version fine-tuned on complaint data works better; the public
+# base model is the default.
 ENCODER = "sentence-transformers/all-MiniLM-L6-v2"
 ENCODER_MAX_LENGTH = 512
 ENCODER_BATCH = 64

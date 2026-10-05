@@ -9,9 +9,7 @@ disturbance". An LLM produces, blind (it sees only the complaint):
   - facet queries: one code-style query each for the rule, the definitions, the
     penalty, enforcement, and exceptions.
 
-In the evaluation these were generated in batch by Claude Sonnet with the prompts
-below (adapted here to one complaint per call). Without an LLM, every version falls
-back to the complaint's own words: the "no-LLM" tier.
+Without an LLM, every version falls back to the complaint's own words.
 """
 
 from __future__ import annotations

@@ -1,5 +1,5 @@
 """
-Search and ranking over the Seattle Municipal Code: the evaluated PreAssess system.
+Search and ranking over the Seattle Municipal Code.
 
 A resident's complaint goes through four stages:
 
@@ -9,7 +9,5 @@ A resident's complaint goes through four stages:
               ─► LambdaMART over 41 features per section
               ─► (optional) an LLM reorders the top 10
 
-This package is a consolidated, readable version of the research code that produced
-the reported numbers. `search.config` holds every setting; each module documents the
-step it implements.
+`search.config` holds every setting; each module documents the step it implements.
 """

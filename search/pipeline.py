@@ -7,9 +7,8 @@ End to end: complaint -> query versions -> first stage -> features -> ranker -> 
     out.X              # 41 features per candidate (for a trained ranker)
 
 Ranking with a trained LambdaMART model and the LLM reorder are separate calls
-(`search.ranker.rank`, `search.cascade.reorder`), so each tier can be served and
-evaluated on its own: no LLM -> first stage only or the ranker on words-only
-features; LLM rewrite -> ranker; + LLM reorder of the top 10.
+(`search.ranker.rank`, `search.cascade.reorder`), so each step can also run without
+the next one, or without an LLM.
 """
 
 from __future__ import annotations

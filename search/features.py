@@ -12,13 +12,9 @@ The 41 ranker features for each (complaint, candidate section).
   facets (16) per facet query (rule, definition, penalty, enforcement, exceptions):
               the section's dense rank, BM25 rank and best cosine; plus which facet fits best
 
-Priors use training labels. A prior must be computed exactly as it could be at
-serving time: with `leave_one_out=True`, a training complaint's own labels are
-excluded from its features. The evaluated model used in-sample priors (each
-complaint's own label was counted in its own popularity feature), which taught it
-that never-seen sections are never relevant and hurt rare issues; leave-one-out
-improved rare issues in cross-validation (rank 1 0.18 -> 0.33) at a small cost on
-common ones.
+Priors are learned from graded training complaints. When computing features for a
+training complaint, pass its own labels as `exclude` (leave-one-out) so the feature
+matches what is available at serving time.
 """
 
 from __future__ import annotations

@@ -4,8 +4,7 @@ reorders them. It catches what features can't (a section that matches in words b
 governs a different situation). It only touches the top 10 because LLM calls are slow
 and cost money: cheap models on many candidates, the expensive one on few.
 
-In the evaluation this was Claude Sonnet with the prompt below (adapted to one
-complaint per call). Sections it omits keep their ranker order after the ones it ranks.
+Sections the LLM omits keep their ranker order after the ones it ranks.
 """
 
 from __future__ import annotations

@@ -52,8 +52,7 @@ class Corpus:
                 if line.strip():
                     rec = json.loads(line)
                     if rec.get("chunk_id"):
-                        # Later duplicate ids overwrite earlier ones (the ids are not
-                        # unique in the extracted data; ~3% of records are affected).
+                        # Later duplicate ids overwrite earlier ones.
                         self.chunks[rec["chunk_id"]] = rec
         self.ids: list[str] = [str(i) for i in np.load(ids_path)["chunk_ids"]]
         self._heading_freq = Counter(c.get("section_heading") for c in self.chunks.values() if c.get("section_heading"))
