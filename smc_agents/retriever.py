@@ -5,14 +5,52 @@ Semantic retriever that pairs the SMC chunk metadata + embeddings.
 from __future__ import annotations
 
 import json
+import logging
+import os
+import re
 import sqlite3
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Sequence
+from typing import TYPE_CHECKING, Callable, Dict, Iterable, List, Optional, Sequence
 
 import numpy as np
-import torch
-from transformers import AutoModel, AutoTokenizer
+
+if TYPE_CHECKING:
+    from smc_agents.rerank import CrossEncoderReranker
+
+
+logger = logging.getLogger(__name__)
+
+Encoder = Callable[[Sequence[str]], np.ndarray]
+
+# Pool sent to the cross-encoder when reranking is on.
+RERANK_POOL = 30
+
+# Lazily constructed module-level reranker, overridable in tests via
+# set_reranker(). Kept off the retriever instance so the heavy model is shared
+# and only built when reranking actually runs.
+_reranker: Optional["CrossEncoderReranker"] = None
+
+
+def get_reranker() -> "CrossEncoderReranker":
+    global _reranker
+    if _reranker is None:
+        from smc_agents.rerank import CrossEncoderReranker
+
+        _reranker = CrossEncoderReranker()
+    return _reranker
+
+
+def set_reranker(reranker: Optional["CrossEncoderReranker"]) -> None:
+    global _reranker
+    _reranker = reranker
+
+
+def _resolve_rerank(rerank: Optional[bool]) -> bool:
+    """Explicit arg wins, else PREASSESS_RERANK env ("1"/"0"), else False."""
+    if rerank is not None:
+        return rerank
+    return os.getenv("PREASSESS_RERANK", "0") == "1"
 
 
 @dataclass
@@ -41,15 +79,18 @@ class GroundedRetriever:
         chunks_path: Path,
         model_name: str = "sentence-transformers/all-MiniLM-L6-v2",
         sqlite_path: Optional[Path] = None,
+        encoder: Optional[Encoder] = None,
     ) -> None:
         self.embeddings_path = embeddings_path
         self.chunks_path = chunks_path
         self.model_name = model_name
         self.sqlite_path = sqlite_path
+        self._encoder = encoder
 
         self._load_embeddings()
         self._load_metadata()
-        self._load_encoder()
+        if self._encoder is None:
+            self._load_encoder()
 
     def _load_embeddings(self) -> None:
         data = np.load(self.embeddings_path)
@@ -58,6 +99,9 @@ class GroundedRetriever:
 
     def _load_metadata(self) -> None:
         metadata: Dict[str, Dict[str, object]] = {}
+        ingested_titles: set = set()
+        section_citations: set = set()
+        chapter_citations: set = set()
         with self.chunks_path.open("r", encoding="utf-8") as handle:
             for line in handle:
                 if not line.strip():
@@ -67,35 +111,70 @@ class GroundedRetriever:
                 if chunk_id is None:
                     continue
                 metadata[chunk_id] = payload
+                title = payload.get("title_number")
+                if title is not None:
+                    ingested_titles.add(int(title))
+                section = payload.get("section_citation")
+                if section:
+                    section_citations.add(str(section))
+                chapter = payload.get("chapter_citation")
+                if chapter:
+                    chapter_citations.add(str(chapter))
         self.metadata = metadata
+        self.ingested_titles = sorted(ingested_titles)
+        self.section_citations = section_citations
+        self.chapter_citations = chapter_citations
 
     def _load_encoder(self) -> None:
+        import torch
+        from transformers import AutoModel, AutoTokenizer
+
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
         self.model = AutoModel.from_pretrained(self.model_name).to(self.device)
         self.model.eval()
 
-    def _encode(self, texts: Sequence[str]) -> np.ndarray:
-        with torch.no_grad():
-            encoded = self.tokenizer(
-                list(texts),
-                padding=True,
-                truncation=True,
-                max_length=512,
-                return_tensors="pt",
-            )
-            encoded = {key: value.to(self.device) for key, value in encoded.items()}
-            outputs = self.model(**encoded)
-            pooled = self._mean_pool(outputs.last_hidden_state, encoded["attention_mask"])
-            normalized = torch.nn.functional.normalize(pooled, p=2, dim=1)
-        return normalized.cpu().numpy()
+        def _hf_encode(texts: Sequence[str]) -> np.ndarray:
+            with torch.no_grad():
+                encoded = self.tokenizer(
+                    list(texts),
+                    padding=True,
+                    truncation=True,
+                    max_length=512,
+                    return_tensors="pt",
+                )
+                encoded = {key: value.to(self.device) for key, value in encoded.items()}
+                outputs = self.model(**encoded)
+                mask = encoded["attention_mask"].unsqueeze(-1).expand(
+                    outputs.last_hidden_state.size()
+                ).float()
+                summed = (outputs.last_hidden_state * mask).sum(dim=1)
+                counts = mask.sum(dim=1)
+                pooled = summed / torch.clamp(counts, min=1e-9)
+                normalized = torch.nn.functional.normalize(pooled, p=2, dim=1)
+            return normalized.cpu().numpy()
 
-    @staticmethod
-    def _mean_pool(model_output: torch.Tensor, attention_mask: torch.Tensor) -> torch.Tensor:
-        mask = attention_mask.unsqueeze(-1).expand(model_output.size()).float()
-        summed = (model_output * mask).sum(dim=1)
-        counts = mask.sum(dim=1)
-        return summed / torch.clamp(counts, min=1e-9)
+        self._encoder = _hf_encode
+
+    def _encode(self, texts: Sequence[str]) -> np.ndarray:
+        if self._encoder is None:
+            raise RuntimeError("No encoder configured")
+        return self._encoder(texts)
+
+    def has_citation(self, citation: str) -> bool:
+        """
+        Return True if a citation appears anywhere in the corpus, matching at
+        either section level (exact or subsection prefix) or chapter level.
+        """
+        citation = citation.strip()
+        if citation in self.section_citations or citation in self.chapter_citations:
+            return True
+        prefix = citation + "."
+        if any(sec.startswith(prefix) for sec in self.section_citations):
+            return True
+        # A citation deeper than corpus granularity (e.g. 23.44.014.C.17.a)
+        # resolves to its parent section if that section exists.
+        return any(citation.startswith(sec + ".") for sec in self.section_citations)
 
     def _candidate_mask(
         self,
@@ -108,13 +187,21 @@ class GroundedRetriever:
         mask = np.ones(len(self.chunk_ids), dtype=bool)
 
         if title_number is not None:
-            mask &= np.array(
+            title_mask = np.array(
                 [
                     self.metadata[cid].get("title_number") == title_number
                     for cid in self.chunk_ids
                 ],
                 dtype=bool,
             )
+            if not title_mask.any():
+                logger.warning(
+                    "title_number=%s matches zero chunks; ingested titles are %s. "
+                    "This filter will return no evidence.",
+                    title_number,
+                    self.ingested_titles,
+                )
+            mask &= title_mask
 
         if section_prefix:
             mask &= np.array(
@@ -145,7 +232,7 @@ class GroundedRetriever:
         *,
         title_number: Optional[int],
         section_prefix: Optional[str],
-        limit: int = 200,
+        limit: int = 800,
     ) -> List[str]:
         sql = [
             "SELECT chunks.chunk_id",
@@ -160,12 +247,115 @@ class GroundedRetriever:
         if section_prefix:
             sql.append("AND chunks.section_citation LIKE ?")
             params.append(f"{section_prefix}%")
-        sql.append("LIMIT ?")
+        # Order by BM25 before applying the limit: without this, SQLite returns
+        # an arbitrary subset of matching rows and the prefilter silently drops
+        # the most relevant chunks before the dense rerank sees them.
+        sql.append("ORDER BY rank LIMIT ?")
         params.append(limit)
 
         with sqlite3.connect(self.sqlite_path) as conn:
-            rows = conn.execute(" ".join(sql), params).fetchall()
+            try:
+                rows = conn.execute(" ".join(sql), params).fetchall()
+            except sqlite3.OperationalError:
+                # Malformed MATCH input (stray punctuation etc.) — treat as no
+                # lexical evidence rather than failing the whole request.
+                return []
         return [row[0] for row in rows]
+
+    @staticmethod
+    def fts_or_query(query: str) -> str:
+        """Turn free text into a safe OR-joined FTS5 MATCH expression."""
+        tokens = re.findall(r"[a-zA-Z]{3,}", query.lower())
+        return " OR ".join(dict.fromkeys(tokens))
+
+    def _result(self, chunk_id: str, score: float) -> RetrievalResult:
+        meta = self.metadata[chunk_id]
+        return RetrievalResult(
+            chunk_id=chunk_id,
+            score=score,
+            text=meta.get("text", ""),
+            full_citation=meta.get("full_citation"),
+            section_heading=meta.get("section_heading"),
+            chapter_title=meta.get("chapter_title"),
+            title_number=meta.get("title_number"),
+            title_label=meta.get("title_label"),
+            metadata=meta,
+        )
+
+    def search_fused(
+        self,
+        query: str,
+        *,
+        top_k: int = 5,
+        title_number: Optional[int] = None,
+        section_prefix: Optional[str] = None,
+        chunk_types: Optional[Sequence[str]] = None,
+        pool: int = 50,
+        rrf_k: int = 60,
+        rerank: Optional[bool] = None,
+    ) -> List[RetrievalResult]:
+        """
+        Hybrid retrieval by reciprocal-rank fusion: dense and BM25 rankings are
+        computed independently (each under the same metadata filters) and
+        merged with RRF. Chosen over the FTS-prefilter + dense-rerank design
+        after evaluation — see eval/results.md.
+
+        When `rerank` resolves truthy (explicit arg, else PREASSESS_RERANK env,
+        else off), the fused top-RERANK_POOL is re-scored by a cross-encoder and
+        the top_k by CE score is returned.
+        """
+        mask = self._candidate_mask(
+            title_number=title_number,
+            section_prefix=section_prefix,
+            chunk_types=chunk_types,
+            fts_query=None,
+        )
+        vocab_indices = np.where(mask)[0]
+        if vocab_indices.size == 0:
+            return []
+
+        query_embedding = self._encode([query])[0]
+        scores = self.embeddings[vocab_indices] @ query_embedding
+        order = np.argsort(scores)[::-1][:pool]
+        dense_ids = [str(self.chunk_ids[vocab_indices[i]]) for i in order]
+
+        fts_ids: List[str] = []
+        if self.sqlite_path:
+            fts_ids = self._fts_lookup(
+                self.fts_or_query(query),
+                title_number=title_number,
+                section_prefix=section_prefix,
+                limit=pool,
+            )
+            if chunk_types:
+                allowed = set(chunk_types)
+                fts_ids = [
+                    cid
+                    for cid in fts_ids
+                    if self.metadata.get(cid, {}).get("chunk_type") in allowed
+                ]
+
+        fused: Dict[str, float] = {}
+        for ranking in (dense_ids, fts_ids):
+            for rank, cid in enumerate(ranking, start=1):
+                fused[cid] = fused.get(cid, 0.0) + 1.0 / (rrf_k + rank)
+
+        ordered = sorted(fused, key=lambda cid: fused[cid], reverse=True)
+
+        if _resolve_rerank(rerank):
+            pool_ids = ordered[:RERANK_POOL]
+            pairs = [
+                (query, str(self.metadata[cid].get("text", ""))[:1000])
+                for cid in pool_ids
+            ]
+            ce_scores = get_reranker().score(pairs)
+            reranked = sorted(
+                zip(pool_ids, ce_scores), key=lambda pair: pair[1], reverse=True
+            )[:top_k]
+            return [self._result(cid, float(score)) for cid, score in reranked]
+
+        top = ordered[:top_k]
+        return [self._result(cid, fused[cid]) for cid in top]
 
     def search(
         self,

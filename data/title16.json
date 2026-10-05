@@ -1,0 +1,941 @@
+{
+  "label": "Title 16",
+  "number": 16,
+  "start_page": 2091,
+  "end_page": 2118,
+  "preface": "Title 16\nHARBOR CODE\nChapters:\n16.04 Definitions 16-3\n16.08 General Provisions 16-6\n16.12 Port Warden 16-7\n16.20 Operation Regulations for Vessels and\nWatercraft 16-8\n16.24 Accidents 16-14\n16.28 Water Sports 16-14\n16.32 Towing\u2014Obstructions 16-16\n16.36 Impoundment 16-18\n16.40 Anchorages 16-19\n16.44 Restricted Areas 16-20\n16.48 Emergency Vessels and Powers 16-21\n16.52 Piers, Floats and Gangways 16-21\n16.56 Nuisances and Prohibited Acts 16-22\n16.60 Use of Waterways\u2014Permits 16-23\n16.64 Enforcement 16-26\n16-1",
+  "subtitles": [
+    {
+      "number": "",
+      "title": "",
+      "start_page": 2093,
+      "end_page": 2093,
+      "intro": "",
+      "divisions": [],
+      "chapters": [
+        {
+          "citation": "16.04",
+          "title": "DEFINITIONS",
+          "start_page": 2093,
+          "end_page": 2093,
+          "intro": "Sections:",
+          "sections": [
+            {
+              "citation": "16.04.010",
+              "heading": "De\ufb01nitions generally .",
+              "start_page": 2093,
+              "end_page": 2093,
+              "text": "The words and phrases used in this title shall\nhave the meanings set out in this chapter, exceptwhere the same shall be clearly contrary to orinconsistent with the context of the section inwhich used.(Ord. 100171 \u00a7 1(part), 1971: Ord. 94587 \u00a7 1(part),1966: Ord. 90653 \u00a7 1(part), 1961: Ord. 87983\u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.030",
+              "heading": "Aquatic event.",
+              "start_page": 2093,
+              "end_page": 2093,
+              "text": ""
+            },
+            {
+              "citation": "16.04.040",
+              "heading": "Authorized emergency vessel.",
+              "start_page": 2093,
+              "end_page": 2093,
+              "text": "\"Authorized emergency vessel\" means any authorized vessel of the City Harbor Department,\nCity Police Department, City Fire Department,King County Sheriff's Department, the UnitedStates Government, and State of Washington\nauthorized patrol vessels.\n(Ord. 120023 \u00a7 2, 2000: Ord. 100171 \u00a7 1(part),1971: Ord. 94587 \u00a7 1(part), 1966: Ord. 90653\u00a7 1(part), 1961: Ord. 87983 \u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.090",
+              "heading": "Obstruction.",
+              "start_page": 2094,
+              "end_page": 2094,
+              "text": "\"Obstruction\" means any vessel or any matter\nor debris which may in any way blockade, inter-fere with or endanger any vessel or impede navi-gation, or which cannot comply with the Interna-tional Regulations for Preventing Collisions atSea, 1972 (72 COLREGS).(Ord. 120023 \u00a7 9, 2000: Ord. 100171 \u00a7 1(part),1971: Ord. 94587 \u00a7 1(part), 1966: Ord. 90653\u00a7 1(part), 1961: Ord. 87983 \u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.100",
+              "heading": "Oil.",
+              "start_page": 2094,
+              "end_page": 2094,
+              "text": "\"Oil\" means any oil or liquid, whether of animal, vegetable or mineral origin, or a mixture,compound or distillation thereof.\n(Ord. 100171 \u00a7 1(part), 1971: Ord. 94587 \u00a7 1(part),\n1966: Ord. 90653 \u00a7 1(part), 1961: Ord. 87983\u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.130",
+              "heading": "Pier.",
+              "start_page": 2095,
+              "end_page": 2095,
+              "text": "\"Pier\" means any pier, wharf, dock, float, gridiron or other structure to promote the convenientloading or unloading or other discharge of vesselsor the repair thereof.(Ord. 120023 \u00a7 13, 2000: Ord. 100171 \u00a7 1(part),1971: Ord. 9458 7 \u00a7 1 (part), 1966: Ord. 90653\n\u00a7 1(part), 1961: Ord. 87983 \u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.150",
+              "heading": "Privately controlled property .",
+              "start_page": 2095,
+              "end_page": 2095,
+              "text": "\"Privately controlled property\" means publicly\nowned harbor area between the inner and outer\nharbor lines, privately owned shoreland and publicly owned tidelands and shorelands, which pub-licly owned harbor area, tidelands and shorelands\nhave been leased to private individuals, associations, corporations or other entities.\n(Ord. 100171 \u00a7 1(part), 1971: Ord. 94587 \u00a7 1(part),\n1966: Ord. 90653 \u00a7 1(part), 1961: Ord. 87983\u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.160",
+              "heading": "Restricted area.",
+              "start_page": 2095,
+              "end_page": 2095,
+              "text": "\"Restricted area\" means an area that has been\nmarked in accordance with and as authorized bythe laws or regulations of the City to be used for,or closed to, certain designated purposes such asswimming, skindiving, ferry landings, and aquatic\nevents, the method of marking and designation ofwhich shall have been made by the Chief of Policein accordance with the provisions of this title.(Ord. 120023 \u00a7 14, 2000: Ord. 100171 \u00a7 1(part),1971: Ord. 94587 \u00a7 1(part), 1966: Ord. 90653\u00a7 1(part), 1961: Ord. 87983 \u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.020",
+              "heading": "Anchorage.",
+              "start_page": 2093,
+              "end_page": 2093,
+              "text": "\"Anchorage\" means a designated position where\nvessels may anchor or moor.(Ord. 120023 \u00a7 1, 2000: Ord. 100171 \u00a7 1(part),1971: Ord. 94587 \u00a7 1(part), 1966: Ord. 90653\n\u00a7 1(part), 1961: Ord. 87983 \u00a7 2(part), 1959.)16.04.030 Aquatic event.\n\"Aquatic event\" means any organized water\nevent of limited duration which is duly sanctionedat least seven (7) days in advance by duly consti-tuted authority and which is conducted accordingto a prearranged schedule and in which generalpublic interest is manifested.(Ord. 100171 \u00a7 1(part), 1971: Ord. 94587 \u00a7 1(part), 1966: Ord. 90653 \u00a7 1(part), 1961: Ord.87983 \u00a7 2 (part), 1959.)"
+            },
+            {
+              "citation": "16.04.045",
+              "heading": "Chief of Police.",
+              "start_page": 2093,
+              "end_page": 2093,
+              "text": "\"Chief of Police\" means the Chief of Police of\nThe City of Seattle and his or her designee.(Ord. 120023 \u00a7 3, 2000.)"
+            },
+            {
+              "citation": "16.04.050",
+              "heading": "City .",
+              "start_page": 2093,
+              "end_page": 2093,
+              "text": "\"City\" means The City of Seattle.\n(Ord. 100171 \u00a7 1(part), 1971: Ord. 94587 \u00a7 1(part),\n1966: Ord. 90653 \u00a7 1(part), 1961: Ord. 87983\n\u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.060",
+              "heading": "Diver's \ufb02ag.",
+              "start_page": 2093,
+              "end_page": 2093,
+              "text": "\"Diver's \ufb02ag\" means a red \ufb02ag \ufb01ve (5) units of\nmeasurement on the hoist by six (6) units of\nmeasurement on the \ufb02y with a white stripe of one\n(1) unit crossing the red diagonally . The \ufb02ag shallhave a stiffener to make it stand out from the poleor mast. This \ufb02ag shall only pertain to skin andSCUBA (Self-Contained Underwater BreathingApparatus) diving and shall supplement any nationally recognized diver's \ufb02ag or marking. Use of\nthe blue and white \"Alpha\" \ufb02ag does not satisfythe requirement for a \"diver's \ufb02ag\" as described inthis title.\n(Ord. 120023 \u00a7 4, 2000: Ord. 100171 \u00a7 1(part),\n1971: Ord. 94587 \u00a7 1(part), 1966: Ord. 90653\n\u00a7 1(part), 1961: Ord. 87983 \u00a7 2(part), 1959.)DEFINITIONS 16.04.060\n16-3"
+            },
+            {
+              "citation": "16.04.065",
+              "heading": "Distress signal.",
+              "start_page": 2094,
+              "end_page": 2094,
+              "text": "\"Distress signal\" means any signaling device\napproved by the United States Coast Guard foruse on recreational vessels.(Ord. 120023 \u00a7 5, 2000.)"
+            },
+            {
+              "citation": "16.04.070",
+              "heading": "Fairway .",
+              "start_page": 2094,
+              "end_page": 2094,
+              "text": "\"Fairway\" means all navigable waters within\nthe corporate limits or within the jurisdiction andcontrol of the City , except waters over privatelyowned or privately controlled property , and in-cludes but is not limited to the navigable portions\nof the following described waters and all submerged street area and waterways therein:\nAll of Elliott Bay , lying easterly of a straight\nline drawn from Alki Point to West Point;\nAll of the East and West Waterways;\nAll of the Duwamish River;All of the Duwamish Waterway Project;All of Salmon Bay;All of Portage Bay;All of Union Bay;All of the Lake Washington Ship Canal, including the portion which shall be under the super-vision and control of the United States Govern-ment;\nAll of Lake Union;All of Lake Washington lying or being within\nthe corporate limits of the City or within thejurisdiction and control of the City;\nAll that portion of Shilshole Bay , lying easterly\nand southerly of a line from West Point to theintersection of the northerly boundary of theCity with the outer harbor line;\nAll that portion of Puget Sound, lying easterly\nand northerly of a line from Alki Point to theintersection of the southerly boundary of theCity with the outer harbor line.\n(Ord. 120023 \u00a7 6, 2000: Ord. 10017 1 \u00a7 1 (part),\n1971: Ord. 94587 \u00a7 1(part), 1966: Ord. 90653\u00a7 1(part), 1961: Ord. 87983 \u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.075",
+              "heading": "Harbor.",
+              "start_page": 2094,
+              "end_page": 2094,
+              "text": "\"Harbor\" or \"Seattle harbor\" means the waters\nwithin the jurisdiction of the City as described inRCW 35.21.160, as the same may be amendedfrom time to time.(Ord. 120023 \u00a7 7, 2000.)16.04.080 Master.\n\"Master\" means the captain, skipper, pilot or\nany other person having charge of any vessel.(Ord. 120023 \u00a7 8, 2000: Ord. 100171 \u00a7 1(part),1971: Ord. 94587 \u00a7 1 (part), 1966: Ord. 90653\u00a7 1(part), 1961: Ord. 87983 \u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.105",
+              "heading": "Operator.",
+              "start_page": 2094,
+              "end_page": 2094,
+              "text": "\"Operator\" means any individual who steers,\ndirects, or otherwise has physical control of avessel or water sport craft that is underway orexercises actual authority to control the person atthe helm.(Ord. 120023 \u00a7 10, 2000.)"
+            },
+            {
+              "citation": "16.04.110",
+              "heading": "Owner.",
+              "start_page": 2094,
+              "end_page": 2094,
+              "text": "\"Owner\" means the person who has lawful\npossession of a vessel or water sport craft or\nobstruction by virtue of legal title or equitableinterest therein which entitles him to such pos-session.\n(Ord. 120023 \u00a7 11, 2000: Ord. 100171 \u00a7 1(part),\n1971: Ord. 94587 \u00a7 1(part), 1966: Ord. 90653\n\u00a7 1(part), 1961: Ord. 87983 \u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.120",
+              "heading": "Person\u2014Number and gender.",
+              "start_page": 2094,
+              "end_page": 2095,
+              "text": "\"Person\" shall, when necessary , mean and include natural persons, associations, copartner-ships and corporations, whether acting by themselves or by a servant, agent or employee; the16.04.065 HARBOR CODE\n16-4\nsingular number shall, when necessary , mean\nand include the plural, and the masculine pro-noun shall include the feminine.(Ord. 100171 \u00a7 1(part), 1971: Ord. 94587 \u00a7 1(part),\n1966: Ord. 90653 \u00a7 1(part), 1961: Ord. 87983\u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.123",
+              "heading": "Personal flotation device",
+              "start_page": 2095,
+              "end_page": 2095,
+              "text": "(PED).\n\"Personal flotation device\" means a wearable\nType I off-shore life jacket, Type II wearable nearshore buoyant vest, Type III wearable flotation\naid, Type IV throwable ring buoy or buoyant\ncushion, or Type V special use device or hybridinflatable device, that is approved by the United\nStates Coast Guard Commandant under Chapter46, Code of Federal Regulations, Part 160.(Ord. 120023 \u00a7 12, 2000.)"
+            },
+            {
+              "citation": "16.04.140",
+              "heading": "Port Warden.",
+              "start_page": 2095,
+              "end_page": 2095,
+              "text": "\"Port Warden\" means the Chief of Police and\nduly authorized deputies and assistants acting in\nhis behalf.(Ord. 100171 \u00a7 1(part), 1971: Ord. 94587 \u00a7 1(part),1966: Ord. 90653 \u00a7 1(part), 1961: Ord. 87983\n\u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.170",
+              "heading": "Submerged street area.",
+              "start_page": 2095,
+              "end_page": 2095,
+              "text": "\"Submerged street area\" means any platted\nstreet area occupied by navigable water.(Ord. 100171 \u00a7 1(part), 1971: Ord. 94587 \u00a7 1(part),1966: Ord. 90653 \u00a7 1(part), 1961: Ord. 87983\u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.180",
+              "heading": "Testing course.",
+              "start_page": 2095,
+              "end_page": 2095,
+              "text": "\"Testing course\" means a course or area on\nwaters subject to the jurisdiction of the City ,designated in accordance with this title or pursuant to other applicable laws and regulations, foruse in industrial development and testing of ex-perimental and production vessels.(Ord. 120023 \u00a7 15, 2000: Ord. 100171 \u00a7 1(part),1971: Ord. 94587 \u00a7 1(part), 1966: Ord. 90653\n\u00a7 1(part), 1961: Ord. 87983 \u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.190",
+              "heading": "Towboat.",
+              "start_page": 2095,
+              "end_page": 2095,
+              "text": "\"Towboat\" means any vessel engaged in towing\nor pushing another vessel or anything other than\na vessel.\n(Ord. 120023 \u00a7 16, 2000: Ord. 100171 \u00a7 1(part),\n1971: Ord. 94587 \u00a7 1(part), 1966: Ord. 90653\n\u00a7 1(part), 1961: Ord. 87983 \u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.200",
+              "heading": "Vessel.",
+              "start_page": 2095,
+              "end_page": 2095,
+              "text": "\"Vessel\" means any description of watercraft\non the water, other than a seaplane, used or\ncapable of being used as a means of transportation on the water. However, it does not include\ninner tubes, air mattresses, and small rafts orflotation devices or toys customarily used by swimmers. (RCW 79A.60.010(23))(Ord. 120023 \u00a7 17, 2000: Ord. 100171 \u00a7 1(part),1971: Ord. 94587 \u00a7 1(part), 1966: Ord. 90653\u00a7 1(part), 1961: Ord. 87983 \u00a7 2(part), 1959.)"
+            },
+            {
+              "citation": "16.04.210",
+              "heading": "Water sport craft.",
+              "start_page": 2095,
+              "end_page": 2095,
+              "text": "\"Water sport craft\" means any device or contrivance used on the water including inner tubes,air mattresses and small rafts and floatation\ndevices or toys customarily used by swimmers.(Ord. 120023 \u00a7 18, 2000: Ord. 100171 \u00a7 1(part),1971: Ord. 94587 \u00a7 1(part), 1966: Ord. 90653\n\u00a7 1(part), 1961: Ord. 87983 \u00a7 2(part), 1959.)DEFINITIONS 16.04.210\n16-5\n(Seattle 3-18)"
+            },
+            {
+              "citation": "16.04.220",
+              "heading": "Waterway .",
+              "start_page": 2096,
+              "end_page": 2096,
+              "text": "\"Waterway\" means each and every platted waterway within the corporate limits of the City , includ-ing those in Lake Union, Portage Bay , Lake Wash-ington and Elliott Bay , but does not include anycommercial waterway created pursuant to RCWChapter 91.04 or any public waterway createdpursuant to RCW Chapter 91.08 or RCW 79.16.430through 79.16.520.(Ord. 100171 \u00a7 1(part), 1971: Ord. 94587 \u00a7 1(part),1966: Ord. 90653 \u00a7 1(part), 1961: Ord. 87983\u00a7 2(part), 1959.)"
+            }
+          ]
+        },
+        {
+          "citation": "16.08",
+          "title": "GENERAL PROVISIONS",
+          "start_page": 2096,
+          "end_page": 2096,
+          "intro": "Sections:",
+          "sections": [
+            {
+              "citation": "16.08.010",
+              "heading": "Authorization.",
+              "start_page": 2096,
+              "end_page": 2096,
+              "text": "The City in the exercise of its police power\nassumes control and jurisdiction over all waterswithin its limits, and such waters shall, for thepurpose of this title, be known as \"the harbor.\" *\n(Ord. 87983 \u00a7 1, 1959.)"
+            },
+            {
+              "citation": "16.08.011",
+              "heading": "Citation.",
+              "start_page": 2096,
+              "end_page": 2096,
+              "text": "The ordinances codified in this title constitute\nthe \"Harbor Code\" of the City and may be cited assuch. Wherever a reference is made herein to\n\"this Code\" it shall be construed to mean \"this\ntitle.\"(Ord. 120023 \u00a7 19, 2000.)"
+            },
+            {
+              "citation": "16.08.015",
+              "heading": "Owner to act in person\u2014",
+              "start_page": 2097,
+              "end_page": 2097,
+              "text": "Agents.\nEvery act or statement required to be made by\nthe owner or operator of any vessel, water sport\ncraft, obstruction, pier, wharf or float shall be\nmade or done by the owner or operator in person\nunless such owner is a company or corporation or\nincapable of acting in person and if the same is\nmade or done by the agent, the necessity thereof\nshall be stated and shown.\n(Ord. 120023 \u00a7 23, 2000.)"
+            },
+            {
+              "citation": "16.08.020",
+              "heading": "Application and justification.",
+              "start_page": 2097,
+              "end_page": 2097,
+              "text": "The provisions of this title shall be applicable\nto all vessels and water sport craft operating in\nthe harbor of this City. The provisions of this title\nshall be construed to supplement United States\nlaws and state laws and regulations when not\nexpressly inconsistent therewith in the harbor\nwhere such United States and state laws and\nregulations are applicable.\n(Ord. 120023 \u00a7 24, 2000: Ord. 87983 \u00a7 4, 1959.)"
+            },
+            {
+              "citation": "16.08.012",
+              "heading": "Purpose and policy .",
+              "start_page": 2096,
+              "end_page": 2096,
+              "text": "This title is enacted as an exercise of the police\npower of the City to protect and preserve the\npublic peace, health, safety and welfare, and itsprovisions shall be liberally construed for the\naccomplishment of these purposes. It is expresslythe purpose of this title to provide for and pro-mote the health, safety and welfare of the generalpublic, and not to create or otherwise establish ordesignate any particular class or group of personswho will or should be especially protected orbenefited by the terms of this title. It is thespecific intent of this title to place the obligationof complying with its requirements upon the owneror operator of vessels, water sport crafts or ob-structions or upon swimmers within its scope,and no provision of nor term used in this title isintended to impose any duty whatsoever uponthe City or any of its officers or employees, forwhom the implementation or enforcement of thistitle shall be discretionary and not mandatory .Nothing contained in this title is intended to benor shall be construed to create or form the basisfor any liability on the part of the City , or itsofficers, employees or agents for any injury ordamage resulting from the failure of the owner oroperator of a vessel, water sport craft or obstruc-tion or of a swimmer to comply with the provi-sions of this title, or by reason or in consequenceof any act or omission in connection with theimplementation or enforcement of this title onthe part of the City by its officers, employees oragents.(Ord. 120023 \u00a7 20, 2000.)"
+            },
+            {
+              "citation": "16.08.013",
+              "heading": "Number, gender and tense.",
+              "start_page": 2096,
+              "end_page": 2096,
+              "text": "Whenever consistent with the context of this\ntitle, words in the present, past or future tenses\nshall be construed to be interchangeable witheach other, words in the singular number shall beconstrued to include the plural, words in theplural shall be construed to include the singular,and words in any gender shall apply to the feminine, masculine and neuter genders.\n(Ord. 120023 \u00a7 21, 2000.)"
+            },
+            {
+              "citation": "16.08.014",
+              "heading": "Existing permits to remain in",
+              "start_page": 2096,
+              "end_page": 2096,
+              "text": "force.\nExcept as otherwise provided in this title, all\npermits lawfully issued under the provisions ofany ordinance or section repealed by the ordi-nances codified in this title shall remain in forceand effect until expiration according to the termsthereof, unless sooner surrendered or revoked;subject, however, to all other provisions of this\ntitle.\n(Ord. 120023 \u00a7 22, 2000.)\n*Editor\u2019s note\u2014 The U.S. Coast Guard and the Army\nCorps of Engineers also exercise jurisdiction over waterwayswithin Seattle.16.04.220 HARBOR CODE"
+            },
+            {
+              "citation": "16.08.030",
+              "heading": "Liability for damages.",
+              "start_page": 2097,
+              "end_page": 2097,
+              "text": "Nothing in this title shall be construed so as to\nrelease any person owning or controlling any\nvessel, water sport craft, pier, obstruction or other\nstructure, from any liability for damages, and the\nsafeguards to life and property required in this\ntitle shall not be construed as relieving any person from installing and maintaining all other\nsafeguards that may be required by law.\n(Ord. 120023 \u00a7 25, 2000: Ord. 87983 \u00a7 52, 1959.)"
+            },
+            {
+              "citation": "16.08.040",
+              "heading": "Public employees to comply.",
+              "start_page": 2097,
+              "end_page": 2097,
+              "text": "The provisions of this title shall apply to the\noperator of any vessel or water sport craft owned\nby or used in the service of the United States\nGovernment, or of this state or of any political\nsubdivision or municipal corporation thereof.\n(Ord. 120023 \u00a7 26, 2000: Ord. 87983 \u00a7 55, 1959.)"
+            },
+            {
+              "citation": "16.08.050",
+              "heading": "Waterway Operations and",
+              "start_page": 2097,
+              "end_page": 2097,
+              "text": "Maintenance Account\nA. A restricted account designated the Waterway Operations and Maintenance Account is established in the Transportation Fund to which\nrestricted account shall be deposited all fees collected from waterway use and occupation permits\nissued under this Chapter 16.08; reimbursements of expenses incurred by the Chief of Police\nin removal, towing, impoundment of vessels, water sport craft or obstructions in waterways and\nreceipts from sale of such vessels, water sportcraft or obstructions; its proportionate share of\ninterest earnings of invested Transportation Fund\nbalances; and any other moneys accruing from\nactivities under this title in waterways or appropriated or budgeted to such fund. If the Waterway Operations and Maintenance Account has a\ncredit balance greater than that of the Transportation Fund, the Director of Finance and Administrative Services shall credit interest to the account at the rate of the City's investment earnings\nfor funds of its size.\nB. The Waterway Operations and Maintenance Account shall be charged with the cost of\nadministration, inspection and policing involved\nin the issuance and continuance of such permits;\nactivities of the City in maintaining waterways\nas public ways for vessels or obstructions and for\ncommerce and navigation; and for maintaining a\nreserve to clear waterways of vessels that may\nsink therein and for emergency activities related\nto waterways and navigation. Vouchers for expenditures shall be approved by the Director of Transportation or the Director's designee, or by the\nChief of Police or the Chief's designee.\n(Ord. 125492, \u00a7 50, 2017; Ord. 123361, \u00a7 269,\n2010; Ord. 120794 \u00a7 211, 2002; Ord. 120537, \u00a7 5,\n2001; Ord. 120023 \u00a7 27, 2000: Ord. 118409 \u00a7 128,\n1996: Ord. 116441 \u00a7 4, 1992; Ord. 114227 \u00a7 1,\n1988: Ord. 100171 \u00a7 18, 1971: Ord. 87983 \u00a7 74,\n1959.)"
+            }
+          ]
+        },
+        {
+          "citation": "16.12",
+          "title": "PORT WARDEN",
+          "start_page": 2097,
+          "end_page": 2097,
+          "intro": "Sections:",
+          "sections": [
+            {
+              "citation": "16.12.010",
+              "heading": "Authority.",
+              "start_page": 2097,
+              "end_page": 2098,
+              "text": "The authority of the Chief of Police shall include:\nA. To enforce the ordinances and regulations\nof the City upon all waters within its limits;\nB. To maintain regular patrols in the harbor\nfor the protection of life and property including,\nbut not limited to, the removal and disposition of\noil pollution, drifting debris and nuisances from\nthe waters of the harbor;\nC. To investigate and report upon marine and\nmaritime accidents in the harbor;\nD. To perform all necessary functions in connection with search and rescue in the harbor;PORT WARDEN 16.12.010\nE. To cooperate with the authorities of the\nUnited States, the state and its political subdivisions in the enforcement of the laws and regulations of the United States, the state and its political subdivisions;\nF. To designate, indicate the location of, and\nto patrol anchorage locations for vessels or water\nsport craft within areas set forth by the ordinances of the City, and to designate, indicate the\nlocation of and to patrol take-off and landing\nareas for aircraft on the water within areas permitted by the ordinances of the City;\nG. To establish, maintain and regulate the\nuse of navigation and regulation buoys in the\nharbor for the regulation of vessels and water\nsport craft;\nH. To designate restricted areas and testing\ncourses;\nI. To promulgate rules and regulations governing the use of the navigable portions of waterways; to issue permits for movement of unseaworthy craft and anchoring or moorage of vessels or\nwater sport craft or obstructions in anchorage\nareas; to issue permits for skindiving or scuba\ndiving; and to charge for all such permits the fee\nestablished by ordinance;\nJ. To remove, impound or sell any vessel, water sport craft or obstruction anchored or moored\nin violation of this title deemed a public nuisance\nor a hazard to navigation or operated or afloat\nunder conditions deemed unsafe for water transportation.\nK. To issue or approve permits for marine\nevents, races and regattas and to collect fees for\nall such permits as authorized by ordinance of the\nCity.\n(Ord. 120023 \u00a7 28, 2000: Ord. 109555 \u00a7 3, 1980:\nOrd. 100171 \u00a7 2, 1971: Ord. 94587, \u00a7 2, 1966; Ord.\n87983 \u00a7 3, 1959.)"
+            },
+            {
+              "citation": "16.12.020",
+              "heading": "Accounting.",
+              "start_page": 2098,
+              "end_page": 2098,
+              "text": "The Chief of Police shall keep accurate and\ndetailed account of all moneys received or disbursed by him in the performance of his duties,\nwhich books of account shall be furnished by and\nbe the property of the City which shall at all\ntimes, within office hours, be open to inspection\nby the public and at all times to inspection and\naudit by the proper department or departments\nof the City.\n(Ord. 120023 \u00a7 29, 2000: Ord. 87983 \u00a7 49, 1959.)16.12.030 Authority supplemental to Superintendent of Parks and\nRecreation.\nThe granting of authority to the Chief of Police\nto enforce the Harbor Code in any fairway within\nproperty under the jurisdiction of the Department of Parks and Recreation shall be supplemental to the authority of the Superintendent of\nParks and Recreation and shall not diminish any\nauthority granted to the Superintendent by the\nCity Charter *or by ordinance.\n(Ord. 120023 \u00a7 30, 2000: Ord. 109227 \u00a7 5, 1980:\nOrd. 87983 \u00a7 75, 1959.)"
+            },
+            {
+              "citation": "16.12.030",
+              "heading": "Authority supplemental to",
+              "start_page": 2097,
+              "end_page": 2097,
+              "text": "Superintendent of Parks and\nRecreation."
+            }
+          ]
+        },
+        {
+          "citation": "16.20",
+          "title": "OPERATION REGULATIONS FOR",
+          "start_page": 2098,
+          "end_page": 2098,
+          "intro": "VESSELS AND WATERCRAFT\nSections:",
+          "sections": [
+            {
+              "citation": "16.20.010",
+              "heading": "Compliance with public health",
+              "start_page": 2099,
+              "end_page": 2099,
+              "text": "regulations\nAll vessels entering or in the harbor shall\ncomply with the applicable public health laws\nand regulations of the United States, and the\nstate and its political subdivisions.\n(Ord. 120023, \u00a7 32, 2000; Ord. 87983, \u00a7 50, 1959.)"
+            },
+            {
+              "citation": "16.20.020",
+              "heading": "Rules of the road",
+              "start_page": 2099,
+              "end_page": 2099,
+              "text": "Except as otherwise specified in this title, vessels or water sport craft shall be subject to the\nInternational Regulations for Preventing Collisions at Sea, 1972 (72 COLREGS) and right-ofway laws and rules of The State of Washington,\nas each of them now exists or may hereafter be\namended.\n(Ord. 120023, \u00a7 33, 2000; Ord. 94587, \u00a7 6, 1966;\nOrd. 87983, \u00a7 31, 1959.)"
+            },
+            {
+              "citation": "16.20.030",
+              "heading": "Equipment and numbering",
+              "start_page": 2099,
+              "end_page": 2099,
+              "text": "All vessels shall carry the equipment required\nby any applicable United States and State of\nWashington laws as now or hereafter amended,\nand shall be numbered or designated in accordance with any applicable United States and\nState of Washington laws as now or hereafter\namended.\n(Ord. 120023, \u00a7 34, 2000; Ord. 87983, \u00a7 26, 1959.)"
+            },
+            {
+              "citation": "16.20.031",
+              "heading": "Prohibited use of distress signal",
+              "start_page": 2099,
+              "end_page": 2099,
+              "text": "No person shall display or sound a distress\nsignal, either visual or audible, on the waters of\nthe harbor except in a situation when assistance\nis needed because of immediate or potential danger to any person aboard a vessel. The Chief of\nPolice may issue a written permit for a person to\ndisplay or sound a distress signal for legitimate\ntraining purposes.\n(Ord. 120023, \u00a7 35, 2000.)"
+            },
+            {
+              "citation": "16.20.040",
+              "heading": "Mufflers",
+              "start_page": 2099,
+              "end_page": 2099,
+              "text": "It shall be unlawful to use or operate any\nengine in or on Seattle Harbor that is not in\ncompliance with Section 25.08.485.\n(Ord. 120023, \u00a7 36, 2000; Ord. 87983, \u00a7 24, 1959.)16.20.060 City buoys\nThe Chief of Police shall be the sole judge of\nany and all use made of any City buoy and his\ndecision as to the same shall be final and conclusive.\n(Ord. 120023, \u00a7 38, 2000; Ord. 87983, \u00a7 32, 1959.)"
+            },
+            {
+              "citation": "16.20.060",
+              "heading": "City buoys",
+              "start_page": 2098,
+              "end_page": 2098,
+              "text": ""
+            },
+            {
+              "citation": "16.20.070",
+              "heading": "Interference with navigation",
+              "start_page": 2099,
+              "end_page": 2099,
+              "text": "No person shall use or operate any vessel or\nwater sport craft or aircraft on the water in a\nmanner which shall unreasonably or unnecessarily interfere with other vessels, water sport craft\nor aircraft on the water or with the free and\nproper navigation of the fairways of the City or\nthe launching of any vessel or water sport craft at\nany public boat launching ramp. Anchoring or\nmooring under a bridge or in a heavily traveled\nchannel or in an approach to a public boat launching ramp shall constitute such interference if\nunreasonable under the prevailing circumstances.\n(Ord. 120023, \u00a7 39, 2000; Ord. 109227, \u00a7 2, 1980;\nOrd. 100171, \u00a7 6, 1971; Ord. 87983, \u00a7 8, 1959.)"
+            },
+            {
+              "citation": "16.20.071",
+              "heading": "Launch ramp limit.",
+              "start_page": 2099,
+              "end_page": 2099,
+              "text": "No vessel or water sport craft shall remain at a\nCity-owned launch ramp longer than fifteen (15)\nminutes unless authorized by the Seattle Department of Parks and Recreation or by permit of the\nChief of Police.\n(Ord. 120023 \u00a7 40, 2000.)"
+            },
+            {
+              "citation": "16.20.072",
+              "heading": "Vessels in confined areas.",
+              "start_page": 2099,
+              "end_page": 2099,
+              "text": "While in the Montlake Cut, Fremont Cut, or\nwithin the guidewalls of any bridge area, vessels\nshall remain to the right side of the channel\nunless prevailing circumstances require otherwise.\n(Ord. 120023 \u00a7 41, 2000.)"
+            },
+            {
+              "citation": "16.20.080",
+              "heading": "Aircraft on the water.",
+              "start_page": 2099,
+              "end_page": 2099,
+              "text": "All vessels or water sport craft shall keep clear\nof aircraft landing within any area now or hereafter set aside by law for such purpose. Aircraft\non the water shall keep clear of all vessels and\nwater sport craft and avoid impeding their navigation.\n(Ord. 120023 \u00a7 42, 2000: Ord. 87983 \u00a7 30, 1959.)"
+            },
+            {
+              "citation": "16.20.081",
+              "heading": "Aircraft take-off and landing",
+              "start_page": 2099,
+              "end_page": 2100,
+              "text": "restricted.\nAircraft are prohibited from landing and/or\ntaking off from the Lake Washington Ship CanalOPERATION REGULATIONS FOR VESSELS AND WATERCRAFT 16.20.08 1\nexcluding Lake Union and Lake Union Reach.\nAircraft are prohibited from taking off from Portage Bay.\n(Ord. 120023 \u00a7 43, 2000.)"
+            },
+            {
+              "citation": "16.20.090",
+              "heading": "Negligent operation.",
+              "start_page": 2100,
+              "end_page": 2100,
+              "text": "A person shall not operate a vessel or aircraft\non the water in a negligent manner. For the\npurposes of this section, to \"operate in a negligent\nmanner\"means operating a vessel or aircraft on\nthe water in disregard of careful and prudent\noperation, or in disregard of careful and prudent\nrates of speed that are no greater than is reasonable and proper under the conditions existing at\nthe point of operation, taking into account the\namount and character of traffic, size of the lake or\nbody of water, freedom from obstruction to view\nahead, effects of vessel wake, and so as not to\nunduly or unreasonably endanger life, limb, property or other rights of any person entitled to the\nuse of such waters.\n(Ord. 120023 \u00a7 44, 2000: Ord. 100171 \u00a7 3, 1971:\nOrd. 87983 \u00a7 5, 1959.)"
+            },
+            {
+              "citation": "16.20.100",
+              "heading": "Reckless operation.",
+              "start_page": 2100,
+              "end_page": 2100,
+              "text": "It shall be unlawful for any person to operate a\nvessel or an aircraft on the water in a reckless\nmanner. For purposes of this section, \"reckless \"\nmeans acting carelessly and heedlessly in a wilful and wanton disregard of the rights, safety, or\nproperty of another.\n(Ord. 120023 \u00a7 45, 2000: Ord. 100171 \u00a7 4, 1971:\nOrd. 87983 \u00a7 6, 1959.)"
+            },
+            {
+              "citation": "16.20.110",
+              "heading": "Intoxication.",
+              "start_page": 2100,
+              "end_page": 2101,
+              "text": "A. 1. It shall be unlawful for any person to\noperate or be in actual physical control of any\nvessel or watercraft:\na. And the person has, within two\n(2) hours after operating or being in actual physical control, an alcohol concentration of 0.08 or\nhigher, as shown by analysis of the person's breath\nor blood made under RCW 46.61.506\nb. And the person has, within two\n(2) hours after operating or being in actual physical control, a THC concentration of 5.00 or higher\nas shown by analysis of the person's blood made\nunder RCW 46.61.506;\nc. While the person is under the\ninfluence of or affected by intoxicating liquor,\nmarijuana or any drug; or\nd. While the person is under the\ncombined influence of or affected by intoxicating\nliquor, marijuana and any drug.2. The fact that a person charged with a\nviolation of this subsection is or has been entitled\nto use a drug under the laws of this state shall not\nconstitute a defense against a charge of violating\nthis subsection.\n3. a. Analysis of blood or breath samples obtained more than two (2) hours after the\nalleged operating or being in actual physical control may be used as evidence that within two (2)\nhours after the alleged operating or being in\nactual physical control a person had an alcohol\nconcentration of 0.08 or higher in violation of\nsubsection A1a of this section, and in any case in\nwhich the analysis shows an alcohol concentration above 0.00 may be used as evidence that a\nperson was under the influence of or affected by\nintoxicating liquor or any drug in violation of\nsubsections A1c or A1d of this section.\nb. Analyses of blood samples obtained more than two (2) hours after the alleged\noperating or being in actual physical control may\nbe used as evidence that within two (2) hours of\nthe alleged operating or being in actual physical\ncontrol a person had a THC concentration of 5.00\nor higher in violation of subsection A1b of this\nsection, and in any case in which the analysis\nshows a THC concentration above 0.00 may be\nused as evidence that a person was under the\ninfluence of or affected by marijuana in violation\nof subsection A1c or A1d of this section.\n4.\"Alcohol concentration \"has the same\nmeaning as in Section 11.14.023\n5.\"Drug\"has the same meaning as in\nSection 11.14.18316.20.081 HARBOR CODE\n6. \"THC concentration\" has the same\nmeaning as in Section 11.14.637.\n7. Notwithstanding Section 16.64.040, violation of this subsection is a gross misdemeanor.In addition to the statutory penalties imposed,the court may order the defendant to pay restitu-tion for any damages or injuries resulting fromthe offense.\nB. It shall be unlawful for the owner of any\nvessel or watercraft or any person having such incharge or in control to authorize or knowinglypermit the same to be operated by any person whois under the in\ufb02uence of intoxicating liquor, mar-ijuana or any drug.\nC. Whenever it appears reasonably certain to\nany police or harbor officer that any person underthe in\ufb02uence of, or affected by the use of, intoxi-cating liquor, marijuana or of any drug is about tooperate a watercraft or vessel in violation ofsubsection A of this section, the officer may takereasonable measures to prevent any such personfrom so doing, either by taking from him the keysof such watercraft or vessel and locking the same,or by some other appropriate means. In any suchcase, the officer shall immediately report the factsto his Commanding Officer of the Harbor Depart-ment, and shall, as soon as possible, deposit thekeys or other articles, if any , taken from thewatercraft or vessel or person with the Command-ing Officer. Such keys or other articles may bereturned to any person upon his demand andproper identi\ufb01cation of himself when it appearsthat he is no longer under the in\ufb02uence of intox-icating liquor, marijuana or any drug.(Ord. 124301, \u00a7 43, 2013; Ord. 119189 \u00a7 9, 1998:\nOrd. 90653 \u00a7 3, 1961: Ord. 87983 \u00a7 13, 1959.)"
+            },
+            {
+              "citation": "16.20.112",
+              "heading": "Refusal to submit to test",
+              "start_page": 2101,
+              "end_page": 2101,
+              "text": "A. A person's refusal to submit to a test or\ntests pursuant to RCW 79A.60.040(4)(a) is a class1 civil infraction under RCW 7.80.120, for whichthe maximum penalty and default amount is$1,000.\nB. The refusal of a person to submit to a test of\nthe alcohol concentration, THC concentration orpresence of any drug in the person's breath orblood is not admissible into evidence at a subse-quent criminal trial.(Ord. 124684, \u00a7 27, 2015; Ord. 124301, \u00a7 44, 2013)"
+            },
+            {
+              "citation": "16.20.115",
+              "heading": "Failure to stop for law enforcement officer.",
+              "start_page": 2101,
+              "end_page": 2101,
+              "text": "Any operator of a vessel who wilfully fails to\nstop when requested or signaled to do so by aperson reasonably identi\ufb01able as a law enforcement officer is guilty of a gross misdemeanor.(RCW 79A.60.080).(Ord. 120023 \u00a7 46, 2000.)"
+            },
+            {
+              "citation": "16.20.120",
+              "heading": "Incapacity of operator.",
+              "start_page": 2101,
+              "end_page": 2101,
+              "text": "It shall be unlawful for the owner of any vessel\nor water sport craft or any person having such incharge or in control to authorize or knowinglypermit the same to be operated by any person whoby reason of physical or mental disability is inca-pable of operating such vessel or water sport craftunder the prevailing circumstances.(Ord. 120023 \u00a7 47, 2000: Ord. 87983 \u00a7 14, 1959.)"
+            },
+            {
+              "citation": "16.20.130",
+              "heading": "Speed regulations\u2014Vessels",
+              "start_page": 2101,
+              "end_page": 2102,
+              "text": "and water sport craft.\nWithin the harbor limits of the City it shall be\nunlawful for any person to operate any vessel orwater sport craft at a speed in excess of thefollowing maximum limits:\nA. Seven (7) nautical miles per hour\nwithin one hundred (100) yards of any shoreline,pier, restricted area or shore installation in LakeWashington, or upon the Lake Washington ShipCanal and adjacent waters east of the entrancebuoy at Shilshole Bay to one hundred (100) yardseast of Webster Point light entering Lake Wash-ington and within two hundred (200) yards of anyshoreline, pier, restricted area or shore installa-tion in all other waters of the City;\nB. Seven (7) nautical miles per hour in\nLake Union provided that during daylight hours,the seven (7) knot speed limit shall not apply in aspeed test area one hundred (100) yards wide andfour hundred (400) yards long marked by buoysand bounded by the following coordinates:\nBeginning at a point (existing northeast corner\nbuoy) Latitude 47 degrees 38( 26.829( North;Longitude 122 degrees 19( 53.430( West; thenceon an azimuth (astronomic north is 0 degrees)of 180 degrees a distance of 100 yards; thenceon an azimuth of 270 degrees a distance of 400yards; thence on an azimuth of 0 degrees adistance of 100 yards; thence on an azimuth of90 degrees a distance of 400 yards to the pointof beginning.\nUse of the speed test area shall be subject to\nthe following limits:\n1. In no event shall any vessel or\nwater sport craft operate at a speed in excess ofseven (7) knots in said area immediately prior tomaking a U-turn;OPERATION REGULATIONS FOR VESSELS AND WATERCRAFT 16.20.130\n16-11\n(Seattle 6-15)\n2. No vessel or water sport craft\nshall enter the speed test area and exceed theseven (7) knot limit if any other vessel or watersport craft is presently using the speed test areaat a speed in excess of seven (7) knots;\n3. No vessel or water sport craft\nshall make more than four (4) runs in or acrossthe speed test area during a two (2) hour period;\n4. The speed test area is intended\nfor brief and limited use and shall be used only forvessel testing by individuals maintaining or sell-ing vessels.\nC. Four (4) nautical miles per hour from\nthe western end of the west guide pier of theHiram M. Chittenden Locks of the Lake Washing-ton Ship Canal to the eastern end of the eastguide pier at said Locks; or\nD. Three (3) nautical miles per hour south\nof the outermost headlands of Andrews Bay (aline drawn due west from the north tangent ofBailey Peninsula); or\nE. Three (3) nautical miles per hour within\none hundred (100) yards of the shoreline of LakeWashington in an area marked by buoys andbounded on the north by a line which is anextension of the centerline of South HendersonStreet and bounded on the south by a line whichis an extension of the centerline of South CarverStreet;\nF . Three (3) nautical miles per hour inside of the breakwater at Shilshole Bay Marina,Elliott Bay Marina or within the con\ufb01nes of anyestablished marina or boat moorage area;\nG. Three (3) nautical miles per hour south\nof the outermost headlands of Wetmore Cove (aline drawn west from the North tangent of SayresPark).\nVessels operated by only human power are exempt from this section provided they are notoperated in a negligent or reckless manner. If alocation shall be within an area described by two(2) subsections of this section, the lowest maxi-mum speed shall control.\nH. Subsections A and B of this section\nshall not apply to non-motorized vessels andmotorized vessels in direct support of non-motor-ized vessels. Motorized vessels providing supportmust be clearly marked as a support and/orrescue vessel and include the name or seal of theorganization providing support. Motorized ves-sels, while exceeding the limit must do so onlywithin obvious proximity to or in pursuit of ves-sel(s) being supported.(Ord. 120451 \u00a7 1, 2001; Ord. 120023 \u00a7 48, 2000:\nOrd. 117785 \u00a7 1, 1995: Ord. 109227 \u00a7 1(part),1980: Ord. 104583 \u00a7 1, 1975: Ord. 102301 \u00a7 1,1973: Ord. 101866 \u00a7 1, 1973: Ord. 100171 \u00a7 5,\n1971: Ord. 96875 \u00a7 1, 1968: Ord. 90653 \u00a7 2, 1961:Ord. 87983 \u00a7 7A, 1959.)"
+            },
+            {
+              "citation": "16.20.131",
+              "heading": "Speed regulations\u2014Aircraft on",
+              "start_page": 2102,
+              "end_page": 2102,
+              "text": "the water.\nA. Speed Regulations. Except for aircraft in\nthe process of taking off or landing, it shall beunlawful for any person to operate any aircraft onthe water or step-taxiing over the water in excessof seven (7) nautical miles per hour within thejurisdiction of the City as follows:\n1. Within one hundred (100) yards of any\nshoreline, pier, restricted area or shore installa-tion in Lake Washington easterly of WebsterPoint;\n2. Within two hundred (200) yards of\nany shoreline, pier, restricted area or shore instal-lation in all other waters of the City; and\n3. Within a designated anchorage or restricted area;\nProvided, such speed limits shall not apply to\naircraft during emergency conditions or on rescueoperations where time is of the essence.\nB. Take Off Prohibited in Portage Bay . It shall\nbe unlawful for any person operating an aircraftto take off from Portage Bay .(Ord. 120023 \u00a7 49, 2000: Ord. 109227 \u00a7 1(part),\n1980: Ord. 87983 \u00a7 7B, 1959.)"
+            },
+            {
+              "citation": "16.20.132",
+              "heading": "Speed regulations\u2014Liability",
+              "start_page": 2102,
+              "end_page": 2102,
+              "text": "not affected.\nNothing in Sections 16.20.130 or 16.20.131\nshall be construed as exempting any person fromliability caused by wake action from operation ofany vessel, water sport craft or aircraft in theareas designated therein nor shall Sections16.20.130 or 16.20.131 be construed as exemptingany person from liability for negligent or recklessoperation of any vessel, water sport craft or air-craft.(Ord. 120023 \u00a7 50, 2000: Ord. 109227 \u00a7 1(part),1980: Ord. 87983 \u00a7 7C, 1959.)"
+            },
+            {
+              "citation": "16.20.140",
+              "heading": "Overloading.",
+              "start_page": 2102,
+              "end_page": 2103,
+              "text": "A. No vessel shall be loaded with passengers\nor cargo beyond its safe carrying capacity norcarry passengers in an unsafe manner taking intoconsideration weather and other existing operat-ing conditions.\nB. No person shall operate a vessel while a\npassenger is situated on the bow or gunwale ofthe vessel in a manner which unduly or unrea-sonably endangers life or limb, taking into ac-16.20.130 HARBOR CODE\n16-12\n(Seattle 6-15)\ncount the prevailing conditions including, but not\nlimited to, the size and character of the vessel,and weather and water conditions.\nC. Whenever it appears reasonably certain to\nany police or harbor officer that any person isoperating a vessel loaded beyond its safe capacityand in the judgment of that officer the operationcreates a hazardous condition, the officer may\ntake reasonable measures to prevent any such\nperson from so operating the vessel. The officermay direct the operator to take immediate andreasonable steps necessary for the safety of theindividuals on board the vessel, including direct-ing the operator to return to shore or a mooring\nand to remain there until the situation creating\nthe hazard is corrected or ended or the officer mayimpound the vessel. Wilful failure to follow thedirection of an officer under this section is amisdemeanor.(Ord. 120023 \u00a7 51, 2000: Ord. 90653 \u00a7 4, 1961:\nOrd. 87983 \u00a7 18, 1959.)"
+            },
+            {
+              "citation": "16.20.150",
+              "heading": "Excessive power.",
+              "start_page": 2103,
+              "end_page": 2103,
+              "text": "A. A person shall not operate or permit to be\noperated a vessel equipped with a motor or otherpropulsion machinery of a power beyond the vessel's ability to operate safely , taking into consideration the vessel's type, use, and construction,\nthe weather conditions, and other existing oper-ating conditions.\nB. Whenever it appears reasonably certain to\nany police officer that any person is operating a\nvessel with a motor or propulsion machinery\nwhich is beyond safe power capacity , and in thejudgment of that officer the operation creates ahazardous condition, the officer may take reasonable measures to prevent any such person from so\noperating the vessel. The officer may direct theoperator to take immediate and reasonable stepsnecessary for the safety of the individuals on\nboard the vessel, including directing the operator\nto return to shore or a mooring and to remain\nthere until the situation creating the hazard is\ncorrected or ended or the officer may impound thevessel. Wilful failure to follow the direction of an\nofficer under this section is a misdemeanor.\n(Ord. 120023 \u00a7 52, 2000: Ord. 99108 \u00a7 1, 1970:\nOrd. 87983 \u00a7 19-A, 1959.)"
+            },
+            {
+              "citation": "16.20.160",
+              "heading": "Racing.",
+              "start_page": 2103,
+              "end_page": 2103,
+              "text": "Nothing in the provisions of this title shall be\nconstrued to mean that the operator of a vessel or\nwater sport craft competing in a race or regatta,or trials therefor, which has been authorized byan appropriate governmental agency or authority ,or an operator engaged in industrial development\nand testing of experimental and production ves-sels and water sport craft, shall be prohibitedfrom attempting to attain high speeds on dulydesignated and indicated racing or testing courses,nor while so engaged, shall such vessels or watersport craft be required to comply with Sections16.20.030, 16.20.040, 16.20.130 and 16.20.170.(Ord. 120023 \u00a7 53, 2000: Ord. 94587 \u00a7 4, 1966:Ord. 87983 \u00a7 27, 1959.)"
+            },
+            {
+              "citation": "16.20.170",
+              "heading": "Whistles and lights.",
+              "start_page": 2103,
+              "end_page": 2103,
+              "text": "It shall be unlawful for the master, owner or\nany other person in charge of any vessel, while\nlying at any pier or while navigating in Seattle\nHarbor, unnecessarily to cause any whistle orsiren to be blown or sounded, nor shall any person\ufb02ash the rays of a searchlight or other blinding\nlight onto the bridge or into the pilothouse of any\nvessel under way or onto streets open to vehicular\ntraffic for any purpose other than those autho-rized by law.(Ord 120023 \u00a7 54, 2000: Ord. 87983 \u00a7 25, 1959.)"
+            },
+            {
+              "citation": "16.20.180",
+              "heading": "Propellers.",
+              "start_page": 2103,
+              "end_page": 2103,
+              "text": "No master, owner or other person in charge of\nany vessel shall, while the same is lying in anyslip or at any pier, either cause or allow thepropeller or wheel of such vessel to be worked insuch a manner as to endanger any other vessel orstructure.(Ord. 120023 \u00a7 55, 2000: Ord. 87983 \u00a7 33, 1959.)"
+            },
+            {
+              "citation": "16.20.190",
+              "heading": "Explosives.",
+              "start_page": 2103,
+              "end_page": 2103,
+              "text": "Every vessel approaching or passing any vessel\nengaged in the transfer of explosives and from\nwhich is displayed the red powder \ufb02ag shall slow\ndown to a no wake speed before coming abreast ofsuch vessel and in time to prevent accident byreason of swells.(Ord. 120023 \u00a7 56, 2000: Ord. 87983 \u00a7 34, 1959.)"
+            },
+            {
+              "citation": "16.20.200",
+              "heading": "Operating vessel without state",
+              "start_page": 2103,
+              "end_page": 2103,
+              "text": "vessel registration.\nIt is unlawful for anyone to own or operate a\nvessel, as de\ufb01ned in RCW 88.02.010, upon the\nwaters within the City without the necessary\nstate vessel registration when registration of thevessel is required by state law.\n(Ord. 111557 \u00a7 1, 1984.)OPERATION REGULATIONS FOR VESSELS AND WATERCRAFT 16.20.200\n16-13"
+            },
+            {
+              "citation": "16.20.210",
+              "heading": "Certi\ufb01cate of registration\u2014",
+              "start_page": 2104,
+              "end_page": 2104,
+              "text": "Enforcement.\nA. Any person charged with the enforcement\nof this title may request for inspection the certif-icate of registration from any vessel owner oroperator to ascertain the legal and registered\nownership of such vessel. Failure to provide such\ncerti\ufb01cate for inspection upon the request of anyperson charged with enforcement of this titleconstitutes a violation and subjects the person,who is requested to produce such document, tothe civil \ufb01ne provided in Section 16.20.220.\nB. The terms \"vessel\" and \"owner\" shall have\nthe meanings contained in RCW 88.02.010.(Ord. 111557 \u00a7 2, 1984.)"
+            },
+            {
+              "citation": "16.20.220",
+              "heading": "Violation of Section 16.20.200",
+              "start_page": 2104,
+              "end_page": 2104,
+              "text": "or 16.20.210\u2014Penalty .\nA violation of Section 16.20.200 or Section"
+            }
+          ]
+        },
+        {
+          "citation": "16.24",
+          "title": "ACCIDENTS",
+          "start_page": 2104,
+          "end_page": 2104,
+          "intro": "Sections:",
+          "sections": [
+            {
+              "citation": "16.24.010",
+              "heading": "Information and assistance.",
+              "start_page": 2104,
+              "end_page": 2104,
+              "text": "The operator of any vessel involved in an\naccident resulting in damage to property whoknows or should know of the accident shall imme-diately stop such vessel at the scene of suchaccident and shall give his name, address, thename and/or number of his vessel, and the nameand address of the owner, to the person struck orthe operator or occupants of the vessel collidedwith or property damaged, and shall render to\nany person injured in such an accident reasonable\nassistance.\n(Ord. 120023 \u00a7 58, 2000: Ord. 87983 \u00a7 15, 1959.)"
+            },
+            {
+              "citation": "16.24.020",
+              "heading": "Filing of report.",
+              "start_page": 2104,
+              "end_page": 2104,
+              "text": "The master, owner or operator of any vessel\nshall \ufb01le a report within forty-eight (48) hours\nwith the Chief of Police of any accident involvingdeath or personal injury requiring medical treat-ment beyond \ufb01rst aid in which such vessel shallhave been involved in Seattle Harbor. The masteror owner of any vessel shall \ufb01le a report within\nten (10) days of any accident if damage to thevessel and other property totals more than TwoThousand Dollars ($2,000) or there is a completeloss of the vessel.(Ord. 123151, \u00a7 1, 2009; Ord. 120023 \u00a7 59, 2000:Ord. 87983 \u00a7 16, 1959.)"
+            },
+            {
+              "citation": "16.24.030",
+              "heading": "Reports con\ufb01dential\u2014Inadmissible as evidence.",
+              "start_page": 2104,
+              "end_page": 2104,
+              "text": "All required accident reports and supplemental\nreports and copies thereof shall be without prejudice to the individual so reporting and shall befor the con\ufb01dential use of the Port Warden, CityAttorney , or other peace and enforcement officeras provided in this title, except that any such\nofficer may disclose the identity of a person reported as involved in an accident when suchidentity is not otherwise known or when suchperson denies his presence at such accident. Nosuch accident report or copy thereof shall be usedas evidence in any trial, civil or criminal, arisingout of an accident, except that any officer above-named for receiving accident reports shall fur-nish, upon demand of any person who has, or whoclaims to have, made such a report, or, upon\ndemand of any court, a certi\ufb01cate showing that a\nspeci\ufb01ed accident report has or has not been\nmade to the Port Warden, solely to prove a compliance or a failure to comply with the require-ment that such a report be made in the mannerrequired by law.(Ord. 87983 \u00a7 17, 1959.)"
+            }
+          ]
+        },
+        {
+          "citation": "16.28",
+          "title": "WATER SPORTS",
+          "start_page": 2104,
+          "end_page": 2104,
+          "intro": "Sections:",
+          "sections": [
+            {
+              "citation": "16.28.010",
+              "heading": "Swimming.",
+              "start_page": 2104,
+              "end_page": 2105,
+              "text": "Swimming in the harbor shall be prohibited\nexcept:\nA. In designated swimming areas; or\nB. Within a distance of \ufb01fty (50) feet from the\nshore or a pier unless the swimmer is accompa-nied by a vessel and within twenty-\ufb01ve feet of a16.20.210 HARBOR CODE\n16-14\nvessel that has aboard a personal \ufb02otation device\nfor each occupant of said vessel and for eachaccompanied swimmer. No swimming shall bepermitted in the United States Government Locks,Montlake Cut, Fremont Cut, under any bridge,within the con\ufb01nes of any guidewall or withinthree hundred (300) feet of a ferry slip or boatlaunch ramp.(Ord. 120023 \u00a7 60, 2000: Ord. 87983 \u00a7 21, 1959.)"
+            },
+            {
+              "citation": "16.28.025",
+              "heading": "Skin diving or scuba diving",
+              "start_page": 2105,
+              "end_page": 2105,
+              "text": "permit\u2014Issuance.\nA. The Chief of Police may issue permits authorizing skin diving and scuba diving for com-mercial or instructional purposes in harbor areaswhere skin diving or scuba diving would other-wise be prohibited.\nB. Permits may be issued for a particular\noccasion up to thirty (30) days in duration or for ayear. Every permit shall describe the activityauthorized and its location; each permit maycontain such other terms and conditions as theChief of Police deems to be in the public interest,including provisions for marking or lighting, foraccommodating passage of vessels and for provid-ing insurance or an indemnity in event of accidentor injury . Diving permits shall be supplemental towaterway use permits when required by Chapter16.60, and use permits for submerged street areawhen required by Ordinance 90047. *\nC. Except for emergencies to save life or prevent injury , no skin diving or scuba diving shall\noccur sooner than one-half (\n1/2) hour before sunrise or later than one-half (1/2) hour after sunset\nexcept by permit from the Chief of Police.\nD. All diving permits shall be subject to revocation upon noncompliance with the terms orconditions of the permit or the Harbor Code, \u2020and\nto immediate suspension whenever the activitiesconducted interfere with free and proper naviga-tion within the harbor.\n(Ord. 120023 \u00a7 62, 2000: Ord. 109555 \u00a7 2, 1980:\nOrd. 87983 \u00a7 76, 1959.)"
+            },
+            {
+              "citation": "16.28.030",
+              "heading": "Water skiing.",
+              "start_page": 2105,
+              "end_page": 2106,
+              "text": "A. No watercraft which shall have in tow or\nshall be otherwise assisting a person on waterskis, aquaplane, surfboard or similar contriv-ances shall be operated or propelled in the harborunless such watercraft shall be occupied by atleast two (2) competent persons; provided, thatthis subsection shall not apply to watercraft usedin duly authorized water-ski tournaments, com-petitions, expositions, or trials therefor.\n*Editor\u2019s note\u2014 Ord. 90047 is codi\ufb01ed in Title 15 of this\nCode.\n\u2020Editor\u2019s note\u2014 The Harbor Code is codi\ufb01ed in Title 16 of\nthis Code.WATER SPORTS 16.28.030\n16-15\nB. It shall be unlawful to water-ski or to tow or\notherwise assist anyone on water skis, aquaplane,surfboard or similar contrivance upon the follow-ing waters:\n1. Within two hundred (200) yards of, or\non, the waters of the Lake Washington ShipCanal or within two hundred (200) yards of anyshoreline, pier, restricted area or shore installa-tion on Lake Union; or\n2. Upon the waters of Salmon Bay , Portage Bay , or Shilshole Bay; or to ski parallelwithin one hundred (100) yards of shore installa-tions on Lake Washington and adjacent waters.Water skiers may start at a shore installation butmust head away from shore to a point at least onehundred (100) yards, or two hundred (200) yards,as set forth above, before skiing parallel with theshore. The return to the shore must be on a ninety(90)-degree angle to the shoreline.\nC. No watercraft shall have in tow or shall\notherwise be assisting a person on water skis,\naquaplane, surfboard or similar contrivance from\nsunset to sunrise; provided, that this subsection\nshall not apply to watercraft used in duly authorized water-ski tournaments, competitions, expositions, or trials therefor.\nD. All watercraft having in tow or otherwise\nassisting a person on water skis, aquaplane, surf-board or similar contrivance, shall be operated in\na careful and prudent manner and shall remainat all times at a reasonable and prudent distancefrom the person and property of others.\nE. Any person on water skis, aquaplane, surfboard or similar contrivance shall conduct himself\nupon the same in a careful and prudent manner\nand shall remain at all times a reasonable and\nprudent distance from the person and property ofothers.(Ord. 91513 \u00a7 1, 1962: Ord. 90653 \u00a7 7, 1961: Ord.\n87983 \u00a7 23, 1959.)"
+            },
+            {
+              "citation": "16.28.040",
+              "heading": "Water sport craft.",
+              "start_page": 2106,
+              "end_page": 2106,
+              "text": "No person shall engage in the operation of or\nride upon a water sport craft that is over \ufb01fty (50)\nfeet from shore or a pier without wearing apersonal \ufb02otation device. No person shall engagein the operation of or ride upon a water sport craftupon the waters of the United States GovernmentLocks, Montlake Cut, Fremont Cut or under anybridge or within the con\ufb01nes of any guidewall or\nsimilar structure.\n(Ord. 120023 \u00a7 63, 2000.)Chapter 16.32\nTOWING\u2014OBSTRUCTIONS\nSections:"
+            },
+            {
+              "citation": "16.28.020",
+              "heading": "Skin diving or scuba diving",
+              "start_page": 2105,
+              "end_page": 2105,
+              "text": "permit\u2014Areas required.\nA. It shall be unlawful to engage in skin\ndiving or scuba diving in the following areas ofthe harbor without a written permit issued by theChief of Police therefor:\n1. To the east of a line from the northwest corner of Harbor Island to the westernmostcorner of the U.S. Naval property located inSmith Cove, in the waters of the Lake Washing-ton Ship Canal from the mid-channel buoy inShilshole Bay to Webster Point light, includingthe waters of Lake Union and Portage Bay , all ofthe inner moorage area of the Port of Seattlemoorings at Shilshole Bay Marina, Elliott BayMarina or any established marina moorage areaother than within the con\ufb01nes of the individualslip while working on a speci\ufb01c vessel and withinthree hundred (300) feet of the perimeter of theUnited States National Oceanic and AtmosphericAdministration facility at Sand Point; or\n2. Within three hundred (300) feet of any\nferry slip, public boat ramp, patrolled public beachdesignated as a swimming area. Provided, that itshall be lawful to engage in skin diving or scubadiving without a written permit between onehundred \ufb01fty (150) feet and three hundred (300)feet of the southeast corner of the Seacrest Parkboat dock, as further described as follows: Start-ing at the intersection of the inner harbor linewith the north margin of SW Georgia Street, andcontinuing easterly along said north margin onehundred ten (110) feet; thence south thirty-eight(38) feet to the true point of beginning, which isthe southeast corner of the Seacrest boat dock;\nthence one hundred \ufb01fty (150) feet from a linesouth 73\u00b0, 30', 0\" east extending a distance of\nthree hundred (300) feet.\n3. Within one hundred and \ufb01fty (150)\nfeet of any pier, dock, \ufb02oat or other shore installation at Seacrest Pier Marina.\nB. Anyone engaged in skin diving or scuba\ndiving shall be accompanied by a vessel which\nshall display a diver's \ufb02ag or the area in which thediving occurs shall be marked by an adequatelydisplayed diver's \ufb02ag. Use of the blue and white\n\"Alpha\" \ufb02ag does not satisfy the requirement for a\"diver's \ufb02ag\" as described in this title.(Ord. 120381 \u00a7 1, 2001; Ord. 120023 \u00a7 61, 2000:\nOrd. 109555 \u00a7 1, 1980: Ord.90653 \u00a7 6, 1961: Ord.\n87983 \u00a7 22, 1959.)"
+            },
+            {
+              "citation": "16.32.010",
+              "heading": "Size of tow.",
+              "start_page": 2106,
+              "end_page": 2106,
+              "text": "No towboat shall tow any raft or boom of logs or\npiles or other tow within the Lake Washington\nShip Canal from Shilshole Bay to Webster Point\nnor in the Duwamish Waterway including the\nEast and West Waterways in excess of eighty (80)\nfeet in width nor one thousand two hundred\n(1,200) feet in length, and no tow shall, in any\nevent, exceed one thousand two hundred (1,200)feet in length.(Ord. 87983 \u00a7 9, 1959.)"
+            },
+            {
+              "citation": "16.32.030",
+              "heading": "Sunken vessels.",
+              "start_page": 2107,
+              "end_page": 2107,
+              "text": "When any vessel or obstruction has been sunk\nor grounded, or has been delayed in such manner\nas to stop or seriously interfere with or endangernavigation, the Chief of Police may order thesame immediately removed and if the owner, orother person in charge thereof, after being soordered, does not proceed immediately with suchremoval, the Chief of Police may take immediatepossession thereof and remove the same, usingsuch methods as in his judgment will preventunnecessary damage to such vessel or obstruction, and the expense incurred by the Chief of\nPolice in such removal shall be paid by the owner\nor master of such vessel or obstruction; and incase of failure to pay the same, the City maymaintain an action for the recovery thereof.(Ord. 120023 \u00a7 65, 2000: Ord. 87983 \u00a7 11, 1959.)"
+            },
+            {
+              "citation": "16.32.060",
+              "heading": "Floats and buoys.",
+              "start_page": 2108,
+              "end_page": 2108,
+              "text": "Other than by operation of law, no \ufb02oat, buoy\nor other marking device shall be anchored in any\nanchorage, fairway , street end or waterway without a written permit from the Chief of Police.(Ord. 120023 \u00a7 68, 2000.)"
+            },
+            {
+              "citation": "16.32.020",
+              "heading": "Removal of obstructing vessels.",
+              "start_page": 2106,
+              "end_page": 2107,
+              "text": "A. Other than as provided in Sections 16.40.010\nand 16.60.020, or as authorized by the Superin-tendent of Parks and Recreation at a Park andRecreation Department facility , no master or per-son having charge of any vessel or obstructionshall anchor the same in any anchorage or fair-way nor make the same fast to any buoy , pier orother structure owned by or under the authorityand control of the City without \ufb01rst obtaining apermit therefor from the City .\nB. No master, owner or other person in charge\nof any towboat shall while towing any vessel,water sport craft or obstruction obstruct anychannel or fairway .\nC. Except as otherwise expressly authorized\nin this title or as authorized by the Superinten-dent of Parks and Recreation at a Park andRecreation Department facility , no owner or operator of any vessel or obstruction shall anchor,\nmake fast or leave said obstruction or vessel insuch a position that it prevents reasonable wateraccess to any public or private pier.\nD. The Chief of Police shall have the power to\norder the removal of:\n1. Any vessel, water sport craft or obstruction anchored in any anchorage or fairway ormade fast to any buoy , pier or other structureowned by or under the authority and control ofthe City;16.28.030 HARBOR CODE\n16-16\n2. Any towboat and/or its tow obstructing navigation in any channel or fairway; and\n3. Any vessel, water sport craft or obstruction lying at any pier in the harbor which isobstructing any slip, fairway or other vessel orwater sport craft; and it is unlawful to fail, neglector refuse to do so.\nE. In the event any vessel, water sport craft or\nobstruction identi\ufb01ed in subsection D of this section is not removed as directed by a written orderof the Chief of Police within seventy-two (72)hours, or such order of the Chief of Police is notfully complied with, in other respects, the Chief ofPolice shall have the power to take immediatepossession of and/or impound such vessel, watersport craft or obstruction and remove the same,using such methods as in his judgment will prevent unnecessary damage to the vessel, water\nsport craft or obstruction, and/or assign the re-moval and impounding of the vessel, water sportcraft or obstruction to a private person or corpo-ration.\n(Ord. 120023 \u00a7 64, 2000: Ord. 109227 \u00a7 3, 1980:\nOrd. 100171 \u00a7 7, 1971: Ord. 87983 \u00a7 10, 1959.)"
+            },
+            {
+              "citation": "16.32.040",
+              "heading": "Floating objects.",
+              "start_page": 2107,
+              "end_page": 2107,
+              "text": "All vessels, water sport craft, logs, piling, building material, scows, houseboats or any otherarticle of value found adrift in Seattle Harbor,may be taken in charge by the Chief of Police and\nshall be subject to reclamation by the owner\nthereof, on payment by him to the City of anyexpenses incurred by the City and in case of\nfailure to reclaim may be sold or disposed ofaccording to law.\n(Ord. 120023 \u00a7 66, 2000: Ord. 87983 \u00a7 12, 1959.)"
+            },
+            {
+              "citation": "16.32.050",
+              "heading": "Unseaworthy craft.",
+              "start_page": 2107,
+              "end_page": 2108,
+              "text": "A. It shall be unlawful for a master, owner or\nother person without a permit from the Chief ofPolice to tow or move in any fairway any vessel orobstruction which prior to movement or tow:\n1. Has been used as a permanent place\nof abode and was not engaged in navigation underits own power within ninety (90) days; or\n2. Appears or exists in an unseaworthy\ncondition, uses or needs support from anothervessel to remain a\ufb02oat, or otherwise appears tolack the capacity for safe movement through andacross navigable waters, other than the following:\n(a) barges, scows, log booms, or disabled but\nbuoyant aircraft in tow by a towage companyauthorized to do business in the state, (b) vesselstemporarily disabled by accident, collision, orother malfunction but otherwise seaworthy and\ncapable of safe movement, and (c) vessels orobstructions being towed or moved by or underthe control of the Chief of Police or the Director ofTransportation.\nB. Any person seeking a permit to tow or move\nany vessel or obstruction identi\ufb01ed in subsectionA of this section shall apply to the Chief of Policetherefor, and shall, irrespective of the distance tobe moved, post a surety bond with the City in anamount that the Director of Transportation shalldetermine re\ufb02ects the estimated expense of theremoval of such vessel or obstruction in event ofits breakup or sinking, provided the Chief ofPolice may accept in lieu thereof an indemnityagreement by a towage company agreeing toremove the vessel or obstruction within ten (10)days in event of breakup or sinking; and if not soremoved, to reimburse the City any expense incurred by removal thereof by the City . In addition,\nthe person seeking the permit shall specify the\ndestination of the vessel or obstruction to betowed and, if the destination is a waterway ,fairway , submerged street end or other area which\nrequires a permit or other governmental approval\nfor occupancy , shall secure and present such per-mit or approval to the Chief of Police whenapplying for the permit. An anchorage as de\ufb01nedin Chapter 16.04 of this title shall not be consid-ered a permitted destination. The Chief of Policeshall not issue a towing permit until all requiredTOWING\u2014OBSTRUCTIONS 16.32.050\n16-17\npermits, leases and occupancy agreements whether\npublic or private, and other needed approvalshave been issued.(Ord. 120023 \u00a7 67, 2000: Ord. 118409 \u00a7 129, 1996:\nOrd. 111349 \u00a7 2, 1983: Ord. 100171 \u00a7 15, 1971:Ord. 87983 \u00a7 71, 1959.)"
+            }
+          ]
+        },
+        {
+          "citation": "16.36",
+          "title": "IMPOUNDMENT",
+          "start_page": 2108,
+          "end_page": 2108,
+          "intro": "Sections:",
+          "sections": [
+            {
+              "citation": "16.36.010",
+              "heading": "Authority to impound.",
+              "start_page": 2108,
+              "end_page": 2108,
+              "text": "The Chief of Police may take immediate possession and/or impound and remove any vessel,water sport craft, or obstruction, when:\nA. The operator or master of the same reasonably appears incapable of safely operating thesame or appears incapable of directing the dispo-sition of the same;\nB. The operator or master of the same refuses\nto sign a citation, or refuses or neglects to obey an\norder of the Chief of Police to proceed from or toan area following a citation or in an emergency;\nC. The operator or master operates a vessel,\nwater sport craft or obstruction in a negligent,reckless or other manner so as to endanger the\nsafety of others or to unreasonably interfere withthe navigation or access to moorage of other\nvessels, and the Chief of Police believes suchoperation of the vessel or obstruction would con-tinue unless possession be taken of the same;\nD. The vessel, water sport craft or obstruction\nappears unsafe for water transportation; or\nE. The vessel, water sport craft or obstruction\nappears abandoned, or is anchored or moored inan anchorage, waterway or submerged street area\nafter expiration, cancellation, or violation of a\npermit, or in violation of this title without apermit seventy-two (72) hours after an order toremove the same has been given by the Chief ofPolice as provided in Section 16.32.020 D or E; orF . The vessel, water sport craft or obstruction\nis obstructing a launch ramp area or public dock,or has remained at a facility under the jurisdic-tion of the Department of Parks and Recreationfor one (1) hour longer than the maximum moor-ing or anchoring time; and remove the same,using such methods as in his judgment will pre-vent unnecessary damage to said vessel, watersport craft or obstruction and/or assign the re-moval and impounding of the vessel, water sportcraft or obstruction to a private corporation.(Ord. 120023 \u00a7 69, 2000: Ord. 109227 \u00a7 4(part),\n1980: Ord. 100171 \u00a7 16(part), 1971: Ord. 87983\u00a7 72(a), 1959.)"
+            },
+            {
+              "citation": "16.36.040",
+              "heading": "Impounding-in-place.",
+              "start_page": 2109,
+              "end_page": 2109,
+              "text": "When taking possession as authorized in Section 16.36.010 or in Section 16.32.020, the Chiefof Police may impound the vessel, water sportcraft or obstruction in place by posting the samewith one (1) or more signs or notices in conspicu-ous places stating \"POLICE IMPOUND-KEEPOFF\" and notifying the owner or master of theimpound. The Chief of Police may in his discretionappoint as custodian the owner or master, theowner or operator of the facility or property wherethe vessel is moored or anchored. Upon the post-ing of such signs, it shall be unlawful for anyperson:\nA. To move, load or unload, rebuild, or enter\nupon such vessel, water sport craft, or obstructionwithout written permission from the Chief of\nPolice, other than for necessary maintenance and\nrepair to prevent deterioration of the same orsinking;\nB. To remove, mutilate, destroy or conceal any\nnotice or sign posted by the Chief of Police or theDirector of Transportation pursuant to the provi-sions of this title.(Ord. 120023 \u00a7 72, 2000: Ord. 118409 \u00a7 130, 1996:\nOrd. 109227 \u00a7 4(part), 1980: Ord. 100171 \u00a7 16(part),\n1971: Ord. 87983 \u00a7 72(d), 1979.)"
+            },
+            {
+              "citation": "16.36.020",
+              "heading": "Expenses.",
+              "start_page": 2108,
+              "end_page": 2108,
+              "text": "In the event possession is taken of any vessel,\nwater sport craft or obstruction as authorized inSection 16.36.010 or in Section 16.32.020, the\nexpenses incurred by the Chief of Police in the\nremoval, towing, impounding, and moorage of the\nsame shall be paid by the owner of such vessel,water sport craft or obstruction or the owner'sdesignee. When a vessel, water sport craft or\nobstruction is moored or impounded at a Cityfacility , the Chief of Police shall assess a reason-able moorage charge therefor, which shall be paidby the owner of such vessel, water sport craft or\nobstruction or the owner's designee. The Chief of\nPolice may decline to release possession of any\nvessel, water sport craft, or obstruction until all\ncharges are paid.(Ord. 120023 \u00a7 70, 2000: Ord. 109227 \u00a7 4(part),1980: Ord. 100171 \u00a7 16(part), 1971: Ord. 87983\u00a7 72(b), 1959.)"
+            },
+            {
+              "citation": "16.36.030",
+              "heading": "Sale of impounded craft\u2014Collection of charges.",
+              "start_page": 2108,
+              "end_page": 2108,
+              "text": "In the event a vessel, water sport craft or\nobstruction shall remain impounded for ninety\n(90) days and the charges of towing and impound-ing remain unpaid, the Chief of Police may sell\nthe same at public auction. The City may main-tain an action against the owner or person incharge of the vessel, water sport craft or obstruction for the recovery of the expenses of towing andimpounding, or the remaining balance thereof, inthe event of sale of the same.(Ord. 120023 \u00a7 71, 2000: Ord. 109227 \u00a7 4(part),1980: Ord. 100171 \u00a7 16(part), 1971: Ord. 87983\u00a7 72(c), 1959.)16.32.050 HARBOR CODE\n16-18"
+            },
+            {
+              "citation": "16.36.050",
+              "heading": "Liability .",
+              "start_page": 2109,
+              "end_page": 2109,
+              "text": "The Chief of Police shall not be held responsible for damages incurred as a result of impound ofa vessel or water sport craft so long as all reason-able and safe practices are employed in saidoperation.(Ord. 120023 \u00a7 73, 2000: Ord. 109227 \u00a7 4(part),1980: Ord. 100171 \u00a7 16(part), 1971: Ord. 87983\u00a7 72(e), 1959.)"
+            }
+          ]
+        },
+        {
+          "citation": "16.40",
+          "title": "ANCHORAGES",
+          "start_page": 2109,
+          "end_page": 2109,
+          "intro": "Sections:",
+          "sections": [
+            {
+              "citation": "16.40.010",
+              "heading": "Submerged street area\u2014Unlawful uses.",
+              "start_page": 2109,
+              "end_page": 2109,
+              "text": "A. It shall be unlawful for the master or other\nperson in charge of any vessel, water sport craft\nor obstruction to anchor, tie or make fast the\nsame:\n1. In any submerged street area with a\npublic dock or boat launching or loading area fora longer period of time than reasonably sufficient\nto load, unload, launch or land the same unless soauthorized by rules and regulations posted for theuse of such public dock or boat launching orloading area;\n2. In any portion of a submerged street\narea designated by written permit for the use ofanother without the written consent of the permitholder; or\n3. In any other submerged street area\nfor a longer period of time than reasonably suffi-cient to load, unload, or repair the same otherthan as authorized in advance by a written per-mit granted by the Director of Transportation\npursuant to Section 16.40.020 or as authorized as\nanchorage for a vessel or obstruction by the Chiefof Police pursuant to Section 16.40.030.\nB. No use of a submerged street area shall be\nmade by permit or otherwise which unreasonablyrestricts water access to adjacent privately ownedor controlled property .(Ord. 120023 \u00a7 74, 2000: Ord. 111310 \u00a7 1, 1983:\nOrd. 100171 \u00a7 8, 1971: Ord. 94587 \u00a7 5, 1966: Ord.\n87983 \u00a7 28, 1959.)"
+            },
+            {
+              "citation": "16.40.020",
+              "heading": "Submerged street area\u2014Use",
+              "start_page": 2109,
+              "end_page": 2109,
+              "text": "permit.\nThe Director of Transportation may authorize\nthe use and occupation of all or any portion of a\nsubmerged street area by use and occupationpermit processed and issued in accordance withOrdinance 90047, *as now or hereafter amended.\nSuch a permit may authorize use of either aspeci\ufb01c area of a submerged street or use ofsubmerged street area by certain vessels or ob-structions.(Ord. 120023 \u00a7 75, 2000: Ord. 100171 \u00a7 10, 1971:Ord. 87983 \u00a7 66, 1959.)"
+            },
+            {
+              "citation": "16.40.030",
+              "heading": "Anchorages designated.",
+              "start_page": 2109,
+              "end_page": 2110,
+              "text": "Recreational anchorage is authorized only pursuant to subsection F of this section. In aid ofcommerce and navigation anchorage for vesselsor obstructions is authorized in the followingdescribed waters:\nA. Elliott Bay Anchorage. Beginning at the\nnortheast corner of Harbor Island; thence north-erly and in a straight line to a point intersectinga line drawn along the south side of King Street;\nthence west on said line to a point intersecting the\neast line of the West Waterway; thence along saideast line to the northwest corner of Harbor Island;\n*Editor\u2019s note\u2014 Ord. 90047, the Street Use Ordinance, is\ncodi\ufb01ed in Subtitle I of Title 15 of this Code.ANCHORAGES 16.40.030\n16-19\nalso, beginning at a point of intersection of the\nouter harbor line with a straight line drawn alongthe west line of the West Waterway; thence northto a point intersecting a straight line drawn alongthe south side of Dearborn Street; thence in awesterly direction to a junction with a line alongthe south side of California Place.\nB. Smith Cove Anchorage. Beginning at a point\nat the junction of the outer harbor line and a linedrawn along the north side of Denny Way , thencewesterly on said line for a distance of approximately two thousand (2,000) feet; thence in a\nnorthwesterly direction paralleling the outer har-bor line to a point intersecting a straight linedrawn along the east side of Pier 88.\nC. Shilshole Bay Anchorage. All of that area\nenclosed by the south pier and the breakwater\nestablished north of the channel at the westentrance to the Lake Washington Ship Canal inShilshole Bay .\nD. Salmon Bay Anchorage. Beginning at a\npoint at the junction of the outer harbor line anda straight line drawn along the south side ofSheridan Street, thence in a southeasterly direc-tion in a straight line to a point at the intersectionof the outer harbor line and the Great Northern\nbridge.\nE. Portage Bay Anchorage. East and south of\na line extending approximately six hundred (600)feet westerly in extension of the south channelline of the Lake Washington Ship Canal which is\nimmediately west of the Montlake Cut, thencesoutherly in extension of the east side of Fourteenth Avenue North to the south shoreline ofPortage Bay .\nProvided, that in addition to the above described anchorages, whenever deemed advisableby the Chief of Police he may grant a written\npermit to the master or owner of any vessel or\nobstruction for the anchorage or mooring of thesame outside of the outer harbor line, or in anywaterway or in any street end on Lake Union at\nsuch locations as he shall determine will not\ninterfere with or impede navigation.\nF . Lake Washington Andrews Bay Anchorage.\nWithin an area marked by buoys or, in the easternshore of the bay , by stakes or signs, which shall be\nset within an area bounded on the north by a\nstraight line which is drawn between a point onthe west coast of the Bailey Peninsula that is onehundred (100) yards south of the \ufb01shing pier (thenortheast corner) and a point one hundred \ufb01fty\n(150) yards easterly of the western shore of Andrews\nBay along a straight line drawn from the north-east corner to the surfaced boat ramp at the footof Ferdinand Street on the western shore ofAndrews Bay (the northwest corner); on the south\nby a straight line which is drawn between a pointon the west coast of the Bailey Peninsula that is astraight line extension of South Dawson Street(the southeast corner) and a point one hundred\ufb01fty (150) yards easterly of the western shore ofAndrews Bay along a straight line extension ofSouth Brandon Street (the southwest corner); andon the west by a straight line drawn between thenorthwest corner and the southwest corner de-scribed above, limited to a period not to exceedseventy-two (72) hours within any one week pe-riod.\nIn addition to the Andrews Bay anchorage,\nwhenever deemed advisable by the Chief of Police, he or she may grant a written permit to the\nmaster or owner of any vessel for the anchorage or\nmooring of said vessel outside of the outer harbor\nline, or in any unused slip, or in any street end on\nLake Washington at such locations as he shalldetermine will not interfere with or impede navigation.(Ord. 120023 \u00a7 76, 2000: Ord. 118570 \u00a7 1, 1997:Ord. 87983 \u00a7 29, 1959.)"
+            }
+          ]
+        },
+        {
+          "citation": "16.44",
+          "title": "RESTRICTED AREAS",
+          "start_page": 2110,
+          "end_page": 2110,
+          "intro": "Sections:",
+          "sections": [
+            {
+              "citation": "16.44.010",
+              "heading": "Testing courses.",
+              "start_page": 2110,
+              "end_page": 2110,
+              "text": "The Chief of Police may from time to time\nestablish and designate such portion or portions\nof waters, within the City , as may be appropriatefor special use as a testing course in connectionwith the operational testing of experimental and\nproduction vessels. Such areas when established\nand maintained as a testing course shall not be\navailable for use by the general public except bypermit issued by the Chief of Police and upon theterms and conditions set forth therein. The Chiefof Police shall have power to adopt rules andregulations not inconsistent with the provisions\nof this title for the use and control of such special\nuse areas and for the protection of water users,recreational or otherwise. A copy of such rules andregulations shall be \ufb01led and available for publicexamination in the office of the City Clerk.(Ord. 120023 \u00a7 77, 2000: Ord. 116368 \u00a7 222, 1992:\nOrd. 94587 \u00a7 3, 1966: Ord. 90653 \u00a7 5, 1961: Ord.\n87983 \u00a7 19, 1959.)16.40.030 HARBOR CODE\n16-20"
+            },
+            {
+              "citation": "16.44.020",
+              "heading": "Restricted areas\u2014Designation.",
+              "start_page": 2111,
+              "end_page": 2111,
+              "text": "In the interests of safe navigation, life safety\nand the protection of property , motor-poweredvessels shall be prohibited on Haller Lake, BitterLake, Green Lake and those waters which arecontiguous to the Washington Park Arboretum(as designated at SMC Section 18.12.190) and theChief of Police shall also designate restrictedareas and the purpose for which same shall beused. No person shall operate any such vesselwithin a restricted area; provided, that this sec-tion shall not apply to vessels engaged in oraccompanying the activity to which an area isrestricted, nor to patrol or rescue craft or in thecase of an emergency .(Ord. 120023 \u00a7 78, 2000: Ord. 109228 \u00a7 1, 1980:Ord. 87983 \u00a7 20, 1959.)"
+            }
+          ]
+        },
+        {
+          "citation": "16.48",
+          "title": "EMERGENCY VESSELS AND POWERS",
+          "start_page": 2111,
+          "end_page": 2111,
+          "intro": "Sections:",
+          "sections": [
+            {
+              "citation": "16.48.010",
+              "heading": "Exemption to authorized",
+              "start_page": 2111,
+              "end_page": 2111,
+              "text": "emergency vessels.\nThe provisions of this title shall be applicable\nto the operation of any and all vessels in the\nharbor of the City except that they shall not applyin the following cases:\nTo any authorized emergency vessel actually\nresponding to an emergency call or in immediate\npursuit of an actual or suspected violator of the\nlaw , within the purpose for which such emer-gency vessel has been authorized; provided, thatthe provisions of this section shall not relieve theoperator of an authorized emergency vessel of theduty to operate with due regard for the safety ofall persons using the City harbor, nor shall itprotect the operator of any such emergency vesselfrom the consequence of a reckless disregard forthe safety of others; provided further, the provisions of this section shall in no event extend any\nspecial privilege or immunity in operation of anauthorized emergency vessel for any purpose otherthan for which the same has been authorized.(Ord. 120023 \u00a7 79, 2000: Ord. 87983 \u00a7 56, 1959.)16.48.020 Emergency powers.\nThe Chief of Police and the officers of the Police\nDepartment are authorized to direct all water-borne traffic, either in person or by means ofvisible or audible signal in conformance with theprovisions of this title; provided, that where nec-essary to expedite waterborne traffic, or to pre-vent or eliminate congestion or to safeguard per-sons or property , such officers, or in the event of afire or other emergency such officers and otherauthorized officers of appropriate governmentalagencies or authorities, may direct waterbornetraffic as conditions may require, notwithstand-ing the provisions of this title. Vessels authorizedto anchor pursuant to this section shall complywith applicable navigation rules, and no vessel soanchored shall be left without some person onboard and in charge of it by day and by night.(Ord. 120023 \u00a7 80, 2000: Ord. 87983 \u00a7 58, 1959.)"
+            },
+            {
+              "citation": "16.48.020",
+              "heading": "Emergency powers.",
+              "start_page": 2111,
+              "end_page": 2111,
+              "text": ""
+            }
+          ]
+        },
+        {
+          "citation": "16.52",
+          "title": "PIERS, FLOATS AND GANGWAYS",
+          "start_page": 2111,
+          "end_page": 2111,
+          "intro": "Sections:",
+          "sections": [
+            {
+              "citation": "16.52.010",
+              "heading": "Unsafe piers.",
+              "start_page": 2111,
+              "end_page": 2112,
+              "text": "Whenever any pier or gangway devoted to passenger traffic shall be damaged or appear to the\nChief of Police to become unsafe so as to renderthe same, or any portion thereof, unsafe for life orproperty , the Chief of Police shall report the mat-ter to the Director of the Seattle Department ofConstruction and Inspections who shall inspectthe same and shall order any unsafe portionbarricaded with proper fencing until such time asnecessary repairs shall be made. If the owner,agent or lessee of such pier shall fail to comply\nwith the orders of the Director of the Seattle\nDepartment of Construction and Inspections, theDirector of the Seattle Department of Construc-tion and Inspections shall direct the owner, agentor lessee to prohibit the use of the unsafe portion\nof such pier and may erect the necessary fencingPIERS, FLOATS AND GANGWAYS 16.52.010\n16-21\n(Seattle 12-15)\nor barricade, with the expense thereof paid by\nand recoverable from the owner, agent, or lesseeof such pier to the City .(Ord. 124919, \u00a7 62, 2015; Ord. 120023, \u00a7 81, 2000;Ord. 87983, \u00a7 35, 1959.)"
+            },
+            {
+              "citation": "16.52.020",
+              "heading": "Pier lights.",
+              "start_page": 2112,
+              "end_page": 2112,
+              "text": "In the interests of safe navigation and the\nprotection of property the Chief of Police shallestablish standards for the lighting of piers in theharbor. Between the hours of sunset and sunriseall piers shall be kept lighted in accordance withthe requirements of the Chief of Police. All walks,passageways, openings or gangways upon anypier upon or through which passengers may passshall be kept adequately lighted between sunsetand sunrise.(Ord. 120023 \u00a7 82, 2000: Ord. 87983 \u00a7 36, 1959.)"
+            },
+            {
+              "citation": "16.52.030",
+              "heading": "Safety devices.",
+              "start_page": 2112,
+              "end_page": 2112,
+              "text": "Every owner, agent or lessee having charge of\nany commercial pier shall furnish and keep foruse on such pier at least one (1) serviceable thirty(30)-inch ring life buoy , and one serviceable thirty\n(30)-inch ring life buoy for every three hundred\n(300) lineal feet of berthing space to each of which\nshall be attached at least two hundred (200) feetof suitable line, one end of which shall be fastenedto the ring buoy . Each ring buoy and line attachedthereto shall be kept in a suitable box on the pierfor the use of the public in case of accident, whichbox shall be properly labeled and be at all timeskept clear of obstructions, and it shall be unlaw-ful to take away , molest, injure or destroy thesame or either of them or to disturb the same, oreither of them, except for use in saving life andproperty .\n(Ord. 87983 \u00a7 37, 1959.)"
+            },
+            {
+              "citation": "16.52.100",
+              "heading": "Fire piers.",
+              "start_page": 2112,
+              "end_page": 2112,
+              "text": "No passengers, freight or merchandise shall be\nhandled over any location designated for the useof the fire boats of the Fire Department, nor shall\nsuch location be used for any purpose whateverother than municipal purposes.(Ord. 87983 \u00a7 47, 1959.)"
+            },
+            {
+              "citation": "16.52.110",
+              "heading": "Patrol floats.",
+              "start_page": 2112,
+              "end_page": 2112,
+              "text": "The Chief of Police shall designate locations\nfor such floats as may be necessary for patrolboats and shall prescribe rules and regulations\nfor the use of such floats.\n(Ord. 120023 \u00a7 88, 2000: Ord. 87983 \u00a7 48, 1959.)"
+            },
+            {
+              "citation": "16.52.060",
+              "heading": "Dangerous gangways.",
+              "start_page": 2112,
+              "end_page": 2112,
+              "text": "Whenever any gangway devoted to public use\nshall appear to be dangerous to the Chief of Policefor such use, shall report the matter to the Director of the Seattle Department of Construction\nand Inspections who shall inspect the same and\nmay forbid the use of such gangway for such\npurpose until the same shall have been repaired\nor reconstructed so as to render the same safe forsuch use and until the Director of the SeattleDepartment of Construction and Inspections has\ninspected the repair or reconstruction and ap-proved the gangway's use for such purpose.(Ord. 124919, \u00a7 63, 2015; Ord. 120023 \u00a7 84, 2000;Ord. 87983 \u00a7 40, 1959.)"
+            },
+            {
+              "citation": "16.52.070",
+              "heading": "Drifting debris.",
+              "start_page": 2112,
+              "end_page": 2112,
+              "text": "It shall be unlawful for the owner, agent or\nlessee in charge of any pier to allow the whole, or\nany part thereof, to fall into or remain adrift in\nthe navigable waters or to drift away . Fender\npiles, broken or loose, shall be removed by the\nowner, agent or lessee of any pier, and upon\nfailure so to do, the same may be removed by theChief of Police and the expense thereof shall be\npaid by and recoverable from the owner, agent or\nlessee of such pier to the City .(Ord. 120023 \u00a7 85, 2000: Ord. 87983 \u00a7 42, 1959.)"
+            },
+            {
+              "citation": "16.52.090",
+              "heading": "Obstructing traffic.",
+              "start_page": 2112,
+              "end_page": 2112,
+              "text": "The determination of the Chief of Police shall\nbe final and conclusive as to all questions relatingto the handling of freight or merchandise or as tothe position of any vessel at any pier or otherstructure belonging to the City , and all personshandling or in charge of freight or merchandise orvessels, shall handle the same expeditiously andwithout interference with or blocking generaltraffic and without interfering with commerceand navigation.(Ord. 120023 \u00a7 87, 2000: Ord. 87983 \u00a7 46, 1959.)"
+            }
+          ]
+        },
+        {
+          "citation": "16.56",
+          "title": "NUISANCES AND PROHIBITED ACTS",
+          "start_page": 2112,
+          "end_page": 2112,
+          "intro": "Sections:",
+          "sections": [
+            {
+              "citation": "16.56.010",
+              "heading": "Nuisances designated\u2014Removal.",
+              "start_page": 2113,
+              "end_page": 2113,
+              "text": "Sunken vessels or water sport craft, refuse of\nall kinds, structures or pieces of any structure,\ndock sweepings, dead fish or parts thereof, dead\nanimals or parts thereof, timber, logs, piles, boom\nsticks, lumber, boxes, empty containers and oil of\nany kind floating uncontrolled on the water, and\nall other substances or articles of a similar nature, are declared to be public nuisances and it\nshall be unlawful for any person to throw or place\nin, or cause or permit to be thrown or placed any\nof the above named articles or substances in\nSeattle Harbor, or upon the shores thereof or in\nsuch position that the same may or can be washed\ninto the harbor, either by high tides, storms,\nfloods or otherwise. Any person causing or permitting said nuisances to be placed as aforesaid\nshall remove the same and upon his failure so to\ndo, the same may be removed by the Chief of\nPolice and the expense thereof shall be paid by\nand recoverable from the person creating the\nnuisance. In all cases such nuisances may be\nabated in the manner provided by law. The abatement of any such public nuisances shall not excuse the person responsible therefor from prosecution under this section.\n(Ord. 120023 \u00a7 89, 2000: Ord. 87983 \u00a7 44, 1959.)"
+            },
+            {
+              "citation": "16.56.030",
+              "heading": "Oil.",
+              "start_page": 2113,
+              "end_page": 2113,
+              "text": "No owner, master or other person in charge of\nany vessel, and no engineer, or other person in\ncharge of any engine room or machinery of any\nvessel, and no owner, lessee, agent, employee, or\nother person in charge of or employed in or about\nany pier, or other structure, and no person along\nor upon the shore of the harbor, shall spill, throw,\npump or otherwise cause oil of any description to\nbe or float upon the waters of the harbor. Any\nperson causing oil to be upon the waters of the\nharbor as aforesaid shall remove the same and\nupon his failure so to do, the same may be removed by the Chief of Police and the expense\nthereof shall be paid by and recoverable from the\nperson causing the oil to be upon the water. The\npayment of such sum, or the maintenance of an\naction therefor, shall not be deemed to exempt\nsuch person from prosecution for causing such oil\nspillage.\n(Ord. 120023 \u00a7 91, 2000: Ord. 87983 \u00a7 43, 1959.)Chapter 16.60\nUSE OF WATERWAYS\u2014PERMITS\nSections:"
+            },
+            {
+              "citation": "16.60.010",
+              "heading": "Use of land portions of waterways.",
+              "start_page": 2113,
+              "end_page": 2113,
+              "text": "It shall be unlawful for anyone to use or occupy\nthe land portion of a waterway for private purposes without a written permit from the Director\nof Transportation so to do other than for access to\nor immediate loading and unloading of vessels or\nobstructions then in the navigable portions thereof\nor launching or landing the same.\n(Ord. 120023 \u00a7 92, 2000: Ord. 118409 \u00a7 131, 1996:\nOrd. 115994 \u00a7 56, 1991: Ord. 100171 \u00a7 9, 1971:\nOrd. 87983 \u00a7 65, 1959.)"
+            },
+            {
+              "citation": "16.60.020",
+              "heading": "Use of waterways.",
+              "start_page": 2113,
+              "end_page": 2114,
+              "text": "A. All use and occupation of waterways,\nwhether by permit or otherwise, shall be subject\nto the following terms and conditions:\n1. An unobstructed channel of at least\nfifty (50) feet width must be preserved at all\ntimes; provided, that the Director of Transportation may authorize a lesser unobstructed channel\nwhen both sides of a waterway are owned or\ncontrolled through lease by the same person,\nfirm, or corporation and said official finds it to be\nin the public interest.\n2. All vessels or obstructions shall be\nanchored, moored or secured in such a manner as\nto minimize interference with navigation in the\nwaterway, and shall be promptly removed upon\norder of the Chief of Police in the event clearance\nof the waterway be necessary for navigation or in\nan emergency.\n3. The owner or master of any vessel or\nobstruction anchored or moored in the navigable\nportions of any waterway shall be responsible for\nthe safe anchorage and fastening of the same,\nand for any actions necessary to prevent sinking.\n4. It shall be unlawful to use any vessel\nor obstruction as a place of abode while moored or\nanchored in the navigable portions of a waterway,\nunless so authorized by permit from the City.\n5. No use of a waterway shall unreasonably restrict water access to adjacent privatelyUSE OF WATERWAYS\u2014PERMITS 16.60.020\nowned or controlled property; or conflict with a\nuse of a waterway permitted by any public body\npursuant to the terms of RCW 79.01.540 or\n79.16.190.\nB. The public or abutting property owners\nmay use the navigable portions of waterways for\nthe loading, unloading and repair of vessels in\nconnection with commerce or navigation for a\nreasonable period of time for the activity and\nwaterway involved without prior written permission from the City; provided, that:\n1. If the Chief of Police has established\nby regulation or posted notice a maximum time\nlimit for uses of any particular waterway or part\nthereof, no vessel shall occupy such waterway or\npart thereof for a longer period of time;\n2. The period of use and occupation of\nany and all of the navigable portions of waterways by such vessel shall not exceed twenty-one\n(21) consecutive days; and\n3. No more than one (1) use and occupancy of waterways in excess of seven (7) consecutive days by such vessel may occur in any sixty\n(60) day period.\n(Ord. 120023 \u00a7 93, 2000: Ord. 118409 \u00a7 132, 1996:\nOrd. 115994 \u00a7 57, 1991; Ord. 100171 \u00a7 11, 1971:\nOrd. 87983 \u00a7 67, 1959.)"
+            },
+            {
+              "citation": "16.60.030",
+              "heading": "Permits for use of waterways.",
+              "start_page": 2114,
+              "end_page": 2115,
+              "text": "A. Authorization. The Director of Transportation may authorize the use and occupancy of all of\nor any portion of a waterway, including land and\nwater parts, by a written use and occupation\npermit as provided in this section, and may issue\nan interim permit pending the final determination regarding the permit application. Such a\npermit may authorize use of either a specific area\nof waterway or use of a particular waterway by\nspecified vessels or obstructions, and shall be\nprocessed in the same manner as permits pursuant to SMC Title 15, Subtitle I unless otherwise\nspecified in this chapter. The issuance or denial\nof any such permit shall be appealable to the\nStreet Use Appeals Board.\nB. Application. Any person seeking the use\nand occupation of a waterway or a portion thereof\nfor a period in excess of twenty-one (21) consecutive days, a longer period than that allowed by\nregulations or posted notice of the Chief of Police\nfor a particular waterway, or an occupancy for a\nvessel or obstruction in excess of seven (7) consecutive days within sixty (60) days of a prior occupancy, shall apply in writing to the Director of\nTransportation therefor. The application shall be\naccompanied by a deposit to cover the cost of\npublishing notice when required by subsection Dof this section. If the application be for a specific\nvessel or obstruction, the application shall state\nthe owner and master's name, address and telephone number, the type and size of vessels or\nobstruction, the waterway(s) in which anchorage\nor moorage is requested, the reason for the application, and the length of time for which the permit is desired.\nC. Processing. The Director of Transportation\nshall investigate the application; give notice to\nthe owner, managing agent or principal lessee of\nproperty, which may have water access affected\nby the use sought by the application; and make\nrecommendation to the Director of Administrative Services. In the event that the application\nshall request a use for a period in excess of 365\ndays, the application shall be referred to the\nSeattle Department of Construction and Inspections, which shall make its recommendations\nthereon.\nD. Notice. In the event that the application\nshall seek a usage in excess of three hundred\nsixty-five (365) days the Director of Transportation shall mail notice of the application and the\ndate, time and place at which such official will\nconsider such application, at least ten (10) days\nprior thereto to the State of Washington, Commissioner of Public Lands, and the Port of Seattle,\npublish such notice in a newspaper of general\ncirculation in the county and post a copy of the\nsame in prominent places in the immediate vicinity of the waterway. The cost of such publication\nshall be borne by the applicant.\nE. Issuance. The Director of Transportation\nmay issue a permit for the use and occupancy of a\nwaterway with appropriate terms and conditions\nupon finding that the use and occupation sought\nis compatible with use of the waterway as public\nways for vessels and the convenience of commerce, is consistent with the City's land use planning in the immediate vicinity, and does not deprive adjacent properties of reasonable water\naccess. The Director of Transportation may waive\ncompliance with the terms and conditions of this\nsection with permit applications by the United\nStates of America and its agencies, by the state\nand by municipal corporations, and in the case of\nan application for moorage of a vessel listed upon\nthe national historic register maintained by the\nUnited States, with the bond requirements in\nsubsection G of this section.16.60.020 HARBOR CODE\nAmong other terms and conditions, the Director of Transportation may , but need not requirethat the vessel connect its plumbing system tothe nearest available City sanitary sewers; thatthe vessel permit the anchorage or fastening ofvessels alongside and access thereto; or that thevessel be removed as soon as privately owned orprivately controlled moorage space becomes avail-able. The applicant shall comply with the termsand conditions of the permit, shall pay the feesprescribed in advance of each month, and shallcease the use and occupancy of the waterway onexpiration of the permit, unless an additionalpermit be issued.\nF . Insurance. An applicant for a permit shall,\nprior to issuance of the permit, provide and maintain in full force and effect while the permit is in\nforce, public liability insurance in an amountspecified by the Director of Transportation suffi-cient to cover potential claims for bodily injury ,death or disability and for property damage, whichmay arise from or be related to the applicant's useof the waterway , naming the City as an additionalinsured.\nG. Bond. An applicant for a permit shall provide prior to issuance of the permit and thereaf-ter maintain during the period of the permit, a\nbond or cash deposit in an amount specified by\nthe Director of Transportation sufficient to coverthe potential cost of removal of vessel(s), or obstruction(s) to be located therein in the event of\nsinking, and in the event of adjacent publicly\nowned structures, the cost of repair thereof in\nevent of collision; and in the event of fixed struc-tures, the estimated cost of removal upon expira-tion of the permit.\nH. Indemnity . The applicant shall execute and\ndeliver to the City upon a form supplied by theDirector of Transportation an agreement in writing and acknowledged by the applicant to holdand save harmless the City from any and allclaims, actions or damages of every kind and\ndescription which may accrue to, or be sufferedby , any persons by reason of or related to the use\nand occupation of the waterway by the permitholder.(Ord. 124919, \u00a7 64, 2015; Ord. 120023 \u00a7 94, 2000;\nOrd. 118409 \u00a7 133, 1996; Ord. 118397 \u00a7 104,1996; Ord. 118369 \u00a7 20, 1996; Ord. 115994 \u00a7 58,1991; Ord. 115958 \u00a7 18, 1991; Ord. 109250 \u00a7 1,1980; Ord. 101820 \u00a7 1, 1973; Ord. 100171 \u00a7 12,1971; Ord. 87983 \u00a7 68, 1959.)16.60.040 Fixed structure in waterway .\nNo fixed structure of any kind shall be built or\nplaced in any waterway unless approved by theDirector of Transportation, the State of Washing-ton, Commissioner of Public Lands, the Port ofSeattle and the United States of America, Depart-ment of Army , Corps of Engineers; or approved bythe Director of Transportation where the otheragencies have declined jurisdiction or expressedin writing no objection to the erection of such astructure.(Ord. 118409 \u00a7 134, 1996: Ord. 115994 \u00a7 59, 1991:Ord. 100171 \u00a7 13, 1971: Ord. 87983 \u00a7 69, 1959.)"
+            },
+            {
+              "citation": "16.60.040",
+              "heading": "Fixed structure in waterway.",
+              "start_page": 2113,
+              "end_page": 2113,
+              "text": ""
+            },
+            {
+              "citation": "16.60.050",
+              "heading": "Permit revocation and fees.",
+              "start_page": 2115,
+              "end_page": 2116,
+              "text": "A. Revocation Without Notice. All permits\ngranted under the provisions of this title for theuse of any waterways shall be wholly of a tempo-rary nature, shall vest no permanent right; andmay be revoked without notice in case:\n1. Any such use or occupation shall become dangerous to the public or persons otherthan the permit holder, or fail to comply with the\nprovisions of this title on a matter directly or\nmaterially affecting the health or safety of thepublic or the safety of adjoining property or pas-sage through other portions of the waterway; or\n2. The permit holder shall refuse to comply with the provisions of this title.\nB. Revocation With Notice. Permits of sixty\n(60) days or more may be revoked upon thirty (30)days' notice, and all other permits upon ten (10)days' notice.\nC. Fees Authorized. In order to cover the costs\nof administration, inspection, and policing in-volved in the issuance and continuance of suchpermits, and to avert interference with commerceor navigation and unauthorized or unduly pro-longed use and occupation of waterways, the Di-rector of Transportation is further authorizedand directed to prepare and recommend to theCity Council for adoption, a schedule of fees ap-plicable to all such permits, which fees shall becommensurate with fees established by ordi-nance for the use and occupation of public placesof similar character in the vicinity;\nD. Exceptions and Allowances.\n1. No fees shall be charged the United\nStates and its agencies, and the state or anymunicipal corporation.\n2. Subject to subsection D4 below , waterway areas used exclusively for youth activities\nrelated to navigation and water safety , withoutcharge to participants, by a nonprofit corporationor an organization that is open to public member-USE OF WATERWAYS\u2014PERMITS 16.60.050\n16-25\n(Seattle 12-15)\nship by eligible youth shall not be considered in\ncalculating the amount of fees for use and occu-pation of waterways.\n3. Subject to subsection D4 below , the\nfee schedule may provide a special classificationfor nonprofit organizations that, under a contractwith the City , participate actively in City water-safety and boating programs for youth in whichthe rate or the calculation of the area used takesinto account the activities of the organization atthe site for the youth program.\n4. The exception and allowance in subsections D2 and D3 apply whenever the Directorof Transportation and the Port Warden deter-mine that upon application and issuance of apermit no substantial administration or policing\nwould be involved and the usage would not interfere with commerce or navigation nor be unduly\nprolonged.\nE. Fee Schedule. The fee schedule, when approved by the City Council by ordinance, shallgovern the amount of the fee for any such permit,\nwhich fee shall be collected as a condition to theissuance or continuance of any such permit otherthan permits issued to the United States and itsagencies, the state, or any municipal corporation.\nThe fee schedule for waterway use permits may\nbe appended to and adopted in conjunction withthe ordinance establishing street use fees.\nF . Exclusion of Clear Channel. Fees shall be\ncomputed according to the area actually included\nin the permit or area obstructed by the vessel,\nwatercraft or obstruction and shall not include\nany charge for the area within an unobstructedfifty (50)-foot channel maintained pursuant toSMC Section 16.60.020.(Ord. 118409 \u00a7 135, 1996: Ord. 116850 \u00a7 1, 1993:\nOrd. 115994 \u00a7 60, 1991; Ord. 105239 \u00a7 1, 1975:Ord. 103033 \u00a7 1, 1974: Ord. 101820 \u00a7 2, 1973:Ord. 100171 \u00a7 14, 1971: Ord. 87983 \u00a7 70, 1959.)"
+            },
+            {
+              "citation": "16.60.060",
+              "heading": "Transfer of permit.",
+              "start_page": 2116,
+              "end_page": 2116,
+              "text": "No permit issued pursuant to this title or right\nor privilege granted under such permit may be\nassigned, sublet or transferred between persons\nor from a vessel or obstruction to another byoperation of law or otherwise, without the writ-ten consent of the City .(Ord. 120023 \u00a7 95, 2000: Ord. 100171 \u00a7 17, 1971:\nOrd. 87983 \u00a7 73, 1959.)"
+            }
+          ]
+        },
+        {
+          "citation": "16.64",
+          "title": "ENFORCEMENT",
+          "start_page": 2116,
+          "end_page": 2116,
+          "intro": "Sections:",
+          "sections": [
+            {
+              "citation": "16.64.010",
+              "heading": "Enforcement authority .",
+              "start_page": 2116,
+              "end_page": 2116,
+              "text": "The Chief of Police and any of his authorized\ndeputies or employees and authorized personnelof the governments of the United States, the stateor its political subdivisions by virtue of theirelection or appointment shall have authority toenter upon and inspect any vessel or obstructionin the harbor and are charged with the enforce-ment of the provisions of this title except as theenforcement thereof is otherwise specified in thistitle. It shall be the duty of the Chief of Police tomake complaints for any violation of the same, orany part hereof in the name of the City; provided,that this provision shall not operate to precludethe making of such complaint by any other personlegally authorized so to do.(Ord. 120023 \u00a7 96, 2000: Ord. 87983 \u00a7 53, 1959.)"
+            },
+            {
+              "citation": "16.64.030",
+              "heading": "Aiding and abetting violation.",
+              "start_page": 2116,
+              "end_page": 2116,
+              "text": "It is unlawful to counsel, aid, or abet the violation of, or failure to comply with any of the provi-sions of this title.\n(Ord. 87983 \u00a7 57, 1959.)"
+            },
+            {
+              "citation": "16.64.040",
+              "heading": "Violation\u2014Penalty .",
+              "start_page": 2116,
+              "end_page": 2117,
+              "text": "Except as provided in this title, failure to perform any act required or the performance of any16.60.050 HARBOR CODE\n16-26\n(Seattle 12-15)\nact prohibited by this title is designated as a civil\ninfraction and may not be classified as a criminaloffense. The provisions of the Seattle MunicipalCode Sections 11.31.020 through 11.31.070 shallapply to the disposition of such civil infractions.(Ord. 120023 \u00a7 97, 2000: Ord. 111842 \u00a7 3, 1984:Ord. 111557 \u00a7 4, 1984: Ord. 87983 \u00a7 59, 1959.)"
+            },
+            {
+              "citation": "16.64.020",
+              "heading": "Release from arrest on notice",
+              "start_page": 2116,
+              "end_page": 2116,
+              "text": "to appear.\nWhenever any person is arrested for any violation of this title the arresting officer may serve\nupon him a citation and notice to appear in court.\nThe arrested person, in order to secure release,\nand when permitted by the arresting officer, mustgive his written promise to appear in court, as\nrequired by the citation and notice by signing in\nthe appropriate place the written citation and\nnotice served by the arresting officer. Upon the\narrested person's failing or refusing to sign such\nwritten promise, he may be taken into the cus-tody of such arresting officer and so remain or be\nplaced in confinement.(Ord. 87983 \u00a7 54, 1959.)"
+            },
+            {
+              "citation": "16.64.050",
+              "heading": "Penalties for criminal offenses",
+              "start_page": 2117,
+              "end_page": 2118,
+              "text": "A. The following offenses are misdemeanors\nand any person convicted of any of the followingoffenses may be punished as described in Section12A.02.070 of the Seattle Municipal Code:\n1. Section 16.20.100\u2014Reckless operation;\n2. Section 16.20.140\u2014Failure to obey regarding overloading; and\n3. Section 16.20.150\u2014Failure to obey regarding excessive power.\nB. The following offenses are gross misdemeanors and any person convicted of any of the following offenses may be punished as described in\nSection 12A.02.070 of the Seattle Municipal Code:\n1. Section 16.20.110\u2014Intoxication2. Section 16.20.115\u2014Failure to stop;3. Section 16.24.010\u2014Information and\nassistance.(Ord. 124684, \u00a7 28, 2015; Ord. 124301, \u00a7 45, 2013;\nOrd. 120023, \u00a7 98, 2000.)ENFORCEMENT 16.64.050\n16-27\n(Seattle 12-15)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

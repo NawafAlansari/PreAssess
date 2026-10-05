@@ -1,0 +1,39 @@
+{"query": "who enforces the building code and can adopt rules", "expected": ["22.202.010"], "granularity": "section"}
+{"query": "city forcing repair or demolition of a dangerous building", "expected": ["22.220.200"], "granularity": "section"}
+{"query": "who maintains and inspects drainage control facilities", "expected": ["22.807.090"], "granularity": "section"}
+{"query": "penalty for violating mobile home park rules", "expected": ["22.904.390"], "granularity": "section"}
+{"query": "where can parking be located for apartment buildings", "expected": ["23.45.536"], "granularity": "section"}
+{"query": "parking and loading access and curb cuts in commercial areas", "expected": ["23.48.085", "23.48.755"], "granularity": "section"}
+{"query": "how much parking is required downtown and where can it go", "expected": ["23.49.019"], "granularity": "section"}
+{"query": "bicycle parking requirements for new buildings", "expected": ["23.54.020"], "granularity": "section"}
+{"query": "what is the purpose of the sign standards", "expected": ["23.55.001"], "granularity": "section"}
+{"query": "bonus floor area for providing a public amenity", "expected": ["23.58A.040"], "granularity": "section"}
+{"query": "requirements for bonus floor area through mixed income housing", "expected": ["23.58B"], "granularity": "chapter"}
+{"query": "view corridor requirements near the waterfront", "expected": ["23.60A.234", "23.60A.292"], "granularity": "section"}
+{"query": "what signs are allowed in the international district", "expected": ["23.66.160", "23.66.338"], "granularity": "section"}
+{"query": "what must a major institution master plan contain", "expected": ["23.69.030"], "granularity": "section"}
+{"query": "transfer of development potential deed and recording requirements", "expected": ["23.73.024"], "granularity": "section"}
+{"query": "transitional encampment permit requirements", "expected": ["23.42.056"], "granularity": "section"}
+{"query": "design review board and neighborhood design guidelines", "expected": ["23.41.008"], "granularity": "section"}
+{"query": "building in potentially hazardous or flood prone locations", "expected": ["22.800.050"], "granularity": "section"}
+{"query": "on site stormwater best management practices for surfaces", "expected": ["22.805.070"], "granularity": "section"}
+{"query": "drainage plan submission and what happens if plans are disapproved", "expected": ["22.805.020"], "granularity": "section"}
+{"query": "setback requirements in single family zones", "expected": ["23.44"], "granularity": "chapter"}
+{"query": "height limits for apartments in multifamily zones", "expected": ["23.45"], "granularity": "chapter"}
+{"query": "shoreline rules for removing trees and protecting plantings", "expected": ["23.60A.158"], "granularity": "section"}
+{"query": "essential public facilities in shoreline environments", "expected": ["23.60A.157"], "granularity": "section"}
+{"query": "seattle mixed north rainier zone special provisions", "expected": ["23.48.445"], "granularity": "section"}
+{"query": "screening requirements for parking in structures", "expected": ["23.48.755", "23.48.085"], "granularity": "section"}
+{"query": "deadline to respond to an administrative appeal", "expected": ["22.920.155"], "granularity": "section"}
+{"query": "repair cost compared to replacement value of a damaged building", "expected": ["22.208.010"], "granularity": "section"}
+{"query": "minimum floor load capacity for ground level commercial floors", "expected": ["23.50A.100"], "granularity": "section"}
+{"query": "green stormwater infrastructure distance from lot line", "expected": ["23.47A.014"], "granularity": "section"}
+{"query": "which trees are exempt from the tree protection rules", "expected": ["25.11.020"], "granularity": "section"}
+{"query": "protecting trees during construction on a development site", "expected": ["25.11.070", "25.11.060"], "granularity": "section"}
+{"query": "how many trees must I plant to replace a removed tree", "expected": ["25.11.090"], "granularity": "section"}
+{"query": "purpose of the tree protection code", "expected": ["25.11.010"], "granularity": "section"}
+{"query": "criteria for designating features in the Columbia City landmark district", "expected": ["25.20.040"], "granularity": "section"}
+{"query": "environmental review requirements under SEPA for a proposed project", "expected": ["25.05"], "granularity": "chapter"}
+{"query": "development standards for steep slope critical areas", "expected": ["25.09"], "granularity": "chapter"}
+{"query": "designating a building as a historic landmark", "expected": ["25.12"], "granularity": "chapter"}
+{"query": "noise limits for construction equipment", "expected": ["25.08"], "granularity": "chapter"}

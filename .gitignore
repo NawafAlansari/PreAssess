@@ -14,8 +14,7 @@ dist-ssr
 
 # Generated municipal code assets
 data/*.pdf
-data/title*.json
-data/processed/
+# Corpus artifacts ARE committed (clone-and-run); source PDFs are not.
 data_processing/*.pdf
 
 # Environment & secrets
@@ -36,3 +35,7 @@ __pycache__/
 *.njsproj
 *.sln
 *.sw?
+data/feedback.jsonl
+
+# Search indexes built by `python -m search build`
+data/search/

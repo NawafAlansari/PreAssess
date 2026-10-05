@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import { Search, FileText, AlertCircle, CheckCircle, Building2, MapPin, Database, TreePine, Home, Info } from 'lucide-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './preassess.css';
+import ReportSection from './components/ReportSection.jsx';
+import { fetchComplianceReport, fetchContext, fetchHealth, suggestAddresses } from './lib/api.js';
+import MapPanel from './components/MapPanel.jsx';
+import ContextPanel from './components/ContextPanel.jsx';
+import { SiteFooter } from './components/Disclaimer.jsx';
 
-// Seattle Municipal Code Database (keeping for requirements)
-const SEATTLE_CODE_DB = {
+// Simplified reference values for the INSTANT client-side checklist only.
+// The AI report does not use this table; it retrieves from the full ingested
+// Seattle Municipal Code corpus server-side, with citation verification.
+const CHECKLIST_REFERENCE = {
   zoning: {
     'SF 5000': {
       setbacks: {
@@ -86,33 +94,6 @@ const SEATTLE_CODE_DB = {
   }
 };
 
-const resolveEnv = () => (typeof import.meta !== 'undefined' ? import.meta.env : undefined);
-
-const DEFAULT_GROQ_MODEL =
-  resolveEnv()?.VITE_GROQ_MODEL ||
-  resolveEnv()?.NEXT_PUBLIC_GROQ_MODEL ||
-  (typeof process !== 'undefined' ? process.env?.NEXT_PUBLIC_GROQ_MODEL : undefined) ||
-  'mixtral-8x7b-32768';
-
-const AVAILABLE_GROQ_MODELS = (() => {
-  const env = resolveEnv();
-  const raw =
-    env?.VITE_GROQ_MODELS ||
-    env?.NEXT_PUBLIC_GROQ_MODELS ||
-    (typeof process !== 'undefined' ? process.env?.NEXT_PUBLIC_GROQ_MODELS : undefined) ||
-    '';
-  const parsed = raw
-    .split(',')
-    .map((model) => model.trim())
-    .filter(Boolean);
-  if (!parsed.includes(DEFAULT_GROQ_MODEL)) {
-    parsed.unshift(DEFAULT_GROQ_MODEL);
-  }
-  return Array.from(new Set(parsed));
-})();
-
-const CODE_REFERENCE_JSON = JSON.stringify(SEATTLE_CODE_DB, null, 2);
-
 const SeattleConstructionChecker = () => {
   const [address, setAddress] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
@@ -124,106 +105,22 @@ const SeattleConstructionChecker = () => {
   const [projectAnalysis, setProjectAnalysis] = useState(null);
   const [debugInfo, setDebugInfo] = useState(null);
   const [llmReport, setLlmReport] = useState(null);
+  const [contextData, setContextData] = useState(null);
+  const [corpusStats, setCorpusStats] = useState(null);
+  const [addressOptions, setAddressOptions] = useState([]);
+  const suggestTimer = React.useRef(null);
+
+  React.useEffect(() => {
+    fetchHealth()
+      .then((h) => setCorpusStats(h.corpus))
+      .catch(() => {});
+  }, []);
   const [llmError, setLlmError] = useState('');
-  const [selectedModel, setSelectedModel] = useState(DEFAULT_GROQ_MODEL);
-
-  const getGroqApiKey = () => {
-    const viteEnv = typeof import.meta !== 'undefined' ? import.meta.env : undefined;
-    if (viteEnv?.VITE_GROQ_API_KEY) return viteEnv.VITE_GROQ_API_KEY;
-    if (viteEnv?.NEXT_PUBLIC_GROQ_API_KEY) return viteEnv.NEXT_PUBLIC_GROQ_API_KEY;
-    if (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_GROQ_API_KEY) {
-      return process.env.NEXT_PUBLIC_GROQ_API_KEY;
-    }
-    if (typeof window !== 'undefined' && window.__GROQ_API_KEY__) {
-      return window.__GROQ_API_KEY__;
-    }
-    return '';
-  };
-
-  const summarizePropertyForLlm = (property) => ({
-    address: property.address,
-    parcelNumber: property.parcelNumber,
-    lotSizeSqFt: property.lotSizeSqFt,
-    lotSizeAcres: property.lotSizeAcres,
-    propertyType: property.propertyType,
-    presentUse: property.presentUse,
-    zoneClassification: property.zoneClassification,
-    zoneDescription: property.zoneDescription,
-    jurisdiction: property.jurisdiction,
-    neighborhood: property.neighborhood,
-    appraisedValue: property.appraisedValue,
-    taxableValue: property.taxableValue,
-    canopyCoverage: property.canopyCoverage,
-    treeCount: property.treeCount,
-    legalDescription: property.legalDescription,
-    latitude: property.latitude,
-    longitude: property.longitude
-  });
-
-  const requestGroqComplianceReport = async (property, analysis, description, model) => {
-    const apiKey = getGroqApiKey();
-    if (!apiKey) {
-      setLlmError('Groq API key missing. Set NEXT_PUBLIC_GROQ_API_KEY (or window.__GROQ_API_KEY__) to enable AI analysis.');
-      return null;
-    }
-
-    setLoadingStage(`Generating compliance report with Groq (${model})...`);
-
-    try {
-      const propertySummary = summarizePropertyForLlm(property);
-      const messages = [
-        {
-          role: 'system',
-          content: 'You are a Seattle land-use compliance specialist. Use provided parcel data, project details, and municipal code excerpts to create an actionable compliance memo. Highlight applicable code sections, required permits, zoning considerations, and risk items. If information is missing, note the gap rather than guessing.'
-        },
-        {
-          role: 'user',
-          content: [
-            `Property Data:\n${JSON.stringify(propertySummary, null, 2)}`,
-            `\nProject Description:\n${description || 'Not provided.'}`,
-            `\nDerived Project Analysis:\n${JSON.stringify(analysis || {}, null, 2)}`,
-            `\nSeattle Municipal Code References:\n${CODE_REFERENCE_JSON}`,
-            '\nPlease provide:\n1. A concise property summary.\n2. Key zoning and development checks with SMC citations when possible.\n3. Permit requirements and submittal notes.\n4. Any tree protection or environmental considerations.\n5. Follow-up questions or data gaps.'
-          ].join('')
-        }
-      ];
-
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model,
-          temperature: 0.2,
-          messages
-        })
-      });
-
-      if (!response.ok) {
-        const errorPayload = await response.json().catch(() => ({}));
-        throw new Error(errorPayload?.error?.message || `Groq request failed with status ${response.status}`);
-      }
-
-      const result = await response.json();
-      const content = result?.choices?.[0]?.message?.content?.trim();
-
-      if (!content) {
-        throw new Error('Groq returned an empty response.');
-      }
-
-      setLlmError('');
-      return content;
-    } catch (groqError) {
-      console.error('Groq LLM error:', groqError);
-      setLlmError(groqError.message || 'Groq LLM request failed.');
-      return null;
-    }
-  };
 
   // King County GIS parcel address layer (ArcGIS MapServer)
-  const KING_COUNTY_PARCEL_SERVICE = 'https://gisdata.kingcounty.gov/arcgis/rest/services/OpenDataPortal/property__parcel_address_area/MapServer/1722';
+  // Proxied through our API: King County's ArcGIS endpoint sends no CORS
+  // headers, so the browser cannot call it directly.
+  const KING_COUNTY_PARCEL_SERVICE = '/api/parcel';
 
   // Normalize address for searching
   const normalizeAddress = (addr) => {
@@ -280,7 +177,8 @@ const SeattleConstructionChecker = () => {
           where: whereClause,
           outFields: '*',
           f: 'json',
-          returnGeometry: 'false',
+          returnGeometry: 'true',
+          outSR: '4326',
           resultRecordCount: '10',
           orderByFields: 'ADDR_FULL'
         });
@@ -309,7 +207,7 @@ const SeattleConstructionChecker = () => {
       if (sanitizedNormalized) {
         const strictParts = [seattleFilter, `UPPER(ADDR_FULL) LIKE '${sanitizedNormalized}%'`];
         if (addressParts.houseNumber) {
-          strictParts.splice(1, 0, `ADDR_NUM = ${addressParts.houseNumber}`);
+          strictParts.splice(1, 0, `ADDR_HN = '${addressParts.houseNumber}'`);
         }
         attempts.push({
           stage: 'Fetching property data (exact address match)...',
@@ -321,7 +219,7 @@ const SeattleConstructionChecker = () => {
         const streetPrefix = sanitizedStreet.split(' ')[0];
         attempts.push({
           stage: 'Trying street prefix search...',
-          whereClause: `${seattleFilter} AND ADDR_NUM = ${addressParts.houseNumber} AND UPPER(ADDR_FULL) LIKE '${addressParts.houseNumber} ${streetPrefix}%'`
+          whereClause: `${seattleFilter} AND ADDR_HN = '${addressParts.houseNumber}' AND UPPER(ADDR_FULL) LIKE '${addressParts.houseNumber} ${streetPrefix}%'`
         });
       }
 
@@ -335,7 +233,7 @@ const SeattleConstructionChecker = () => {
       if (addressParts.houseNumber) {
         attempts.push({
           stage: 'Searching by house number...',
-          whereClause: `${seattleFilter} AND ADDR_NUM = ${addressParts.houseNumber}`
+          whereClause: `${seattleFilter} AND ADDR_HN = '${addressParts.houseNumber}'`
         });
       }
 
@@ -384,7 +282,7 @@ const SeattleConstructionChecker = () => {
       const filterByStreet = requiredStreetTokens.length
         ? parcelFeatures.filter((feature) => {
             const attrs = feature.attributes || {};
-            const streetTokens = [attrs.ADDR_PD, attrs.ADDR_SN, attrs.ADDR_ST, attrs.ADDR_SD]
+            const streetTokens = (attrs.ADDR_FULL || '').toUpperCase().split(' ').slice(1)
               .map(normalizeToken)
               .filter(Boolean);
             return requiredStreetTokens.every((token) => streetTokens.includes(token));
@@ -398,7 +296,7 @@ const SeattleConstructionChecker = () => {
           const attrs = feature.attributes || {};
           const fullAddress = attrs.ADDR_FULL ? attrs.ADDR_FULL.toUpperCase().trim() : '';
           const normalizedFull = normalizeAddress(attrs.ADDR_FULL || '');
-          const streetTokens = [attrs.ADDR_PD, attrs.ADDR_SN, attrs.ADDR_ST, attrs.ADDR_SD]
+          const streetTokens = (attrs.ADDR_FULL || '').toUpperCase().split(' ').slice(1)
             .map(normalizeToken)
             .filter(Boolean);
           const streetMatchesAll =
@@ -412,8 +310,8 @@ const SeattleConstructionChecker = () => {
           else if (normalizedFull.includes(sanitizedNormalized)) score += 40;
 
           if (targetHouseNumber !== null) {
-            if (Number(attrs.ADDR_NUM) === targetHouseNumber) score += 45;
-            else if (attrs.ADDR_NUM != null) score -= 35;
+            if (Number(attrs.ADDR_HN) === targetHouseNumber) score += 45;
+            else if (attrs.ADDR_HN != null) score -= 35;
           }
 
           if (requiredStreetTokens.length) {
@@ -462,6 +360,18 @@ const SeattleConstructionChecker = () => {
 
       // Process the best matching parcel
       const parcel = bestCandidate.feature.attributes;
+      const parcelGeometry = bestCandidate.feature.geometry || null;
+      const parcelCentroid = (() => {
+        const ring = parcelGeometry?.rings?.[0];
+        if (!ring?.length) return null;
+        let sx = 0;
+        let sy = 0;
+        ring.forEach(([x, y]) => {
+          sx += x;
+          sy += y;
+        });
+        return { longitude: sx / ring.length, latitude: sy / ring.length };
+      })();
       console.log('Found parcel:', parcel);
 
       setLoadingStage('Processing property information...');
@@ -522,11 +432,9 @@ const SeattleConstructionChecker = () => {
         jurisdiction: parcel.CTYNAME || parcel.LEVY_JURIS || 'SEATTLE',
         neighborhood: parcel.PROP_NAME || parcel.PLAT_NAME || 'Unknown',
 
-        // Tree data (placeholder - would need separate API)
-        canopyCoverage: Math.floor(Math.random() * 30) + 10,
-        treeCount: Math.floor(Math.random() * 5) + 1,
-        latitude: parcel.LAT || parcel.POINT_Y || null,
-        longitude: parcel.LON || parcel.POINT_X || null,
+        latitude: parcelCentroid?.latitude ?? null,
+        longitude: parcelCentroid?.longitude ?? null,
+        parcelRings: parcelGeometry?.rings ?? null,
         legalDescription: parcel.LEGALDESC || null,
 
         // Data source
@@ -577,7 +485,7 @@ const SeattleConstructionChecker = () => {
   // Generate checklist
   const generateChecklist = (data, projectAnalysis) => {
     const items = [];
-    const zoneCode = SEATTLE_CODE_DB.zoning[data.zoneClassification] || SEATTLE_CODE_DB.zoning['SF 5000'];
+    const zoneCode = CHECKLIST_REFERENCE.zoning[data.zoneClassification] || CHECKLIST_REFERENCE.zoning['SF 5000'];
     
     // Pre-Application
     items.push({
@@ -626,8 +534,8 @@ const SeattleConstructionChecker = () => {
           task: 'Complete tree inventory',
           required: true,
           description: 'Document all trees ≥6" diameter',
-          code: SEATTLE_CODE_DB.treeProtection.inventory.code,
-          specificRequirement: `Property shows ${data.canopyCoverage}% canopy. Inventory required.`
+          code: CHECKLIST_REFERENCE.treeProtection.inventory.code,
+          specificRequirement: 'Street-tree data for this parcel appears on the map below.'
         }
       ]
     });
@@ -639,8 +547,8 @@ const SeattleConstructionChecker = () => {
         {
           task: 'Building Permit',
           required: true,
-          description: SEATTLE_CODE_DB.permits.building.description,
-          code: SEATTLE_CODE_DB.permits.building.code,
+          description: CHECKLIST_REFERENCE.permits.building.description,
+          code: CHECKLIST_REFERENCE.permits.building.code,
           specificRequirement: 'Submit at cosaccela.seattle.gov/portal/'
         }
       ]
@@ -664,6 +572,7 @@ const SeattleConstructionChecker = () => {
     setProjectAnalysis(null);
     setLlmReport(null);
     setLlmError('');
+    setContextData(null);
 
     try {
       const trimmedDescription = projectDescription.trim();
@@ -680,14 +589,23 @@ const SeattleConstructionChecker = () => {
       const checklistData = generateChecklist(data, analysis);
       setChecklist(checklistData);
 
-      const llmOutput = await requestGroqComplianceReport(
-        data,
-        analysis,
-        trimmedDescription,
-        selectedModel
-      );
-      if (llmOutput) {
-        setLlmReport(llmOutput);
+      let ctx = null;
+      if (data.latitude && data.longitude) {
+        setLoadingStage('Checking overlays, critical areas, and trees...');
+        try {
+          ctx = await fetchContext(data.latitude, data.longitude);
+          setContextData(ctx);
+        } catch (ctxError) {
+          console.error('GIS context lookup failed:', ctxError);
+        }
+      }
+
+      setLoadingStage('Generating compliance report...');
+      try {
+        const bundle = await fetchComplianceReport(data, analysis, trimmedDescription, ctx);
+        setLlmReport(bundle);
+      } catch (reportError) {
+        setLlmError(reportError.message || 'Report generation failed.');
       }
 
     } catch (err) {
@@ -703,44 +621,29 @@ const SeattleConstructionChecker = () => {
     <div className="bg-light min-vh-100 py-5">
       <div className="container">
         {/* Header */}
-        <div className="card shadow-sm border-0 mb-4">
+        <div className="card shadow-sm border-0 mb-4 pa-header">
           <div className="card-body">
             <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
               <div>
-                <div className="d-flex align-items-center gap-2 mb-2">
-                  <Building2 className="text-primary" size={32} />
-                  <h1 className="h3 mb-0 text-dark">Seattle Construction Requirements</h1>
+                <div className="d-flex align-items-baseline gap-3 mb-1">
+                  <h1 className="h2 mb-0 pa-wordmark">Pre<span className="pa-accent">Assess</span></h1>
+                  {corpusStats && (
+                    <span className="small pa-stats">
+                      {corpusStats.sections.toLocaleString()} code sections indexed · {corpusStats.titles.length} SMC titles
+                      {corpusStats.built_at && ` · code as of ${corpusStats.built_at}`}
+                    </span>
+                  )}
                 </div>
-                <p className="text-muted mb-3">Live parcel analysis powered by King County GIS and Groq AI.</p>
+                <p className="mb-3 pa-tagline">Ask what the Seattle Municipal Code requires for your project — every citation verified against the code itself.</p>
                 <div className="d-flex flex-wrap gap-3 align-items-center">
                   <span className="badge bg-success-subtle text-success-emphasis d-flex align-items-center gap-2">
                     <Database size={16} />
                     King County GIS (Live)
                   </span>
-                  {AVAILABLE_GROQ_MODELS.length > 1 ? (
-                    <div className="d-flex align-items-center gap-2">
-                      <FileText size={16} className="text-primary" />
-                      <div className="d-flex align-items-center gap-2">
-                        <label className="form-label text-muted small mb-0">Groq model</label>
-                        <select
-                          className="form-select form-select-sm"
-                          value={selectedModel}
-                          onChange={(event) => setSelectedModel(event.target.value)}
-                        >
-                          {AVAILABLE_GROQ_MODELS.map((model) => (
-                            <option key={model} value={model}>
-                              {model}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  ) : (
-                    <span className="badge bg-primary-subtle text-primary-emphasis d-flex align-items-center gap-2">
-                      <FileText size={16} />
-                      Groq Model: {selectedModel}
-                    </span>
-                  )}
+                  <span className="badge bg-primary-subtle text-primary-emphasis d-flex align-items-center gap-2">
+                    <FileText size={16} />
+                    Citation-verified AI reports
+                  </span>
                 </div>
               </div>
             </div>
@@ -790,7 +693,15 @@ const SeattleConstructionChecker = () => {
                   <input
                     type="text"
                     value={address}
-                    onChange={(e) => setAddress(e.target.value)}
+                    onChange={(e) => {
+                    const v = e.target.value;
+                    setAddress(v);
+                    clearTimeout(suggestTimer.current);
+                    suggestTimer.current = setTimeout(() => {
+                      suggestAddresses(v).then(setAddressOptions).catch(() => {});
+                    }, 250);
+                  }}
+                  list="addr-suggest" 
                     placeholder="e.g. 400 Broad St"
                     className="form-control"
                   />
@@ -799,7 +710,7 @@ const SeattleConstructionChecker = () => {
               </div>
               <div className="col-lg-3">
                 <label className="form-label fw-semibold">&nbsp;</label>
-                <button type="submit" className="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2" disabled={loading}>
+                <button type="submit" className="btn btn-success w-100 d-flex align-items-center justify-content-center gap-2" disabled={loading}>
                   {loading ? (
                     <>
                       <span className="spinner-border spinner-border-sm" role="status" />
@@ -825,12 +736,34 @@ const SeattleConstructionChecker = () => {
                   rows={3}
                 />
               </div>
+                          <datalist id="addr-suggest">
+                {addressOptions.map((a) => (
+                  <option key={a} value={a} />
+                ))}
+              </datalist>
             </form>
 
             {loading && loadingStage && (
-              <div className="alert alert-info d-flex align-items-center gap-2 mt-4 mb-0">
-                <div className="spinner-border spinner-border-sm" role="status" />
-                <span className="fw-semibold small">{loadingStage}</span>
+              <div className="d-flex flex-column gap-2 mt-4">
+                <div className="pa-stages">
+                  {[
+                    ['Parcel', /parcel|property|search|match|address/i],
+                    ['Overlays & trees', /overlay|critical|tree/i],
+                    ['Report', /report/i]
+                  ].map(([label, re], idx, arr) => {
+                    const activeIdx = arr.findIndex(([, rx]) => rx.test(loadingStage));
+                    const state = idx < activeIdx ? 'done' : idx === activeIdx ? 'active' : '';
+                    return (
+                      <span key={label} className={`pa-stage ${state}`}>
+                        {state === 'done' ? '✓ ' : ''}{label}
+                      </span>
+                    );
+                  })}
+                </div>
+                <div className="d-flex align-items-center gap-2 text-muted">
+                  <div className="spinner-border spinner-border-sm" role="status" />
+                  <span className="small">{loadingStage}</span>
+                </div>
               </div>
             )}
 
@@ -918,8 +851,8 @@ const SeattleConstructionChecker = () => {
                 <div className="col d-flex align-items-center gap-2">
                   <TreePine className="text-success" size={18} />
                   <div>
-                    <div className="small text-muted">Estimated Tree Canopy</div>
-                    <div className="fw-semibold">{propertyData.canopyCoverage}%</div>
+                    <div className="small text-muted">Street Trees (30 m)</div>
+                    <div className="fw-semibold">{contextData?.trees?.count ?? '—'}</div>
                   </div>
                 </div>
                 {propertyData.appraisedValue > 0 && (
@@ -944,36 +877,11 @@ const SeattleConstructionChecker = () => {
           </div>
         )}
 
-        {/* LLM Error */}
-        {llmError && (
-          <div className="alert alert-warning d-flex align-items-start gap-2 mb-4" role="alert">
-            <Info size={18} className="mt-1" />
-            <div>
-              <div className="fw-semibold">Groq AI not available</div>
-              <div className="small">{llmError}</div>
-            </div>
-          </div>
-        )}
+        <ContextPanel contextData={contextData} />
 
-        {/* LLM Report */}
-        {llmReport && (
-          <div className="card border-0 shadow-sm mb-4">
-            <div className="card-body">
-              <div className="d-flex align-items-center gap-2 mb-2">
-                <FileText className="text-primary" size={22} />
-                <h2 className="h5 mb-0">AI Compliance Summary</h2>
-              </div>
-              <div className="text-muted small mb-3">
-                Model: <span className="text-monospace">{selectedModel}</span>
-              </div>
-              <div className="border rounded-3 bg-body-tertiary p-3">
-                <pre className="mb-0 small text-body-emphasis" style={{ whiteSpace: 'pre-wrap' }}>
-                  {llmReport}
-                </pre>
-              </div>
-            </div>
-          </div>
-        )}
+        {propertyData && <MapPanel property={propertyData} contextData={contextData} />}
+
+        <ReportSection bundle={llmReport} error={llmError} />
 
         {/* Checklist */}
         {checklist && (
@@ -985,11 +893,11 @@ const SeattleConstructionChecker = () => {
               </div>
 
               {checklist.map((category, catIndex) => (
-                <div key={catIndex} className="mb-4">
-                  <div className="d-flex align-items-center justify-content-between bg-body-tertiary px-3 py-2 rounded-3 mb-3">
+                <details key={catIndex} className="mb-3" open={catIndex === 0}>
+                  <summary className="d-flex align-items-center justify-content-between bg-body-tertiary px-3 py-2 rounded-3 mb-3" style={{ cursor: 'pointer', listStyle: 'none' }}>
                     <h3 className="h6 mb-0">{category.category}</h3>
                     <span className="badge bg-secondary-subtle text-secondary-emphasis">{category.items.length} item(s)</span>
-                  </div>
+                  </summary>
 
                   <div className="d-flex flex-column gap-3">
                     {category.items.map((item, itemIndex) => {
@@ -1022,11 +930,13 @@ const SeattleConstructionChecker = () => {
                       );
                     })}
                   </div>
-                </div>
+                </details>
               ))}
             </div>
           </div>
         )}
+
+        <SiteFooter />
       </div>
     </div>
   );

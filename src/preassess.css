@@ -1,0 +1,154 @@
+/* PreAssess visual layer: civic-clean on top of Bootstrap.
+   One accent, quiet type, document-grade report. Trust is the product. */
+
+:root {
+  --pa-accent: #0f5132;        /* deep civic green */
+  --pa-accent-soft: #e8f3ee;
+  --pa-ink: #1a1d20;
+  --pa-paper: #fbfbf9;
+}
+
+body {
+  background: var(--pa-paper);
+}
+
+/* Header bar */
+.pa-header {
+  border-top: 4px solid var(--pa-accent);
+}
+.pa-wordmark {
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: var(--pa-ink);
+}
+.pa-wordmark .pa-accent {
+  color: var(--pa-accent);
+}
+.pa-tagline {
+  color: #5c636a;
+}
+.pa-stats {
+  font-variant-numeric: tabular-nums;
+  color: #5c636a;
+}
+
+/* Stage progress pills */
+.pa-stages {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.pa-stage {
+  padding: 0.15rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  border: 1px solid #dee2e6;
+  color: #868e96;
+  background: #fff;
+  transition: all 0.25s ease;
+}
+.pa-stage.active {
+  border-color: var(--pa-accent);
+  color: var(--pa-accent);
+  background: var(--pa-accent-soft);
+}
+.pa-stage.done {
+  border-color: #cfe2d8;
+  color: var(--pa-accent);
+  background: #fff;
+}
+
+/* The report as a document */
+.pa-report {
+  font-family: Charter, 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: var(--pa-ink);
+  max-width: 46rem;
+  white-space: pre-wrap;
+}
+.pa-report .pa-citation {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.82em;
+  vertical-align: baseline;
+  border-radius: 0.35rem;
+  padding: 0 0.3rem;
+  line-height: 1.4;
+}
+
+/* Evidence drawer */
+.pa-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: min(430px, 92vw);
+  background: #fff;
+  box-shadow: -12px 0 32px rgba(0, 0, 0, 0.14);
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  animation: pa-slide-in 0.22s ease;
+}
+@keyframes pa-slide-in {
+  from { transform: translateX(30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.pa-drawer-head {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e9ecef;
+}
+.pa-drawer-body {
+  padding: 1rem 1.25rem;
+  overflow-y: auto;
+}
+.pa-code-text {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-left: 3px solid var(--pa-accent);
+  border-radius: 0.35rem;
+  padding: 0.75rem;
+  white-space: pre-wrap;
+}
+
+/* Print / PDF: the report as a clean handout */
+@media print {
+  .pa-no-print, form, .pa-stages, .btn, footer, .alert {
+    display: none !important;
+  }
+  .pa-report .pa-citation {
+    display: inline !important;
+    border: none;
+    padding: 0;
+    font-weight: 600;
+    color: #0f5132 !important;
+    background: none !important;
+  }
+  .card {
+    box-shadow: none !important;
+    border: none !important;
+    break-inside: avoid;
+  }
+  .leaflet-container {
+    display: none;
+  }
+  body {
+    background: #fff;
+  }
+}
+
+/* Small screens */
+@media (max-width: 576px) {
+  .pa-drawer {
+    width: 100vw;
+  }
+  .leaflet-container {
+    height: 260px !important;
+  }
+  .pa-wordmark {
+    font-size: 1.6rem;
+  }
+}
